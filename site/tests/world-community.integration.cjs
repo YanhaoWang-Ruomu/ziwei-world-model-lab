@@ -1,0 +1,56 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
+const base='http://127.0.0.1:8770',suffix=Date.now().toString(36);let count=0;
+async function req(p,{cookie='',method='GET',body,origin=base}={}){const r=await fetch(base+p,{method,headers:{Cookie:cookie,Origin:origin,'Content-Type':'application/json'},body:body===undefined?undefined:JSON.stringify(body)});return {status:r.status,data:await r.json(),cache:r.headers.get('Cache-Control')};}
+const eq=(a,b)=>{assert.deepEqual(a,b);count++;};
+const a='local_preview_subject=world-a-'+suffix,b='local_preview_subject=world-b-'+suffix,core='local_preview_owner=1';
+const payload={title:'虚构研究 '+suffix,state:{context:'虚构项目',resources:'两周',constraints:'样本不足',unknowns:'待观察'},events:[{id:'fictional-event',date:'2026-09-30',kind:'observed',title:'虚构启动',detail:'合成测试资料'}]};
+const submission={title:'虚构公开讨论 '+suffix,body:'仅为公开虚构案例，不附带个人资料。',kind:'case',tags:['虚构测试'],sharingConfirmed:true};
+async function decide(kind,id,revision,decision,reason='虚构审核说明'){return req('/api/community/moderation',{cookie:core,method:'POST',body:{kind,id,...(kind==='report'?{}:{revision}),decision,reason}});}
+(async()=>{
+  eq((await req('/api/storage')).data.testStore,true);
+  if(process.argv.includes('verify')){const p=JSON.parse(fs.readFileSync(path.join(__dirname,'../.wrangler/persistence-test/world-test-checkpoint.json'),'utf8'));const r=await req('/api/world/projects/'+p.id,{cookie:p.cookie});eq(r.status,200);eq(r.data.reviews[0].outcome,'contradicted');eq(r.data.branches[0].baseline.state.context,'虚构项目');await req('/api/world/projects/'+p.id,{cookie:p.cookie,method:'DELETE',body:{revision:2}});eq((await req('/api/world/projects/'+p.id,{cookie:p.cookie})).status,404);console.log('PASS '+count+' restart persistence and deletion checks');return;}
+  eq((await req('/api/world/projects')).status,401);
+  eq((await req('/api/world/projects',{cookie:a,method:'POST',origin:'https://invalid.test',body:payload})).status,403);
+  eq((await req('/api/world/projects',{cookie:a,method:'POST',body:{...payload,birth:'never accepted'}})).status,400);
+  eq((await req('/api/world/projects',{cookie:a,method:'POST',body:{...payload,events:[{...payload.events[0],date:'2026-02-30'}]}})).status,400);
+  const created=await req('/api/world/projects',{cookie:a,method:'POST',body:payload});eq(created.status,200);assert.match(created.cache,/no-store/);count++;const id=created.data.project.id;
+  for(const cookie of [b,core])for(const method of ['GET','PUT','DELETE'])eq((await req('/api/world/projects/'+id,{cookie,method,body:method==='GET'?undefined:{...payload,revision:1}})).status,404);
+  const branchBody={revision:1,title:'虚构分支甲',hypothesis:'若样本增多',action:'做合成实验',expected:'得到反馈',observeOn:'2026-10-07'};
+  const branch=await req('/api/world/projects/'+id+'/branches',{cookie:a,method:'POST',body:branchBody});eq(branch.status,200);eq(branch.data.branch.baseline.state,payload.state);
+  eq((await req('/api/world/projects/'+id+'/branches',{cookie:b,method:'POST',body:branchBody})).status,404);
+  const changed={...payload,state:{...payload.state,context:'更新虚构状态'},revision:1};eq((await req('/api/world/projects/'+id,{cookie:a,method:'PUT',body:changed})).data.project.revision,2);
+  eq((await req('/api/world/projects/'+id,{cookie:a,method:'PUT',body:changed})).status,409);
+  eq((await req('/api/world/projects/'+id+'/branches',{cookie:a,method:'POST',body:branchBody})).status,409);
+  const rid=branch.data.branch.id,review={date:'2026-10-07',result:'虚构结果与预期相反',outcome:'contradicted',learning:'缩小下一次假设'};
+  eq((await req('/api/world/branches/'+rid+'/reviews',{cookie:b,method:'POST',body:review})).status,404);
+  eq((await req('/api/world/branches/'+rid+'/reviews',{cookie:a,method:'POST',body:review})).status,200);
+  const saved=await req('/api/world/projects/'+id,{cookie:a});eq(saved.data.branches[0].baseline.state.context,payload.state.context);eq(saved.data.reviews[0].result,review.result);
+  eq((await req('/api/community/posts',{method:'POST',body:submission})).status,401);
+  eq((await req('/api/community/posts',{cookie:a,method:'POST',body:{...submission,sharingConfirmed:false}})).status,400);
+  eq((await req('/api/community/posts',{cookie:a,method:'POST',body:{...submission,caseId:id}})).status,400);
+  const posted=await req('/api/community/posts',{cookie:a,method:'POST',body:submission});eq(posted.status,200);eq(posted.data.post.status,'pending');const pid=posted.data.post.id;
+  eq((await req('/api/community/posts/'+pid)).status,404);eq((await req('/api/community/posts/'+pid,{cookie:b})).status,404);
+  eq((await req('/api/community/posts?tag='+encodeURIComponent('虚构测试'))).data.posts.some(p=>p.id===pid),false);
+  eq((await req('/api/community/moderation',{cookie:a})).status,403);
+  eq((await req('/api/community/moderation',{cookie:core+'; ziwei_view_role=public'})).status,403);
+  eq((await req('/api/world/projects/'+id,{cookie:a,method:'PUT',body:null})).status,400);
+  eq((await decide('post',pid,1,'published','')).status,400);
+  const decisions=await Promise.all([decide('post',pid,1,'published'),decide('post',pid,1,'published')]);eq(decisions.map(r=>r.status).sort(),[200,409]);
+  eq((await req('/api/community/posts/'+pid)).status,200);
+  eq((await req('/api/community/posts?q='+encodeURIComponent(suffix)+'&tag='+encodeURIComponent('虚构测试'))).data.posts.some(p=>p.id===pid),true);
+  eq((await req('/api/community/posts/'+pid,{cookie:b,method:'DELETE',body:{revision:2}})).status,403);
+  eq((await req('/api/community/posts/'+pid+'/favorite',{cookie:b,method:'POST'})).status,200);eq((await req('/api/community/posts/'+pid,{cookie:b})).data.post.favorite,true);
+  eq((await req('/api/community/posts?scope=favorites',{cookie:b})).data.posts.some(p=>p.id===pid),true);eq((await req('/api/community/posts?scope=favorites',{cookie:a})).data.posts.some(p=>p.id===pid),false);
+  const commented=await req('/api/community/posts/'+pid+'/comments',{cookie:b,method:'POST',body:{body:'虚构评论 <script>text only</script>',sharingConfirmed:true}});eq(commented.status,200);const cid=commented.data.comment.id;
+  eq((await req('/api/community/posts/'+pid)).data.comments.length,0);eq((await req('/api/community/posts/'+pid,{cookie:b})).data.comments.length,1);
+  eq((await decide('comment',cid,1,'published')).status,200);eq((await req('/api/community/posts/'+pid)).data.comments.length,1);
+  eq((await req('/api/community/moderation/target?comment='+cid,{cookie:core})).data.postId,pid);eq((await req('/api/community/moderation/target?comment='+cid,{cookie:a})).status,403);
+  const reportBody={targetKind:'comment',targetId:cid,reason:'虚构举报理由'};eq((await req('/api/community/reports',{cookie:a,method:'POST',body:reportBody})).status,200);eq((await req('/api/community/reports',{cookie:a,method:'POST',body:reportBody})).status,409);
+  const report=(await req('/api/community/moderation',{cookie:core})).data.reports.find(r=>r.target_id===cid);assert.ok(report);count++;
+  eq((await decide('comment',cid,2,'hidden')).status,200);eq((await req('/api/community/posts/'+pid)).data.comments.length,0);eq((await decide('report',report.id,0,'resolved')).status,200);
+  eq((await req('/api/community/posts/'+pid,{cookie:a,method:'DELETE',body:{revision:1}})).status,409);eq((await req('/api/community/posts/'+pid,{cookie:a,method:'DELETE',body:{revision:2}})).status,200);
+  eq((await req('/api/community/posts/'+pid)).status,404);eq((await req('/api/community/posts?scope=favorites',{cookie:b})).data.posts.some(p=>p.id===pid),false);eq((await decide('post',pid,3,'published')).status,409);
+  eq((await req('/api/world/projects/'+id,{cookie:a,method:'DELETE',body:{revision:1}})).status,409);
+  fs.writeFileSync(path.join(__dirname,'../.wrangler/persistence-test/world-test-checkpoint.json'),JSON.stringify({cookie:a,id,rid}));
+  console.log('PASS '+count+' world/community authorization, publication, concurrency and persistence checks');
+})().catch(e=>{console.error(e.stack);process.exitCode=1;});

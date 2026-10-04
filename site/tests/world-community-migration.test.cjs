@@ -1,0 +1,18 @@
+const {DatabaseSync}=require('node:sqlite'),fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
+const db=new DatabaseSync(':memory:');db.exec('PRAGMA foreign_keys=ON; CREATE TABLE existing_sentinel(id TEXT PRIMARY KEY); INSERT INTO existing_sentinel VALUES (\'fictional-existing-record\');');
+const sql=fs.readFileSync(path.join(__dirname,'../drizzle/0011_world_community.sql'),'utf8');
+assert.ok(!/\b(DROP|ALTER|DELETE|UPDATE)\s+(TABLE|FROM)\b/i.test(sql),'migration must only add objects');db.exec(sql);
+assert.equal(db.prepare('SELECT COUNT(*) AS n FROM existing_sentinel').get().n,1);
+assert.equal(db.prepare("SELECT COUNT(*) AS n FROM sqlite_master WHERE type='table' AND (name LIKE 'world_%' OR name LIKE 'community_%')").get().n,8);
+db.exec("INSERT INTO world_projects VALUES('p','fictional-user','fictional','{}',1,1,1); INSERT INTO world_branches VALUES('b','p','{}',1); INSERT INTO world_reviews VALUES('r','b','{}',1);");
+db.exec(fs.readFileSync(path.join(__dirname,'../drizzle/0012_scenario_runs.sql'),'utf8'));
+db.exec("INSERT INTO world_runs VALUES('run','b','generic-transition/1','fictional-hash','{}','{}',1)");
+assert.throws(()=>db.exec("INSERT INTO world_runs VALUES('duplicate','b','generic-transition/1','fictional-hash','{}','{}',1)"));
+db.exec("INSERT INTO community_posts(id,user_id,title,body,kind,tags,created_at,updated_at) VALUES('post','fictional-user','fictional','fictional','case','[]',1,1); INSERT INTO community_comments(id,post_id,user_id,body,created_at) VALUES('comment','post','fictional-user','fictional',1); INSERT INTO community_favorites VALUES('fictional-user','post',1);");
+assert.throws(()=>db.exec("UPDATE community_posts SET status='unreviewed-public'"));
+assert.throws(()=>db.exec("UPDATE community_posts SET kind='executable-rule'"));
+db.exec("INSERT INTO community_reports(id,user_id,target_kind,target_id,reason,created_at) VALUES('report','fictional-user','post','post','fictional',1)");
+assert.throws(()=>db.exec("INSERT INTO community_reports(id,user_id,target_kind,target_id,reason,created_at) VALUES('duplicate','fictional-user','post','post','fictional',1)"));
+db.exec("DELETE FROM world_projects WHERE id='p'; DELETE FROM community_posts WHERE id='post'");
+for(const table of ['world_branches','world_reviews','world_runs','community_comments','community_favorites'])assert.equal(db.prepare('SELECT COUNT(*) AS n FROM '+table).get().n,0);
+assert.equal(db.prepare('SELECT COUNT(*) AS n FROM existing_sentinel').get().n,1);db.close();console.log('PASS additive migration, constraints, uniqueness, cascades and existing-record preservation');

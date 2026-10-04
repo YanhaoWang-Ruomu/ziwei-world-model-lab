@@ -1,0 +1,59 @@
+.research-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:24px 0;padding:24px;border:1px solid rgba(202,169,103,.25);border-radius:16px;background:#fffaf0}
+.research-field{display:flex;flex-direction:column;gap:8px;color:#514735;min-width:0}.research-field:has(textarea),.research-check{grid-column:1/-1}.research-field input,.research-field select,.research-field textarea{width:100%;min-width:0;box-sizing:border-box;padding:12px;background:#fffdf7;color:#433b2f;border:1px solid #b8a785;border-radius:8px;font:inherit}.research-field textarea{min-height:92px;resize:vertical}.research-check{display:flex;align-items:flex-start;gap:10px;line-height:1.7}.research-check input{width:auto;flex:none;margin-top:7px}.research-card{padding:20px;margin:14px 0;background:#fffaf0;border:1px solid rgba(202,169,103,.25);border-radius:14px;overflow-wrap:anywhere}.research-copy{white-space:pre-wrap;line-height:1.8;overflow-wrap:anywhere}.research-status{min-height:24px;color:#70542c}.research-projects{display:flex;flex-wrap:wrap;gap:10px}.research-table-scroll{overflow:auto;max-width:100%;margin:18px 0}.research-table{width:100%;min-width:720px;border-collapse:collapse}.research-table th,.research-table td{padding:14px;border:1px solid #b8a785;text-align:left;vertical-align:top;max-width:280px}.research-card button,.research-editor>button{margin:4px 10px 4px 0}.research-card summary{cursor:pointer;padding:12px 0}.research-feed{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.research-feed .research-card{margin:0}.research-feed button{max-width:100%;white-space:normal;overflow-wrap:anywhere}#world,#community{max-width:1180px;margin:auto;padding-bottom:90px}#world [hidden],#community [hidden]{display:none!important}@media(max-width:760px){.research-form,.research-feed{grid-template-columns:1fr}.research-form{padding:16px}.research-field,.research-check{grid-column:1}.research-card{padding:16px}#world,#community{padding-left:12px;padding-right:12px}}
+
+.research-check{color:#514735}.research-copy{color:#433b2f}.research-form button{justify-self:start;min-height:44px}.research-card h3{color:#433b2f}
+
+.scenario-workbench{margin:22px 0;border-top:1px solid #b8a785;padding-top:14px}.scenario-workbench summary{cursor:pointer;color:#6b5127}.scenario-form textarea{min-height:160px;font:14px/1.6 monospace}.scenario-json{white-space:pre-wrap;overflow-wrap:anywhere;max-height:380px;overflow:auto;font:13px/1.65 monospace}.scenario-output details{padding:12px 0}.scenario-output .research-card{margin:16px 0}.scenario-workbench button{white-space:normal;overflow-wrap:anywhere}
+
+/* Continue the original gold-leaf silk and quiet astronomical imagery. */
+#world,#community{font-size:16px;max-width:1320px;background:var(--silk-weave),var(--silk-light);border-inline:1px solid #bda36a24}
+.research-heading{position:relative;isolation:isolate;overflow:hidden;padding:28px 30px;margin:0 0 24px;border:1px solid #ccad6e80;border-radius:5px;background:linear-gradient(100deg,#0c1427f5 0%,#13192cde 48%,#141b2c82),url('./sky/night-hermetic.png') center 44%/cover;box-shadow:inset 0 0 0 4px #c8ac6430,inset 0 0 0 5px #081224,0 9px 32px #211a2910}
+.research-heading::after{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 82% 36%,#ead49526,transparent 42%);animation:research-starlight 14s ease-in-out infinite alternate;pointer-events:none}
+#world .research-heading h1,#community .research-heading h1{color:#f5e5c1;font-size:clamp(26px,3vw,36px);font-weight:500;margin:4px 0 12px;letter-spacing:.08em;text-shadow:0 2px 14px #030919}
+.research-heading .workspace-kicker{color:#dbbb7c;font-size:12px;letter-spacing:.23em;margin:0 0 10px}
+.research-intro{color:#dbd5c7;line-height:1.85;max-width:46em;margin:0;font-size:15px}
+.research-form,.research-card,.community-detail,.community-composer,.community-moderation{background:var(--silk-weave),var(--silk-light);border-color:#b39a6266;border-radius:5px;box-shadow:inset 0 1px #fffdf3,inset 0 0 0 3px #ddc58815,0 6px 22px #4b382608}
+.research-form{gap:16px 20px}.research-field{font-size:14px;line-height:1.7}
+.research-field input,.research-field select,.research-field textarea{font-size:16px;min-height:46px;line-height:1.6;border-color:#a38d616b}
+.research-field :is(input,select,textarea):focus-visible{outline:2px solid #aa8745;outline-offset:3px}
+.research-check{font-size:14px}.research-status{font-size:14px;margin:10px 0;min-height:0}.research-status:empty{display:none}
+.research-copy{font-size:16px}.research-table{background:#fff9ed7a;font-size:14px}.research-table th{background:#b9954720;white-space:nowrap;font-weight:600}
+.research-table th,.research-table td{border-color:#b39a6255}.research-projects{margin-bottom:16px}
+.community-actions{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 14px}
+.community-actions button,.research-form button{font-size:14px;min-height:44px;letter-spacing:.04em;border-radius:4px}
+#community .book-primary,#world .book-primary{color:#f5e8ca;border-color:#b69b60;background:linear-gradient(130deg,#3d493c,#23372f);box-shadow:inset 0 1px #d2bc8060}
+#community .book-secondary,#world .book-secondary{color:#68532e;border-color:#ad945a66;background:linear-gradient(125deg,#fffcf4,#e9dfc87d)}
+.community-review-shortcut:disabled{opacity:1;color:#817459!important;background:#ede4d266!important;cursor:not-allowed}
+.community-review-shortcut:disabled::after,.workspace-nav a[aria-disabled=true]::after{content:"";display:block;flex:none;width:14px;height:17px;background:currentColor;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 20'%3E%3Cpath fill='none' stroke='black' stroke-width='1.5' d='M4 8V5a4 4 0 0 1 8 0v3M3 8h10a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z M8 11v4'/%3E%3C/svg%3E") center/contain no-repeat}
+.community-review-shortcut{display:flex;align-items:center;justify-content:center;gap:12px}
+#community>.research-inline{grid-template-columns:minmax(150px,1.25fr) minmax(130px,1fr) minmax(130px,1fr) auto;align-items:end;padding:20px;margin:14px 0 24px}
+#community>.research-inline .research-field{grid-column:auto}
+.research-feed{gap:18px;margin:16px 0 24px}.community-topic{position:relative;padding:24px;transition:border-color .25s,box-shadow .25s}
+.community-topic::before{content:"";position:absolute;top:0;left:24px;right:24px;height:1px;background:linear-gradient(90deg,transparent,#b99a51,transparent)}
+.community-topic:hover{border-color:#a18547bd;box-shadow:inset 0 1px #fff,0 7px 28px #62513712}
+.community-topic-meta{font-size:12px;letter-spacing:.1em;color:#80704f;margin:0 0 12px}
+#community .community-topic-title{padding:0;border:0;background:none;box-shadow:none;text-align:left;color:#39362c;font:500 21px/1.65 Georgia,'Noto Serif SC','Microsoft YaHei',serif;margin:0 0 18px;width:100%;text-wrap:pretty}
+#community .community-topic-title:focus-visible{outline:2px solid #a48543;outline-offset:5px}
+.community-tags{display:flex;flex-wrap:wrap;gap:8px}
+#community .community-tag{font-size:12px;color:#746141;border:1px solid #bcaa7855;background:#dfd2b438;border-radius:3px;padding:4px 9px;margin:0;min-height:30px}
+.community-empty{grid-column:1/-1;text-align:center;padding:32px 18px;border-block:1px solid #baa36966;background:#f8f2e3b3}.community-empty p{margin:6px 0}.community-empty-star{font-size:34px;color:#ab8a49}
+.community-detail{padding:28px;margin:24px 0;scroll-margin-top:80px}.community-detail>.research-copy{padding:12px 0 20px;border-bottom:1px solid #aa8d5740}
+.community-login-note{display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap;color:#746346;padding:20px 0;margin:0}
+.community-login-note a{font-size:14px;padding:8px 16px;text-decoration:none}
+.community-composer{padding:0 22px;margin:24px 0;scroll-margin-top:80px}.community-composer>summary{cursor:pointer;font-size:18px;line-height:1.7;color:#59472b;padding:18px 0}.community-composer>.research-form{padding:20px 0;margin:0;border:0;box-shadow:none;background:none}
+.community-moderation{padding:24px;margin:28px 0;scroll-margin-top:80px}.community-moderation-locked{border-style:dashed;background:linear-gradient(120deg,#e9e0ce80,#f7f0df80);box-shadow:none}.community-moderation-locked h2{color:#827253;font-size:18px}
+.community-moderation-locked .muted{margin:0;font-size:14px}
+.workspace-nav a[aria-disabled=true]{color:#b5a68a;cursor:not-allowed;border-color:transparent;background:transparent;box-shadow:none;opacity:.85}
+.workspace-nav a[aria-disabled=true]::after{margin-left:auto;color:#b39b68}
+.workspace-nav a[aria-disabled=true]:hover{color:#c6b99f;background:#b79b6010;border-color:#bd9b5422}
+.workspace-nav a{min-width:0}.workspace-nav{flex-shrink:0}
+@keyframes research-starlight{from{opacity:.35;transform:translateX(-2%)}to{opacity:1;transform:translateX(2%)}}
+@media(max-width:1000px){#community>.research-inline{grid-template-columns:repeat(2,minmax(0,1fr))}#community>.research-inline button{width:100%}}
+@media(max-width:760px){
+ #world,#community{padding:20px 14px 70px}.research-heading{padding:24px 20px;margin-bottom:18px;background-position:62% 42%}.research-intro{font-size:14px}
+ .community-actions{gap:8px}.community-actions button{flex:1;padding:10px}.community-topic{padding:20px}.research-feed{gap:12px}
+ #community>.research-inline{padding:14px;gap:12px}.community-detail,.community-moderation{padding:20px 16px}.community-composer{padding:0 16px}
+ #community .community-topic-title{font-size:20px}.community-login-note{font-size:14px}.research-table-scroll{border-right:1px solid #b3986266}
+ .workspace-nav a{font-size:14px!important;gap:9px}.workspace-nav a[aria-disabled=true]::after{width:12px;height:15px}
+}
+@media(prefers-reduced-motion:reduce){.research-heading::after{animation:none}.community-topic{transition:none}}

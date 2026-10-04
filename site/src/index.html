@@ -30,6 +30,7 @@
   <link rel="stylesheet" href="personal-account.css" />
   <link rel="stylesheet" href="storage.css" />
   <link rel="stylesheet" href="gilded-theme.css" />
+  <link rel="stylesheet" href="research-community.css" />
 </head>
   <body data-role="public" class="immersive-sky sky-pending">
     <div class="grain" aria-hidden="true"></div>
@@ -40,15 +41,17 @@
       <nav class="workspace-nav" id="workspace-navigation">
         <a href="/download.html"><span aria-hidden="true">↓</span>下载应用</a>
         <a href="#model" data-nav="model"><span aria-hidden="true">01</span>星辰与命盘</a>
+        <a href="#world" data-nav="world"><span aria-hidden="true">◇</span>世界状态与复盘</a>
+        <a href="#community" data-nav="community"><span aria-hidden="true">◇</span>社区讨论</a>
         <a href="#library" data-nav="library"><span aria-hidden="true">02</span>书籍与文章</a>
-        <a href="#cards" data-nav="cards" hidden><span aria-hidden="true">03</span>技法卡片库</a>
-        <a href="#submissions" data-nav="submissions" hidden><span aria-hidden="true">04</span>我的提交</a>
-        <a href="#review" data-nav="review" hidden><span aria-hidden="true">05</span>审核中心</a>
-        <a href="#rules" data-nav="rules" hidden><span aria-hidden="true">06</span>规则工作台</a>
-        <a href="#materials" data-nav="materials" hidden><span aria-hidden="true">07</span>材料管理</a>
-        <a href="#private" data-nav="private" hidden><span aria-hidden="true">08</span>本机私密入口</a>
-        <a href="#members" data-nav="members" hidden><span aria-hidden="true">09</span>核心账户</a>
-        <a href="#lab" data-nav="lab" hidden><span aria-hidden="true">10</span>研究实验室</a><a href="#history" data-nav="history" hidden><span aria-hidden="true">11</span>历史记录</a>
+        <a data-nav="cards" class="workspace-nav-locked" aria-disabled="true" tabindex="-1"><span aria-hidden="true">03</span>技法卡片库</a>
+        <a data-nav="submissions" class="workspace-nav-locked" aria-disabled="true" tabindex="-1"><span aria-hidden="true">04</span>我的提交</a>
+        <a data-nav="review" class="workspace-nav-locked" aria-disabled="true" tabindex="-1"><span aria-hidden="true">05</span>审核中心</a>
+        <a data-nav="rules" class="workspace-nav-locked" aria-disabled="true" tabindex="-1"><span aria-hidden="true">06</span>规则工作台</a>
+        <a data-nav="materials" class="workspace-nav-locked" aria-disabled="true" tabindex="-1"><span aria-hidden="true">07</span>材料管理</a>
+        <a data-nav="private" class="workspace-nav-locked" aria-disabled="true" tabindex="-1"><span aria-hidden="true">08</span>本机私密入口</a>
+        <a data-nav="members" class="workspace-nav-locked" aria-disabled="true" tabindex="-1"><span aria-hidden="true">09</span>核心账户</a>
+        <a data-nav="lab" class="workspace-nav-locked" aria-disabled="true" tabindex="-1"><span aria-hidden="true">10</span>研究实验室</a><a data-nav="history" class="workspace-nav-locked" aria-disabled="true" tabindex="-1"><span aria-hidden="true">11</span>历史记录</a>
       </nav>
       <div class="sidebar-account"><span class="account-dot" aria-hidden="true"></span><div><strong id="workspace-role">公开访客</strong><small id="workspace-role-note">阅读与使用</small></div><a href="#account" aria-label="账户与访问">↗</a></div>
     </aside>
@@ -133,6 +136,8 @@
         <div id="cosmic-rules" hidden><div class="model-heading"><div><h2>用规则核对条件</h2><p id="model-status" role="status">正在读取可使用的规则…</p></div><label for="model-picker">选择规则<select id="model-picker"><option>正在载入…</option></select></label></div><div id="model-pagination" class="page-controls"></div><div id="model-use" class="model-layout"></div><p class="model-footnote">使用已审核规则逐项判断。本版规则条件需手动填写，现实条件需另行核实；规则命中不等于事件概率。</p></div>
         <details class="cosmic-method"><summary>这张星图与命盘依据什么？<span>数据、口径与研究边界 ↗</span></summary><div class="method-grid"><div><h3>星空有据</h3><p>20,000 颗恒星来自 HYG 4.1，坐标历元 J2000.0。距离为星表估计；缺少可靠距离时明确留空。地球使用 NASA Blue Marble 贴图，球体大小与照明为观看示意，不是恒星距离的统一比例或实时昼夜。星点大小用于辨认，不是天体直径。</p><a href="https://github.com/astronexus/HYG-Database/blob/main/hyg/README.md" target="_blank" rel="noopener noreferrer">HYG 星表说明 ↗</a><a href="https://github.com/Stellarium/stellarium-skycultures/blob/master/chinese/index.json" target="_blank" rel="noopener noreferrer">南北斗星官参考 ↗</a><a href="./sky/EARTH-SOURCE.txt" target="_blank">地球影像来源 ↗</a><a href="./sky/LICENSE.txt" target="_blank">星表衍生数据 · CC BY-SA 4.0 ↗</a></div><div><h3>排盘可核</h3><p>默认采用服务器端若木安星，以主人提供的安星资料为优先；未载明部分由 iztro 2.6.1 通行规则补充。也可手动选择公开算法，在本页计算。原始安星 PDF 不在网站提供访问。输入公历，自动转农历。方盘的十二地支固定；宫干、主星、辅曜、杂曜、神煞、大限与小限依出生资料计算。命盘内可切换本命、大限、流年、流月、流日、流时；点击宫内年龄段直接进入该大限，小限仅保留为宫内参考资料。流月、流日、流时按所选标准时计算，流分、流秒暂不支持。四化的传统象义与星曜落宫计算分开，不直接作为事件概率。</p><a href="https://docs.iztro.com/posts/config-n-plugin" target="_blank" rel="noopener noreferrer">排盘引擎与口径 ↗</a><a href="https://docs.iztro.com/learn/major-star" target="_blank" rel="noopener noreferrer">星曜基础介绍参考 ↗</a></div><div><h3>从基础开始</h3><p>当前具备排盘、材料检索与已审核规则判断。现实知识的持续更新、跨领域推演与概率校准尚未建立，不能声称知道一切或已验证命运预测。</p><a href="#library">查阅可访问的原典 ↗</a></div></div></details>
       </section>
+      <section class="workspace-panel" id="world" data-view="world" hidden></section>
+      <section class="workspace-panel" id="community" data-view="community" hidden></section>
       <section class="workspace-panel" id="account" data-view="account" hidden><p class="workspace-kicker">账户与访问</p><h1>进入你的工作空间</h1><p class="muted">登录后按当前权限显示可用功能。选择对应的登录入口；公开功能无需登录。</p><div class="account-flow"><div class="personal-account-card"><p class="panel-overline">PERSONAL ACCOUNT</p><h2>个人账户</h2><p>登录后收藏自己的命例，随时回来继续观盘。</p>
 <div id="personal-auth-entry"><div class="personal-auth-tabs" role="group" aria-label="登录或注册"><button type="button" data-account-mode="login" aria-pressed="true">登录</button><button type="button" data-account-mode="register" aria-pressed="false">注册新账户</button></div>
 <form id="personal-account-form"><label>用户名<input id="personal-username" name="username" autocomplete="username" minlength="3" maxlength="32" required placeholder="3–32 位中英文或数字"></label><label>密码<input id="personal-password" name="password" type="password" autocomplete="current-password" maxlength="128" required placeholder="注册时至少 12 位"></label><label id="personal-confirm-label" hidden>确认密码<input id="personal-password-confirm" type="password" autocomplete="new-password" maxlength="128"></label><label class="personal-remember"><input id="personal-remember" type="checkbox">在此设备保持登录 30 天</label><button class="book-primary" id="personal-account-submit" type="submit">登录</button></form><small>可使用浏览器的密码管理器保存登录信息。请妥善保管密码，当前暂未提供邮件找回。</small></div>

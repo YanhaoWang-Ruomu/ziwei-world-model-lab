@@ -1,13 +1,13 @@
-const labels={model:'星辰与命盘',library:'书籍与文章',cards:'技法卡片库',submissions:'我的提交',review:'审核中心',rules:'规则编辑与测试',materials:'材料管理',private:'本机私密入口',members:'核心账户',lab:'研究实验室',history:'历史记录',account:'账户与访问'};
-const allowed={public:['model','library','account'],special:['model','library','cards','submissions','rules','account'],core:Object.keys(labels)};
+import {VIEW_LABELS as labels,viewAccess} from './workspace-access.mjs';
 export function initWorkspace({api,onSession}) {
   let viewer={role:'public'},current='model';
   const $=s=>document.querySelector(s);
   function navigate(){
     let key=location.hash.slice(1)||'model';if(key==='special')key=viewer.role==='public'?'account':'library';
     if(['top','demo','architecture'].includes(key))key=key==='top'?'model':'lab';
-    if(!allowed[viewer.role].includes(key)||(key==='members'&&!viewer.founder))key='model';
+    if(!viewAccess(viewer,key).allowed)key='model';
     current=key;
+    document.body.dataset.workspaceView=key;
     document.querySelectorAll('[data-view]').forEach(node=>{node.hidden=node.dataset.view!==key;});
     document.querySelectorAll('[data-nav]').forEach(node=>node.setAttribute('aria-current',node.dataset.nav===key?'page':'false'));
     $('#workspace-location').textContent=labels[key];
@@ -15,12 +15,28 @@ export function initWorkspace({api,onSession}) {
   }
   window.addEventListener('hashchange',navigate);
   document.addEventListener('ziwei:navigate',navigate);
+  document.querySelectorAll('[data-nav]').forEach(node=>{
+    node.addEventListener('click',event=>{
+      if(!viewAccess(viewer,node.dataset.nav).allowed){event.preventDefault();event.stopImmediatePropagation();}
+    },true);
+    node.addEventListener('keydown',event=>{
+      if(['Enter',' '].includes(event.key)&&!viewAccess(viewer,node.dataset.nav).allowed)event.preventDefault();
+    });
+  });
   function setViewer(next){
-    viewer=next;const role=next.role||'public';document.body.dataset.role=role;
+    viewer={...next,role:next.role||'public'};const role=viewer.role;document.body.dataset.role=role;
     const titles={public:next.authenticated?'公开用户':'公开访客',special:'特殊用户',core:next.founder?'创建者 · 核心管理人':'核心管理人'};
     $('#viewer-status').textContent=titles[role];$('#workspace-role').textContent=titles[role];
     $('#workspace-role-note').textContent={public:'阅读与使用',special:'阅读、整理与提交',core:next.founder?'管理、审核与账户授权':'管理与审核'}[role];
-    document.querySelectorAll('[data-nav]').forEach(node=>{node.hidden=!allowed[role].includes(node.dataset.nav)||(node.dataset.nav==='members'&&!next.founder)||(node.dataset.nav==='rules'&&!next.core)||(node.dataset.nav==='submissions'&&next.core);});
+    document.querySelectorAll('[data-nav]').forEach(node=>{
+      const access=viewAccess(viewer,node.dataset.nav);node.hidden=false;
+      node.setAttribute('aria-disabled',String(!access.allowed));
+      node.classList.toggle('workspace-nav-locked',!access.allowed);
+      node.title=access.allowed?'':access.reason;
+      node.setAttribute('aria-label',labels[node.dataset.nav]+(access.allowed?'':'，已锁定，'+access.reason));
+      if(access.allowed){node.href='#'+node.dataset.nav;node.removeAttribute('tabindex');}
+      else{node.removeAttribute('href');node.tabIndex=-1;}
+    });
     document.querySelector('[data-level="special"]').hidden=role==='public';
     const signedIn=next.authenticated||next.specialAuthenticated||role!=='public';
     $('#header-owner-login').hidden=signedIn;

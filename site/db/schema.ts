@@ -1,4 +1,33 @@
-import { sqliteTable, text, integer, primaryKey, index } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text, integer, primaryKey, index, unique, check } from 'drizzle-orm/sqlite-core';
+import {sql} from 'drizzle-orm';
+
+export const worldProjects=sqliteTable('world_projects',{
+  id:text('id').primaryKey(),userId:text('user_id').notNull(),title:text('title').notNull(),payload:text('payload').notNull(),revision:integer('revision').notNull().default(1),createdAt:integer('created_at').notNull(),updatedAt:integer('updated_at').notNull(),
+},t=>[index('idx_world_owner').on(t.userId,t.updatedAt)]);
+export const worldBranches=sqliteTable('world_branches',{
+  id:text('id').primaryKey(),projectId:text('project_id').notNull().references(()=>worldProjects.id,{onDelete:'cascade'}),payload:text('payload').notNull(),createdAt:integer('created_at').notNull(),
+},t=>[index('idx_world_branch').on(t.projectId,t.createdAt)]);
+export const worldReviews=sqliteTable('world_reviews',{
+  id:text('id').primaryKey(),branchId:text('branch_id').notNull().references(()=>worldBranches.id,{onDelete:'cascade'}),payload:text('payload').notNull(),createdAt:integer('created_at').notNull(),
+},t=>[index('idx_world_review').on(t.branchId,t.createdAt)]);
+export const worldRuns=sqliteTable('world_runs',{
+  id:text('id').primaryKey(),branchId:text('branch_id').notNull().references(()=>worldBranches.id,{onDelete:'cascade'}),engineVersion:text('engine_version').notNull(),inputHash:text('input_hash').notNull(),inputSnapshot:text('input_snapshot').notNull(),result:text('result').notNull(),createdAt:integer('created_at').notNull(),
+},t=>[index('idx_world_runs_branch').on(t.branchId,t.createdAt),unique('world_run_input_unique').on(t.branchId,t.inputHash)]);
+export const communityPosts=sqliteTable('community_posts',{
+  id:text('id').primaryKey(),userId:text('user_id').notNull(),title:text('title').notNull(),body:text('body').notNull(),kind:text('kind').notNull(),tags:text('tags').notNull(),status:text('status').notNull().default('pending'),revision:integer('revision').notNull().default(1),note:text('note').notNull().default(''),createdAt:integer('created_at').notNull(),updatedAt:integer('updated_at').notNull(),
+},t=>[index('idx_community_public').on(t.status,t.createdAt),index('idx_community_owner').on(t.userId,t.createdAt),check('community_post_kind',sql`${t.kind} IN ('case','technique')`),check('community_post_status',sql`${t.status} IN ('pending','published','rejected','hidden','withdrawn')`)]);
+export const communityComments=sqliteTable('community_comments',{
+  id:text('id').primaryKey(),postId:text('post_id').notNull().references(()=>communityPosts.id,{onDelete:'cascade'}),userId:text('user_id').notNull(),body:text('body').notNull(),status:text('status').notNull().default('pending'),revision:integer('revision').notNull().default(1),note:text('note').notNull().default(''),createdAt:integer('created_at').notNull(),
+},t=>[index('idx_community_comments').on(t.postId,t.status,t.createdAt),check('community_comment_status',sql`${t.status} IN ('pending','published','rejected','hidden','withdrawn')`)]);
+export const communityFavorites=sqliteTable('community_favorites',{
+  userId:text('user_id').notNull(),postId:text('post_id').notNull().references(()=>communityPosts.id,{onDelete:'cascade'}),createdAt:integer('created_at').notNull(),
+},t=>[primaryKey({columns:[t.userId,t.postId]})]);
+export const communityReports=sqliteTable('community_reports',{
+  id:text('id').primaryKey(),userId:text('user_id').notNull(),targetKind:text('target_kind').notNull(),targetId:text('target_id').notNull(),reason:text('reason').notNull(),status:text('status').notNull().default('open'),note:text('note').notNull().default(''),createdAt:integer('created_at').notNull(),
+},t=>[index('idx_community_reports').on(t.status,t.createdAt),unique('community_report_unique').on(t.userId,t.targetKind,t.targetId),check('community_report_kind',sql`${t.targetKind} IN ('post','comment')`),check('community_report_status',sql`${t.status} IN ('open','resolved')`)]);
+export const communityModeration=sqliteTable('community_moderation',{
+  id:text('id').primaryKey(),targetKind:text('target_kind').notNull(),targetId:text('target_id').notNull(),actor:text('actor').notNull(),decision:text('decision').notNull(),reason:text('reason').notNull(),createdAt:integer('created_at').notNull(),
+});
 
 export const storageState = sqliteTable('storage_state', {
   id: text('id').primaryKey(), dirtyVersion: integer('dirty_version').notNull().default(0),

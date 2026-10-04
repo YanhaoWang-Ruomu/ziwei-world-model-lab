@@ -78,6 +78,20 @@
       "when": 1790094294459,
       "tag": "0010_technique_revision_history",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "6",
+      "when": 1790762957150,
+      "tag": "0011_world_community",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "6",
+      "when": 1790764818102,
+      "tag": "0012_scenario_runs",
+      "breakpoints": true
     }
   ]
 }

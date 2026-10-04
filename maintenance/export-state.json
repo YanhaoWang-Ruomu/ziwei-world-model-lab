@@ -1,10 +1,14 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "c849f21d084eb4e4681d25b9dee3eb5b3969afce",
+  "sourceCommit": "bc78fb70b4f342d925b619ae73f2cacf8194a181",
   "files": [
     {
       "path": "site/db/schema.ts",
-      "sha256": "5c2efb50d18678f0c44344dd49b6eec1e09cb3006d54359977a67636b6cb4eff"
+      "sha256": "7564a6a6903ef7f462bfe1304cb3fce930648b10881a0ec6af3ac85cfc2ad6f6"
+    },
+    {
+      "path": "site/docs/community-local-acceptance.md",
+      "sha256": "0d3e724e6726125e79f48a4b8c3193e78a5ab237355eab23ae5b91967fc1005e"
     },
     {
       "path": "site/drizzle.config.ts",
@@ -55,6 +59,14 @@
       "sha256": "9619e84692566ea5e9d4635607d75af00a6ae4a082ca159be167de38eded5779"
     },
     {
+      "path": "site/drizzle/0011_world_community.sql",
+      "sha256": "bcf6f4a1ec8230cd395d311580d90499dfcb9a727e2a662b883185ad08491d30"
+    },
+    {
+      "path": "site/drizzle/0012_scenario_runs.sql",
+      "sha256": "4cb6b7af053d069d022da2c5ff1f8ab7f595a41192692d2f9bb8f7ba21e6b50c"
+    },
+    {
       "path": "site/drizzle/meta/0000_snapshot.json",
       "sha256": "c19e8b2924661a0626aa4d9b8444d30efbe9487a9b88206fd95306aad5979379"
     },
@@ -99,8 +111,16 @@
       "sha256": "dd7e63af70c1729fdc5cb95e54c7c7b983f19484511776bca741c75ab0634358"
     },
     {
+      "path": "site/drizzle/meta/0011_snapshot.json",
+      "sha256": "799ff34738506b609a87c8e735c66330daf2f61a148c77f112c5971034bae7e0"
+    },
+    {
+      "path": "site/drizzle/meta/0012_snapshot.json",
+      "sha256": "33ead24c254911822010d7a98acf4bc41c0bd2733cb64b4114c170c34617f9e6"
+    },
+    {
       "path": "site/drizzle/meta/_journal.json",
-      "sha256": "0539c93ac582034d6f5233835a6462f778d4d4c928af4b8c8a48a9471ff9a988"
+      "sha256": "380c7083bbe814a95bc269ac72ca04d9f6dccf4cf1c51501d0f946765970093e"
     },
     {
       "path": "site/package.json",
@@ -121,6 +141,10 @@
     {
       "path": "site/scripts/preview.mjs",
       "sha256": "fbc5dc3cd698dd998ebb7fce4a864c34446eb58e379009e0b104261014ff63f2"
+    },
+    {
+      "path": "site/scripts/test-preview.mjs",
+      "sha256": "ca647ffb06d2d75af543f5d67aed06c9aed619e9d192539e8588f14e1d3aeac4"
     },
     {
       "path": "site/server/accounts.js",
@@ -163,6 +187,10 @@
       "sha256": "129653b9c89142462fae3f206351a5f57a92e5fc290290a58125965287701cea"
     },
     {
+      "path": "site/server/scenario-runs.js",
+      "sha256": "e6ec28fdaa37cdb550b733963cb7a71f1b8582c7e9d392c3ac456ba51a489a42"
+    },
+    {
       "path": "site/server/security.js",
       "sha256": "bd79f379f7a15f3164f15836e6492e8ad2b908a096aee666179ad0b684509c6a"
     },
@@ -172,7 +200,7 @@
     },
     {
       "path": "site/server/storage.js",
-      "sha256": "a64aab812781c3282a7b30efae5c33b034b80469c362c8c6320a046164e34e7f"
+      "sha256": "346db709f62efce7ec194a9e82d7807848b711a297a890fda128d69a628ffc40"
     },
     {
       "path": "site/server/submissions.js",
@@ -188,7 +216,11 @@
     },
     {
       "path": "site/server/worker.js",
-      "sha256": "3049655781b1aaf1fd864a81ee3ef154bd49bff61d000926e38d020520f2c6e1"
+      "sha256": "245ad932df4bb9cf16ac562e26d5a9edb4116da51a8928f144d617d5d34379e7"
+    },
+    {
+      "path": "site/server/world-community.js",
+      "sha256": "abf77b9add264b68a06cb50a1061242ab2d815ceebb701d3502f5ff9f650a43b"
     },
     {
       "path": "site/src/app.js",
@@ -348,7 +380,7 @@
     },
     {
       "path": "site/src/index.html",
-      "sha256": "f690eb0cc00974ad8d2b8189783849f76914e5481788769ff1eb962f63409f36"
+      "sha256": "c6ea91806b0f6b3208f148723d29cf726981ec00982223333eb46c8df76f8364"
     },
     {
       "path": "site/src/journey-motion.mjs",
@@ -368,7 +400,7 @@
     },
     {
       "path": "site/src/library.js",
-      "sha256": "9c5ffdfc9e9e7511c55e6b752ed59dd80bfb7b998c2dfa9d26bf98e8424401fd"
+      "sha256": "fdf521e180519cc816a68bc41571ab9a385f770671ed5826e9c9f59c0ffbb9d8"
     },
     {
       "path": "site/src/living-landscape.mjs",
@@ -435,6 +467,14 @@
       "sha256": "45f92dfd987130c9a0295c5d9c2aa52635b77e2b3b37e2236e85e1d37334df0d"
     },
     {
+      "path": "site/src/research-community.css",
+      "sha256": "610d4b6427ae8e595028700d325a7f2da6874bf331e38f2df0bb64e7e182e6ae"
+    },
+    {
+      "path": "site/src/research-community.js",
+      "sha256": "0dc542de364254af8c75004afb88c121dffc12aef0520d4263b28b28d3b0b4ea"
+    },
+    {
       "path": "site/src/review.css",
       "sha256": "9b59baabaf056085b2eafb9c5f10ee14a4519b4abc9a2dc01464dbdbb8427e35"
     },
@@ -453,6 +493,14 @@
     {
       "path": "site/src/rules.js",
       "sha256": "c42921f482f11f499e96bc8d5554102f9b9b60cb5daae6d98c9d82cba2403165"
+    },
+    {
+      "path": "site/src/scenario-engine.mjs",
+      "sha256": "fdf3ea4b533b46ddeeb7d2388dcc40cf1fb2af450b073f1828fce4351ced24a8"
+    },
+    {
+      "path": "site/src/scenario-workbench.js",
+      "sha256": "e55354969736efafd45b83e2c96d765e6bcf2e6712dd6679bbe92576d69b3fa7"
     },
     {
       "path": "site/src/scene-geometry.mjs",
@@ -679,16 +727,28 @@
       "sha256": "75f1e0eabe61b9eca8749f23b52927e06420c58429f4596d456dce8349c4fce0"
     },
     {
+      "path": "site/src/workspace-access.mjs",
+      "sha256": "00587afd9b7b55c27edc6c4bea38d2b2bc3ba03d7fdb1d459e8f9b5c4889a209"
+    },
+    {
       "path": "site/src/workspace.css",
       "sha256": "2cb87ddcca7b1bde4256bb1332aa90ec1813d8b534407f66daefe44727c0884a"
     },
     {
       "path": "site/src/workspace.js",
-      "sha256": "328fe6638e2ecfe755fec2dfef9f27e5a0119e33b3c829179554d41bab09953c"
+      "sha256": "daa0c78544b2ea649bf4ebf04339353da0dfdd61ca3ad87eef91924b5b05597c"
     },
     {
       "path": "site/src/world-time.mjs",
       "sha256": "d9a51b2c2dd39ad17830921c07ccd0f14b69aca9652473a4846886786db10d15"
+    },
+    {
+      "path": "site/tests/accounts.integration.cjs",
+      "sha256": "e271e77789a7f5dc24ac83fe76e49d38a9c50ac1c8ebc3cd83d90422c1a931f1"
+    },
+    {
+      "path": "site/tests/accounts.test.mjs",
+      "sha256": "ea6909c0088ad719a552856db7d55d97c21aed532c25bcba9a1a142ff41e994b"
     },
     {
       "path": "site/tests/audio-playback.test.mjs",
@@ -707,6 +767,14 @@
       "sha256": "4ae63db738b70f24014f5d6a1cdfed5ee7cbb491cfc31edfaaff0266aee40dca"
     },
     {
+      "path": "site/tests/community-demo-seed.mjs",
+      "sha256": "f199a0f51d7f216a8f1970172a9fddb8868b7bcfbcccb8e352b3bc7b117f87cf"
+    },
+    {
+      "path": "site/tests/community-demo.mjs",
+      "sha256": "d79b772a211aa662544453bac6db0427cc64d57228c57a057f02ff8c4f163ea3"
+    },
+    {
       "path": "site/tests/cycle-navigation.test.mjs",
       "sha256": "1d9c25c11ddef1564121ea550b87bdaf7f9b3b5011f09c5557d662ab89d6c279"
     },
@@ -721,6 +789,14 @@
     {
       "path": "site/tests/orrery.test.mjs",
       "sha256": "16691b47e407a90b8bc8553b859ceb3852a9cb3145e69b0a99f70bfe9e5798fe"
+    },
+    {
+      "path": "site/tests/scenario-engine.test.mjs",
+      "sha256": "c44a0b72d40a11c97b8b73d0eabf8d5f86d6004d3717cd58ebed32a55a5705ba"
+    },
+    {
+      "path": "site/tests/scenario.integration.mjs",
+      "sha256": "24ba1762304b2fe1156fdbadcb4b858e086ee2d9e58ab26ea4b1755f4105b6cf"
     },
     {
       "path": "site/tests/scene-geometry.test.mjs",
@@ -745,6 +821,30 @@
     {
       "path": "site/tests/sky-phenomena.test.mjs",
       "sha256": "9657b5d0511d1c5d6e320be297d78f8f867fd8bdf7ffe8544187dc5e42641da2"
+    },
+    {
+      "path": "site/tests/workspace-access.test.mjs",
+      "sha256": "3184a526eaf9c72f1d4310b590a90cdc8b1ebf465d3c3eb2f4d58c55aa3a540e"
+    },
+    {
+      "path": "site/tests/workspace-navigation.test.mjs",
+      "sha256": "8d0bc5ddf7cc864a54993e42543f83b40b84ff514491047c504a34c759598f9f"
+    },
+    {
+      "path": "site/tests/world-community-harness.js",
+      "sha256": "cccbe8ff0ca34b612a027e9985749b7e272107e4fe3d0d688dc7d4d7aa93f7e0"
+    },
+    {
+      "path": "site/tests/world-community-migration.test.cjs",
+      "sha256": "2d1d2f3e44840f1f52086704ee7e0d9b6d078ddda5784410376ccb077f34045a"
+    },
+    {
+      "path": "site/tests/world-community.integration.cjs",
+      "sha256": "52984d12b098249a98161432e6ae28b8e6fc9d66355e2853be6b56553b651b74"
+    },
+    {
+      "path": "site/tests/world-community.test.mjs",
+      "sha256": "0e89b32f7f4bb577087f06f2e59691d88c56f12f43ea61d14f7b83901ae17add"
     },
     {
       "path": "site/tests/world-time.test.mjs",

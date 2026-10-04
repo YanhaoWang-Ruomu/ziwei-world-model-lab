@@ -1,7 +1,7 @@
 import {HttpError,jsonBody,now} from './security.js';
 
 // No content or credentials are returned by the health check.
-const tables=['personal_accounts','chart_cases','books','pages','page_revisions','technique_cards','card_rules','card_submissions','core_members','grants','workspace_drafts','account_levels','authored_techniques','technique_history'];
+const tables=['world_runs','world_projects','world_branches','world_reviews','community_posts','community_comments','community_favorites','community_reports','community_moderation','personal_accounts','chart_cases','books','pages','page_revisions','technique_cards','card_rules','card_submissions','core_members','grants','workspace_drafts','account_levels','authored_techniques','technique_history'];
 const quoted=table=>'"'+table+'"';
 export const storageLocation=env=>env.LOCAL_PREVIEW==='1'?'local':'cloud';
 export async function markStored(db){

@@ -1,3 +1,5 @@
+import {worldCommunityRoute} from './world-community.js';
+import {scenarioRoute} from './scenario-runs.js';
 import {searchLibrary} from './library-search.mjs';
 import {deleteBook,activeBookGuard} from './book-deletion.mjs';
 import * as OpenCC from 'opencc-js';
@@ -87,6 +89,8 @@ async function route(request, env) {
     return response;
   }
   const context={path,method,request,db,viewer,env,guard:visibility(viewer),bookFor,normalize,fold:convert,url};
+  const scenario=await scenarioRoute(context);if(scenario!==null)return json(scenario);
+  const research=await worldCommunityRoute(context);if(research!==null)return json(research);
   const technique=await techniqueRoute(context);if(technique!==null)return json(technique);
   const storage=await storageRoute(context);if(storage!==null)return json(storage);
   const account=await accountRoute(context);if(account!==null){
@@ -276,7 +280,7 @@ async function serveObject(env, key, request, fileName) {
 export default { async fetch(request, env, ctx) {
   try {
     const response=await route(request,env),path=new URL(request.url).pathname;
-    if(response.ok&&path!=='/api/techniques/match'&&!['GET','HEAD'].includes(request.method)&&/^\/api\/(books|cases|drafts|submissions|core-members|account-levels|techniques|account\/register)(?:\/|$)/.test(path)){
+    if(response.ok&&path!=='/api/techniques/match'&&!/^\/api\/world\/runs\/[a-f0-9-]{36}\/replay$/.test(path)&&!['GET','HEAD'].includes(request.method)&&/^\/api\/(world|community|books|cases|drafts|submissions|core-members|account-levels|techniques|account\/register)(?:\/|$)/.test(path)){
       // A delayed backup must never turn a committed save into a false failure.
       try{await markStored(env.DB);const backup=createBackup(env);if(ctx?.waitUntil)ctx.waitUntil(backup);else await backup;}catch{}
     }

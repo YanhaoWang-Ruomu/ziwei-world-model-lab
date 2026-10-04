@@ -1,0 +1,11 @@
+import {spawnSync,spawn} from 'node:child_process';
+import {fileURLToPath} from 'node:url';
+import path from 'node:path';
+const root=path.resolve(fileURLToPath(new URL('..',import.meta.url)));
+const cli=path.join(root,'node_modules/wrangler/bin/wrangler.js');
+const persist=path.join(root,'.wrangler/persistence-test');
+const migration=spawnSync(process.execPath,[cli,'d1','migrations','apply','DB','--local','--persist-to',persist,'--config','wrangler.jsonc'],{cwd:root,stdio:'inherit',windowsHide:true});
+if(migration.status!==0)process.exit(migration.status||1);
+const server=spawn(process.execPath,[cli,'dev','--local','--ip','127.0.0.1','--port','8770','--persist-to',persist,'--var','PREVIEW_PURPOSE:fictional-persistence','--config','wrangler.jsonc'],{cwd:root,stdio:'inherit',windowsHide:true});
+for(const signal of ['SIGINT','SIGTERM'])process.on(signal,()=>server.kill(signal));
+server.on('exit',code=>process.exit(code||0));
