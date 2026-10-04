@@ -38,3 +38,13 @@
 | 桌面/手机视觉复核 | 本轮未完成：浏览器工具启动失败，电脑控制工具因无法可靠识别当前浏览器网址而停止；未绕过限制 |
 
 验证服务使用公开算法适配器和独立的 `.wrangler/persistence-test`，不执行原项目私有安星模块，不读取真实技法、书籍或用户资料。未改动原有 8769 服务、正式网站、线上数据库或权限。本轮 GitHub 更新只导出明确公开清单内的源码和虚构示例。
+
+## Community editor and review update — 2026-10-04
+
+- Community moderation is hosted in the existing Review Center, including pending posts, replies, report target inspection, public-content lookup and hide actions. Existing technique review remains intact.
+- A signed-out reader gets a sign-in entry directly inside the reply area. Signing in returns to the selected public post. Only that public post ID and a 30-minute expiry are kept as a navigation preference; drafts and private records are not put in this return marker.
+- Posts and replies share plain-text / Markdown editing, bold, italic, strikethrough, headings, ordered/unordered lists, quotes, code, safe web links, and a rendered preview. HTML is displayed as text.
+- Uploaded images and attachments use persistent object storage and the additive 0013 migration. Limits: 10 MiB/file, 8 files/content item, 30 MiB/content item. Access follows parent publication status. An unattached upload is private to its owner and may be removed; expired unattached uploads are cleaned on the owner's next upload.
+- Validated only with fictional data and the public chart adapter on port 8770: 114 public unit / DOM tests, 50 media integration checks, 62 existing community/world checks, 38 account/case checks, additive migration preservation, and restart persistence for posts, replies and image bytes.
+- Browser plugin failed to connect because its browser-service runtime file was unavailable. The automated DOM test covers comment placement, login return, rich rendering, upload controls, and moving moderation out of Community; desktop/mobile screenshot inspection was not completed this round.
+- Existing Windows and Android wrappers already support file selection and authenticated file downloads; these web features load from the shared website without changing installer versions.

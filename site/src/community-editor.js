@@ -1,0 +1,24 @@
+import {renderCommunityText,renderCommunityFiles,communityFileAccept,communityFileLimit} from './community-text.mjs';
+
+export function communityEditor({api,el,btn,label='正文',max=12000}) {
+  const root=el('div','community-editor'),toolbar=el('div','community-editor-toolbar'),input=el('textarea'),mode=el('select'),preview=el('div','community-editor-preview'),filesRoot=el('div','community-editor-files'),status=el('p','research-status');
+  input.name='body';input.maxLength=max;input.rows=7;input.setAttribute('aria-label',label);input.placeholder='写下你的想法，可使用上方工具排版，也可添加图片和附件。';
+  mode.setAttribute('aria-label','文字格式');mode.append(new Option('排版文字','markdown'),new Option('纯文字','plain'));
+  const picked=el('input');picked.type='file';picked.multiple=true;picked.accept=communityFileAccept;picked.hidden=true;
+  let files=[],busy=false,epoch=0,showPreview=false;
+  status.setAttribute('role','status');
+  function refresh(){preview.hidden=!showPreview;input.hidden=showPreview;renderCommunityText(preview,input.value,mode.value);filesRoot.replaceChildren();for(const file of files){const row=el('div','community-editor-file'),view=el('div');renderCommunityFiles(view,[file]);row.append(view,btn('移除',async()=>{if(busy)return;files=files.filter(f=>f.id!==file.id);refresh();try{await api('/api/community/attachments/'+file.id,{method:'DELETE'});}catch{status.textContent='已从本次内容移除。';}}));filesRoot.append(row);}root.querySelectorAll('.community-format-button').forEach(b=>b.disabled=mode.value==='plain'||showPreview);}
+  function edit(before,after='',prefix=false){const a=input.selectionStart,b=input.selectionEnd,selected=input.value.slice(a,b)||'文字';if(prefix){const start=input.value.lastIndexOf('\n',a-1)+1;input.setRangeText(input.value.slice(start,b).split('\n').map(line=>before+line).join('\n'),start,b,'select');}else input.setRangeText(before+selected+after,a,b,'select');input.dispatchEvent(new Event('input',{bubbles:true}));input.focus();}
+  for(const [name,start,end,prefix]of [['粗体','**','**'],['斜体','*','*'],['删除线','~~','~~'],['标题','## ','',true],['列表','- ','',true],['编号','1. ','',true],['引用','> ','',true],['代码','`','`']]){const b=btn(name,()=>edit(start,end,prefix));b.classList.add('community-format-button');toolbar.append(b);}
+  const linkPanel=el('div','community-link-panel'),address=el('input');address.type='url';address.placeholder='https://';address.setAttribute('aria-label','链接地址');linkPanel.hidden=true;let linkSelection=[0,0];
+  const linkButton=btn('链接',()=>{linkSelection=[input.selectionStart,input.selectionEnd];linkPanel.hidden=!linkPanel.hidden;if(!linkPanel.hidden)address.focus();});linkButton.classList.add('community-format-button');
+  linkPanel.append(address,btn('插入链接',()=>{try{const u=new URL(address.value);if(!['https:','http:'].includes(u.protocol)||u.username||u.password)throw Error();input.setSelectionRange(...linkSelection);edit('[',']('+u.href+')');linkPanel.hidden=true;address.value='';}catch{status.textContent='请填写完整的 http 或 https 网页地址。';}}));
+  const uploadButton=btn('图片 / 附件',()=>picked.click()),previewButton=btn('预览排版',()=>{showPreview=!showPreview;previewButton.textContent=showPreview?'继续编辑':'预览排版';refresh();});toolbar.append(linkButton,uploadButton,mode,previewButton);
+  picked.addEventListener('change',async()=>{const selected=[...picked.files],g=epoch;picked.value='';if(busy)return;busy=true;uploadButton.disabled=true;status.textContent='正在保存附件…';
+    try{for(const file of selected){if(files.length>=8)throw Error('每条内容最多添加 8 个附件。');if(!file.size||file.size>communityFileLimit)throw Error('每个文件需在 10 MB 以内。');if(files.reduce((s,f)=>s+f.size,0)+file.size>30*1024*1024)throw Error('每条内容的附件合计不能超过 30 MB。');const data=await api('/api/community/attachments',{method:'POST',headers:{'Content-Type':'application/octet-stream','X-File-Name':encodeURIComponent(file.name)},body:file});if(g!==epoch)return;files.push(data.attachment);refresh();}if(g===epoch)status.textContent='附件已保存，随本条内容提交审核。';}
+    catch(e){if(g===epoch)status.textContent=e.message;}finally{if(g===epoch){busy=false;uploadButton.disabled=false;}}
+  });
+  mode.addEventListener('change',refresh);input.addEventListener('input',()=>{if(showPreview)refresh();});
+  root.append(el('label','community-editor-label',label),toolbar,linkPanel,input,preview,filesRoot,picked,el('small','muted','每个文件最多 10 MB；最多 8 个，总计 30 MB。支持常用图片、PDF、Office、文字和 ZIP 文件。'),status);refresh();
+  return {root,input,get busy(){return busy;},value(){if(busy)throw Error('附件还在上传，请稍候再提交。');if(!input.value.trim()&&!files.length)throw Error('请填写文字，或添加图片和附件。');return {body:input.value,format:mode.value,attachments:files.map(f=>f.id)};},reset(){epoch++;busy=false;uploadButton.disabled=false;files=[];input.value='';mode.value='markdown';showPreview=false;previewButton.textContent='预览排版';status.textContent='';refresh();},dispose(){epoch++;}};
+}

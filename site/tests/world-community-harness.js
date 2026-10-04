@@ -7,7 +7,7 @@ export const worldHarness=`<!doctype html><html lang="zh-CN"><head><meta charset
 import {initResearchCommunity} from '/research-community.js';
 const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
 const btn=(t,fn,cls='book-secondary')=>{const n=el('button',cls,t);n.type='button';n.onclick=fn;return n;};
-const api=async(p,o={})=>{const r=await fetch(p,{...o,headers:{'Content-Type':'application/json'},cache:'no-store'});const d=await r.json();if(!r.ok)throw Error(d.error);return d;};
+const api=async(p,o={})=>{const r=await fetch(p,{...o,headers:{...(typeof o.body==='string'?{'Content-Type':'application/json'}:{}),...o.headers},cache:'no-store'});const d=await r.json();if(!r.ok)throw Error(d.error);return d;};
 initResearchCommunity({api,el,btn});
 function nav(){const view=location.hash.slice(1)||'world';document.querySelectorAll('[data-view]').forEach(n=>n.hidden=n.dataset.view!==view);document.querySelectorAll('[data-nav]').forEach(n=>n.setAttribute('aria-current',n.dataset.nav===view?'page':'false'));document.querySelector('#workspace-location').textContent=view==='world'?'世界状态与复盘':'社区讨论';document.dispatchEvent(new CustomEvent('ziwei:view',{detail:view}));}
 window.addEventListener('hashchange',nav);nav();document.dispatchEvent(new CustomEvent('ziwei:session',{detail:await api('/api/session')}));window.uiReady=true;

@@ -9,6 +9,13 @@ db.exec(fs.readFileSync(path.join(__dirname,'../drizzle/0012_scenario_runs.sql')
 db.exec("INSERT INTO world_runs VALUES('run','b','generic-transition/1','fictional-hash','{}','{}',1)");
 assert.throws(()=>db.exec("INSERT INTO world_runs VALUES('duplicate','b','generic-transition/1','fictional-hash','{}','{}',1)"));
 db.exec("INSERT INTO community_posts(id,user_id,title,body,kind,tags,created_at,updated_at) VALUES('post','fictional-user','fictional','fictional','case','[]',1,1); INSERT INTO community_comments(id,post_id,user_id,body,created_at) VALUES('comment','post','fictional-user','fictional',1); INSERT INTO community_favorites VALUES('fictional-user','post',1);");
+db.exec(fs.readFileSync(path.join(__dirname,'../drizzle/0013_community_media.sql'),'utf8'));
+assert.deepEqual({...db.prepare("SELECT body,format FROM community_posts WHERE id='post'").get()},{body:'fictional',format:'plain'});
+assert.equal(db.prepare("SELECT format FROM community_comments WHERE id='comment'").get().format,'plain');
+db.exec("INSERT INTO community_attachments(id,user_id,file_name,content_type,file_size,object_key,sha256,created_at) VALUES('file','fictional-user','fictional.txt','text/plain',9,'community/file','fictional-hash',1)");
+for(const target of ["target_kind=NULL,target_id='orphan'","target_kind='post',target_id=NULL","target_kind='invalid',target_id='post'"])assert.throws(()=>db.exec('UPDATE community_attachments SET '+target));
+db.exec("UPDATE community_attachments SET target_kind='post',target_id='post'");
+assert.throws(()=>db.exec('UPDATE community_attachments SET file_size=10485761'));
 assert.throws(()=>db.exec("UPDATE community_posts SET status='unreviewed-public'"));
 assert.throws(()=>db.exec("UPDATE community_posts SET kind='executable-rule'"));
 db.exec("INSERT INTO community_reports(id,user_id,target_kind,target_id,reason,created_at) VALUES('report','fictional-user','post','post','fictional',1)");

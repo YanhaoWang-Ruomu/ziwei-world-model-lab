@@ -1,4 +1,5 @@
 import {worldCommunityRoute} from './world-community.js';
+import {attachmentRoute} from './community-attachments.mjs';
 import {scenarioRoute} from './scenario-runs.js';
 import {searchLibrary} from './library-search.mjs';
 import {deleteBook,activeBookGuard} from './book-deletion.mjs';
@@ -89,6 +90,7 @@ async function route(request, env) {
     return response;
   }
   const context={path,method,request,db,viewer,env,guard:visibility(viewer),bookFor,normalize,fold:convert,url};
+  const attachment=await attachmentRoute(context);if(attachment!==null)return attachment instanceof Response?attachment:json(attachment);
   const scenario=await scenarioRoute(context);if(scenario!==null)return json(scenario);
   const research=await worldCommunityRoute(context);if(research!==null)return json(research);
   const technique=await techniqueRoute(context);if(technique!==null)return json(technique);
