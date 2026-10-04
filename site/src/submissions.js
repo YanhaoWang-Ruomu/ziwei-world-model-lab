@@ -7,22 +7,18 @@ export function initSubmissions({api,el,btn,ruleWorkbench,onPublished,openSource
   let activeDraft;
   const labels=[['title','卡片标题',160],['topic','主题',80],['quote','原文摘录（保留简繁原字）',12000],['conditions','适用条件',6000],['conclusion','原文结论',6000],['exceptions','例外与限制',6000],['terminology','术语说明',6000],['questions','待核问题',6000],['notes','整理说明',6000]];
   function clearEditor(){activeDraft?.close();activeDraft=null;$('#submission-editor').replaceChildren();$('#review-editor').replaceChildren();}
-  async function refresh(next=viewer){const changed=JSON.stringify(viewer)!==JSON.stringify(next);viewer=next;if(changed)clearEditor();const run=++generation;
+  async function refresh(next=viewer){const changed=JSON.stringify(viewer)!==JSON.stringify(next);viewer=next;if(changed){clearEditor();offset=0;reviewOffset=0;}const run=++generation;
     for(const id of ['submission-list','review-list'])$('#'+id).replaceChildren();
     if(viewer.role==='public')return;
-    const review=viewer.core,root=$(review?'#review-list':'#submission-list'),status=$(review?'#review-status':'#submission-status');
-    const select=$(review?'#review-filter':'#submission-filter'),start=review?reviewOffset:offset;
-    $('#submission-account-note').textContent=viewer.sharedAccount?'当前使用共享账号：使用同一账号的人会看到共同的提交记录。':'这里保留你的提交、审核结果与退回原因。';
-    try{const data=await api(`/api/submissions?status=${select.value}&offset=${start}`);if(run!==generation)return;
-      status.textContent=`${data.total} 份提交`;if(!data.submissions.length)root.append(el('div','workspace-empty',review?'当前没有需要处理的提交。':'还没有提交记录。可从卡片库编辑卡片，或从已校订的原文页整理新卡片。'));
-      for(const row of data.submissions){const item=el('article','submission-row');const meta=el('div','submission-meta');meta.append(el('span',`submission-state ${row.status}`,names[row.status]),el('span','muted',new Date(row.created_at*1000).toLocaleString()));
-        item.append(meta,el('h3','',row.payload.title),el('p','muted',`《${row.book_title}》 · 第 ${row.page} 页（段） · ${row.card_id?'修改已有卡片':'新增卡片'}`));
-        if(review)item.append(el('p','muted',`提交人：${row.author_label}`));
-        if(row.decision_note)item.append(el('p','decision-note',`审核意见：${row.decision_note}`));
-        item.append(btn(review&&row.status==='pending'?'打开并审核':'查看提交',()=>openSubmission(row.id),review&&row.status==='pending'?'book-primary':'book-secondary'));root.append(item);
-      }
-      const pages=el('div','page-controls');if(start>0)pages.append(btn('上一组提交',()=>{if(review)reviewOffset-=20;else offset-=20;refresh();}));if(start+20<data.total)pages.append(btn('下一组提交',()=>{if(review)reviewOffset+=20;else offset+=20;refresh();}));root.append(pages);
-    }catch(e){if(run===generation)status.textContent=e.message;}
+    $('#submission-account-note').textContent=viewer.sharedAccount?'当前使用共享账号：使用同一账号的人会看到共同的提交记录。':'这里只显示你的技法提交，包含自编技法与书籍摘录；社区投稿仍在社区中查看。';
+    async function fill(review){const root=$(review?'#review-list':'#submission-list'),status=$(review?'#review-status':'#submission-status'),select=$(review?'#review-filter':'#submission-filter'),start=review?reviewOffset:offset;
+      try{const params=new URLSearchParams({status:select.value,offset:String(start),scope:review?'all':'mine'}),data=await api('/api/submissions?'+params);if(run!==generation)return;
+        status.textContent=data.total+' 份书籍摘录提交';if(!data.submissions.length)root.append(el('div','workspace-empty',review?'当前没有需要处理的书籍摘录提交。':'还没有书籍摘录提交记录。'));
+        for(const row of data.submissions){const item=el('article','submission-row'),meta=el('div','submission-meta');meta.append(el('span','submission-state '+row.status,names[row.status]),el('span','muted',new Date(row.created_at*1000).toLocaleString()));item.append(meta,el('h3','',row.payload.title),el('p','muted','《'+row.book_title+'》 · 第 '+row.page+' 页（段） · '+(row.card_id?'修改已有卡片':'新增卡片')));if(review)item.append(el('p','muted','提交人：'+row.author_label));if(row.decision_note)item.append(el('p','decision-note','审核意见：'+row.decision_note));item.append(btn(review&&row.status==='pending'?'打开并审核':'查看提交',()=>openSubmission(row.id),review&&row.status==='pending'?'book-primary':'book-secondary'));root.append(item);}
+        const pages=el('div','page-controls');if(start>0)pages.append(btn('上一组提交',()=>{if(review)reviewOffset-=20;else offset-=20;refresh();}));if(start+20<data.total)pages.append(btn('下一组提交',()=>{if(review)reviewOffset+=20;else offset+=20;refresh();}));root.append(pages);
+      }catch(e){if(run===generation)status.textContent=e.message;}
+    }
+    await Promise.all([fill(false),...(viewer.core?[fill(true)]:[])]);if(run===generation)document.dispatchEvent(new Event('ziwei:review-updated'));
   }
   function editor({book,page,card,payload,submission,sourceText,sourceCurrent=true,currentCard}) {
     const review=Boolean(submission&&viewer.core&&submission.status==='pending'),readOnly=Boolean(submission&&!review),target=review?'review':'submissions';

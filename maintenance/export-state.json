@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "601410e1108036025fe38773a3377536c8090477",
+  "sourceCommit": "d7637dfa2961c4987dd2f5462a2340ef523aae04",
   "files": [
     {
       "path": "site/db/schema.ts",
@@ -9,6 +9,10 @@
     {
       "path": "site/docs/community-local-acceptance.md",
       "sha256": "82b7141ec762468c567bffbb6a6cc0ab089c4b8b95e5afc746b2b1de362c4c41"
+    },
+    {
+      "path": "site/docs/navigation-consolidation.md",
+      "sha256": "97d2d9596a8f5a62164c7843c3f0e7afcb92e9c9a79b6d349d174bf06b86f8cd"
     },
     {
       "path": "site/drizzle.config.ts",
@@ -159,6 +163,10 @@
       "sha256": "7720c5ceb0be4a5b0a700fc48b89736c685d77a72adf08fd327f47f4601c8f5a"
     },
     {
+      "path": "site/server/activity-history.mjs",
+      "sha256": "80e5e5e22d822d5e070e3f94330d08a8922099e8cdbb293bf81f68673b7b46f6"
+    },
+    {
       "path": "site/server/book-deletion.mjs",
       "sha256": "db41d64eb7271f747117c95ac7ab76f6108fa140184c3d3d71f400b8f55b1569"
     },
@@ -216,7 +224,7 @@
     },
     {
       "path": "site/server/submissions.js",
-      "sha256": "e1402ea858703ede853b9f0d3f505f80ddcff4f3f260465320912f3e58ffd524"
+      "sha256": "b83498c71d9596a37dcb13cf59a60b203582dfbc4bea1590ce1cf60ba188045e"
     },
     {
       "path": "site/server/technique-history.js",
@@ -224,15 +232,19 @@
     },
     {
       "path": "site/server/techniques.js",
-      "sha256": "be015288549ad417f624c956c98ebe0ee9bd9e503cee70fb53b30baf4b5019c6"
+      "sha256": "f1cd4d9e2cea693d3351e3397f113d785b19db37962cd356d6c4f610ad55856d"
     },
     {
       "path": "site/server/worker.js",
-      "sha256": "4162bc40a6bdfb73426f8a9c9264b487fcc399c5365b78d7c5ed73c36999a739"
+      "sha256": "c4d521dc26f9a378a4ff38fddaf31eadce91f9ba4b9483e30f723f36721ede57"
     },
     {
       "path": "site/server/world-community.js",
       "sha256": "2e32a4a20be81a55c2723355baa4497cb92a16d77fc004ae1778b1b17b239d81"
+    },
+    {
+      "path": "site/src/activity-history.mjs",
+      "sha256": "901a5e398d1e24708d03c5c68e3b0c3c7333982a58de0d8242aebd8fea263e87"
     },
     {
       "path": "site/src/app.js",
@@ -256,7 +268,7 @@
     },
     {
       "path": "site/src/cards.js",
-      "sha256": "10b5f300bf3631d2591737765081beb04f8467c4ab2981712bdc5015bb4ab2cb"
+      "sha256": "4f8f9c540adb6e1671409662d72be16d801f0d178b6ca2dc59c15277e6b09a41"
     },
     {
       "path": "site/src/celestial-events.mjs",
@@ -336,7 +348,7 @@
     },
     {
       "path": "site/src/community.js",
-      "sha256": "68f98ecaece37ff7c9833c9beb3175cf390d6fb653ee08417ff67f5caa82183d"
+      "sha256": "5396dfad38ad5efb80d9803051f339935071ebc35da8c8ec3e83513dd05e4290"
     },
     {
       "path": "site/src/compact-controls.mjs",
@@ -404,7 +416,7 @@
     },
     {
       "path": "site/src/index.html",
-      "sha256": "8b91bc75c21d96b4ab2aee5e1704f2f42c0937d33897d9684565f6257d76ecec"
+      "sha256": "313bb7a1226a9fbd3cef8f8e0668d358b7b90c1eb19253750010f9426f429731"
     },
     {
       "path": "site/src/journey-motion.mjs",
@@ -424,7 +436,7 @@
     },
     {
       "path": "site/src/library.js",
-      "sha256": "fdf521e180519cc816a68bc41571ab9a385f770671ed5826e9c9f59c0ffbb9d8"
+      "sha256": "a9f286d11e9e147d5c58dd5f671d379b2fd19935f9665cad20d3000af7c04473"
     },
     {
       "path": "site/src/living-landscape.mjs",
@@ -496,7 +508,7 @@
     },
     {
       "path": "site/src/research-community.js",
-      "sha256": "ecdb73ae87c3afd6f6a6ba5585909670814569df8361683c4dcdaa691cc84806"
+      "sha256": "1f4d36f810b8ad0bb5e29ea44d8a5fc43eb676cf301e0dde4c95fbe2e06c2037"
     },
     {
       "path": "site/src/review.css",
@@ -516,7 +528,7 @@
     },
     {
       "path": "site/src/rules.js",
-      "sha256": "c42921f482f11f499e96bc8d5554102f9b9b60cb5daae6d98c9d82cba2403165"
+      "sha256": "d2499344c298ac143705ef097718fe137bcf4f13c6553523806b97c9ff2480ae"
     },
     {
       "path": "site/src/scenario-engine.mjs",
@@ -708,7 +720,7 @@
     },
     {
       "path": "site/src/submissions.js",
-      "sha256": "d60c734ca5d9479b6dd268c71be3bae6c734e86a255133264d7b768a635e9191"
+      "sha256": "9e883f350fd910bd664b749d02bb4ffbb8d9cf410b226f1a961a5f465e9c6ddb"
     },
     {
       "path": "site/src/tech-workbench.css",
@@ -720,7 +732,7 @@
     },
     {
       "path": "site/src/technique-history.js",
-      "sha256": "6555b86a6775e7a47939f237bc7e90f195212a987104ed62048b77b2c9128c1a"
+      "sha256": "e53f0788ee4a9b2f8d21c700db63054175f5d73b8432a43dcc119f86b2faff3a"
     },
     {
       "path": "site/src/technique-scan.mjs",
@@ -732,7 +744,7 @@
     },
     {
       "path": "site/src/techniques.js",
-      "sha256": "287f38ecff00eb7f5d3d5234a74b49dbb37f8844eb1f4870685a10cfeb174064"
+      "sha256": "9eed4f89cb62b7c2b3e01242ce1783a71d0c0b265495d055c19422d6ce8bf08c"
     },
     {
       "path": "site/src/terrain-profile.mjs",
@@ -752,7 +764,15 @@
     },
     {
       "path": "site/src/workspace-access.mjs",
-      "sha256": "00587afd9b7b55c27edc6c4bea38d2b2bc3ba03d7fdb1d459e8f9b5c4889a209"
+      "sha256": "d16f6bed915a5684fb874cc88b6d7509617c52412bb57bca3570f2d9fcee70ac"
+    },
+    {
+      "path": "site/src/workspace-consolidated.css",
+      "sha256": "ebd09bf2ac3e68aeb156dfeac7c3bc4eb621b5b22d85598499936d9645b2d17b"
+    },
+    {
+      "path": "site/src/workspace-sections.mjs",
+      "sha256": "40ada38448061629a71b545094a5097758e21b796125c06b8dba1b48625c0624"
     },
     {
       "path": "site/src/workspace.css",
@@ -760,7 +780,7 @@
     },
     {
       "path": "site/src/workspace.js",
-      "sha256": "daa0c78544b2ea649bf4ebf04339353da0dfdd61ca3ad87eef91924b5b05597c"
+      "sha256": "222a60d5ce2e99b7a9e4cb96db1e1a3b6103ac6a1cae7dc84c175956307721ce"
     },
     {
       "path": "site/src/world-time.mjs",
@@ -773,6 +793,10 @@
     {
       "path": "site/tests/accounts.test.mjs",
       "sha256": "ea6909c0088ad719a552856db7d55d97c21aed532c25bcba9a1a142ff41e994b"
+    },
+    {
+      "path": "site/tests/activity-history.test.mjs",
+      "sha256": "422f3db603bc51c76b88894bc6f9de975eb79b47f0ba6a31493a6c9576c5fc39"
     },
     {
       "path": "site/tests/audio-playback.test.mjs",
@@ -861,6 +885,10 @@
     {
       "path": "site/tests/workspace-access.test.mjs",
       "sha256": "3184a526eaf9c72f1d4310b590a90cdc8b1ebf465d3c3eb2f4d58c55aa3a540e"
+    },
+    {
+      "path": "site/tests/workspace-consolidation.test.mjs",
+      "sha256": "b56a36aba00c49fe807a0d3f1377586756022552161def5ff4fe95a4d7dec1f4"
     },
     {
       "path": "site/tests/workspace-navigation.test.mjs",

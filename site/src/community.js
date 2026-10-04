@@ -98,7 +98,7 @@ export function initCommunity({api,el,btn}) {
     if(!reviewRoot)return;if(!viewer.core){reviewGate();return;}const g=generation,r=++reviewRequest,data=await api('/api/community/moderation');if(g!==generation||r!==reviewRequest)return;
     reviewRoot.className='community-moderation';reviewRoot.replaceChildren(el('h2','','社区投稿、评论与举报'),el('p','muted','核对正文及附件后批准公开；举报内容与处理记录集中保留。'),action('刷新社区队列',loadModeration,reviewStatus),reviewStatus,queue);queue.replaceChildren();
     for(const [key,kind,label]of [['posts','post','投稿'],['comments','comment','评论'],['reports','report','举报']]){
-      const section=el('section','community-review-group');section.append(el('h3','',label+' · '+data[key].length));queue.append(section);
+      const section=el('section','community-review-group');section.dataset.reviewCategory=kind==='report'?'reports':'community';section.append(el('h3','',label+' · '+data[key].length));queue.append(section);
       if(!data[key].length)section.append(el('p','muted','暂无待处理'+label+'。'));
       for(const p of data[key]){const card=el('article','research-card');card.append(el('h4','',kind==='post'?p.title:kind==='comment'?'待审评论':'待处理举报'));if(kind==='report'){
           card.append(el('p','research-copy',p.reason));const target=el('div','community-review-target');card.append(action('查看举报内容',()=>loadTarget(p.target_kind,p.target_id,target),reviewStatus),target);
@@ -107,7 +107,7 @@ export function initCommunity({api,el,btn}) {
       }
     }
     const find=el('details','community-review-search'),f=form('research-form research-inline'),found=el('div'),out=message();find.append(el('summary','','查找已公开讨论并处理'),f,found);f.append(field('q','关键词'),submit('查找'),out);reviewRoot.append(find);
-    guarded(f,out,async v=>{const epoch=generation,data=await api('/api/community/posts?'+new URLSearchParams({q:v.q}));if(epoch!==generation)return;found.replaceChildren();out.textContent=data.posts.length?'选择内容查看或隐藏。':'没有匹配讨论。';for(const p of data.posts){const target=el('div');found.append(action(p.title,()=>loadTarget('post',p.id,target),out),target);}});
+    guarded(f,out,async v=>{const epoch=generation,data=await api('/api/community/posts?'+new URLSearchParams({q:v.q}));if(epoch!==generation)return;found.replaceChildren();out.textContent=data.posts.length?'选择内容查看或隐藏。':'没有匹配讨论。';for(const p of data.posts){const target=el('div');found.append(action(p.title,()=>loadTarget('post',p.id,target),out),target);}});find.dataset.reviewCategory='community';document.dispatchEvent(new Event('ziwei:review-updated'));
   }
   function clear(){generation++;listRequest++;detailRequest++;reviewRequest++;commentEditor?.dispose();commentEditor=null;postEditor.reset();composer.reset();composerPanel.open=false;composerStatus.textContent='';search.reset();offset=0;detailId='';detail.replaceChildren();detail.hidden=true;list.replaceChildren();status.textContent='';reviewStatus.textContent='';queue.replaceChildren();reviewGate();}
   async function enter(view){const g=generation;try{if(view==='community')await loadPosts();if(view==='review')await loadModeration();}catch(e){if(g===generation)(view==='review'?reviewStatus:status).textContent=e.message;}}
@@ -118,5 +118,5 @@ export function initCommunity({api,el,btn}) {
     else enter(location.hash.slice(1));
   });
   document.addEventListener('ziwei:logout',()=>{clear();viewer={};composerPanel.hidden=true;});
-  document.addEventListener('ziwei:view',e=>enter(e.detail));reviewGate();
+  document.addEventListener('ziwei:view',e=>enter(e.detail));document.querySelector('#review-refresh')?.addEventListener('click',()=>enter('review'));reviewGate();
 }

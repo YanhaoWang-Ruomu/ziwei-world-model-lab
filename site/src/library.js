@@ -1,3 +1,4 @@
+import {initWorkspaceSections} from './workspace-sections.mjs';
 import {initResearchCommunity} from './research-community.js';
 import { importMaterial, pauseImport } from './upload.js';
 import { renderManagement } from './management.js';
@@ -193,6 +194,7 @@ workspace=initWorkspace({api,onSession:applySession});
 const personalAccount=initPersonalAccount({api,onSession:applySession});
 const privateVault=initPrivateLibrary({el,btn});
 initTechniques({api,el,btn,vault:privateVault});
+initWorkspaceSections({api,el,btn});
 async function applySession(next){
   ++searchGeneration;++detailGeneration;ruleWorkbench.clear();modelWorkbench.clear();submissions.clear();
   pageLookup.hidden=true;lookupBook.replaceChildren();lookupStatus.textContent='';searchCoverage.textContent='';

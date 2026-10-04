@@ -31,6 +31,7 @@
   <link rel="stylesheet" href="storage.css" />
   <link rel="stylesheet" href="gilded-theme.css" />
   <link rel="stylesheet" href="research-community.css" />
+  <link rel="stylesheet" href="workspace-consolidated.css" />
 </head>
   <body data-role="public" class="immersive-sky sky-pending">
     <div class="grain" aria-hidden="true"></div>
@@ -39,21 +40,15 @@
       <p class="sidebar-caption">观天 · 察人 · 求知</p>
       <button id="sky-menu-toggle" class="sky-menu-toggle" type="button" aria-expanded="false" aria-controls="workspace-navigation">工作区 <span aria-hidden="true">☰</span></button>
       <nav class="workspace-nav" id="workspace-navigation">
-        <a href="/download.html"><span aria-hidden="true">↓</span>下载应用</a>
         <a href="#model" data-nav="model"><span aria-hidden="true">01</span>星辰与命盘</a>
-        <a href="#world" data-nav="world"><span aria-hidden="true">◇</span>世界状态与复盘</a>
-        <a href="#community" data-nav="community"><span aria-hidden="true">◇</span>社区讨论</a>
-        <a href="#library" data-nav="library"><span aria-hidden="true">02</span>书籍与文章</a>
-        <a data-nav="cards" class="workspace-nav-locked" aria-disabled="true" tabindex="-1"><span aria-hidden="true">03</span>技法卡片库</a>
-        <a data-nav="submissions" class="workspace-nav-locked" aria-disabled="true" tabindex="-1"><span aria-hidden="true">04</span>我的提交</a>
-        <a data-nav="review" class="workspace-nav-locked" aria-disabled="true" tabindex="-1"><span aria-hidden="true">05</span>审核中心</a>
-        <a data-nav="rules" class="workspace-nav-locked" aria-disabled="true" tabindex="-1"><span aria-hidden="true">06</span>规则工作台</a>
-        <a data-nav="materials" class="workspace-nav-locked" aria-disabled="true" tabindex="-1"><span aria-hidden="true">07</span>材料管理</a>
-        <a data-nav="private" class="workspace-nav-locked" aria-disabled="true" tabindex="-1"><span aria-hidden="true">08</span>本机私密入口</a>
-        <a data-nav="members" class="workspace-nav-locked" aria-disabled="true" tabindex="-1"><span aria-hidden="true">09</span>核心账户</a>
-        <a data-nav="lab" class="workspace-nav-locked" aria-disabled="true" tabindex="-1"><span aria-hidden="true">10</span>研究实验室</a><a data-nav="history" class="workspace-nav-locked" aria-disabled="true" tabindex="-1"><span aria-hidden="true">11</span>历史记录</a>
+        <a href="#library" data-nav="library"><span aria-hidden="true">02</span>资料库</a>
+        <a data-nav="cards" class="workspace-nav-locked" aria-disabled="true" tabindex="-1"><span aria-hidden="true">03</span>技法中心</a>
+        <a href="#world" data-nav="world"><span aria-hidden="true">04</span>研究室</a>
+        <a href="#community" data-nav="community"><span aria-hidden="true">05</span>社区</a>
+        <a data-nav="review" class="workspace-nav-locked" aria-disabled="true" tabindex="-1"><span aria-hidden="true">06</span>管理中心</a>
       </nav>
       <div class="sidebar-account"><span class="account-dot" aria-hidden="true"></span><div><strong id="workspace-role">公开访客</strong><small id="workspace-role-note">阅读与使用</small></div><a href="#account" aria-label="账户与访问">↗</a></div>
+      <a class="sidebar-download" href="/download.html">下载与更新</a>
     </aside>
     <header class="site-header">
       <a class="brand" href="#model" aria-label="观星台首页">
@@ -141,11 +136,11 @@
       <section class="workspace-panel" id="account" data-view="account" hidden><p class="workspace-kicker">账户与访问</p><h1>进入你的工作空间</h1><p class="muted">登录后按当前权限显示可用功能。选择对应的登录入口；公开功能无需登录。</p><div class="account-flow"><div class="personal-account-card"><p class="panel-overline">PERSONAL ACCOUNT</p><h2>个人账户</h2><p>登录后收藏自己的命例，随时回来继续观盘。</p>
 <div id="personal-auth-entry"><div class="personal-auth-tabs" role="group" aria-label="登录或注册"><button type="button" data-account-mode="login" aria-pressed="true">登录</button><button type="button" data-account-mode="register" aria-pressed="false">注册新账户</button></div>
 <form id="personal-account-form"><label>用户名<input id="personal-username" name="username" autocomplete="username" minlength="3" maxlength="32" required placeholder="3–32 位中英文或数字"></label><label>密码<input id="personal-password" name="password" type="password" autocomplete="current-password" maxlength="128" required placeholder="注册时至少 12 位"></label><label id="personal-confirm-label" hidden>确认密码<input id="personal-password-confirm" type="password" autocomplete="new-password" maxlength="128"></label><label class="personal-remember"><input id="personal-remember" type="checkbox">在此设备保持登录 30 天</label><button class="book-primary" id="personal-account-submit" type="submit">登录</button></form><small>可使用浏览器的密码管理器保存登录信息。请妥善保管密码，当前暂未提供邮件找回。</small></div>
-<div id="personal-profile" hidden><h3 id="personal-profile-name"></h3><p id="personal-profile-role"></p><small>账户识别码</small><p id="personal-profile-code"></p><button type="button" class="book-primary" data-cases-open>我的命例 ↗</button><a class="book-secondary" href="#model">返回观星台</a></div><p id="personal-account-status" role="status" aria-live="polite"></p><a id="personal-signin" href="/signin-with-chatgpt?return_to=%2F%23account" target="_top">使用 ChatGPT 账号登录 ↗</a><small>登录只确认身份。核心权限由创建者本人授予；未获授权时仍使用公开功能。</small></div><div id="account-access"></div></div><div class="account-role-guide"><div><strong>公开访客</strong>排盘、规则推演与公开材料</div><div><strong>特殊用户</strong>授权材料、技法卡片与审核提交</div><div><strong>核心管理人</strong>全部业务功能与审核发布</div></div><section class="sky-account-preferences"><p class="panel-overline">PERSONAL PREFERENCES</p><h2>个人设置 · 观星偏好</h2><label class="sky-pref-check"><input type="checkbox" data-sky-pref="opening" checked />进入首页时播放巡天开场</label><label>光阴流转<select data-sky-pref="speed"><option value="1">舒缓 · 4 分钟 / 日</option><option value="2" selected>流转 · 100 秒 / 日</option><option value="4">疾行 · 45 秒 / 日</option></select></label><p class="muted">保存在当前浏览器。系统启用“减少动态效果”时自动跳过开场。</p><button class="book-secondary" type="button" data-sky-replay>返回观星，重播开场 ↗</button></section><button id="account-signout" class="book-secondary" type="button" hidden>退出当前全部登录</button><p id="logout-status" role="status"></p></section>
+<div id="personal-profile" hidden><h3 id="personal-profile-name"></h3><p id="personal-profile-role"></p><small>账户识别码</small><p id="personal-profile-code"></p><button type="button" class="book-primary" data-cases-open>我的命例 ↗</button><a class="book-secondary" href="#model">返回观星台</a></div><p id="personal-account-status" role="status" aria-live="polite"></p><a id="personal-signin" href="/signin-with-chatgpt?return_to=%2F%23account" target="_top">使用 ChatGPT 账号登录 ↗</a><small>登录只确认身份。核心权限由创建者本人授予；未获授权时仍使用公开功能。</small></div><div id="account-access"></div></div><div class="account-role-guide"><div><strong>公开访客</strong>排盘、规则推演与公开材料</div><div><strong>特殊用户</strong>授权材料、技法卡片与审核提交</div><div><strong>核心管理人</strong>全部业务功能与审核发布</div></div><section class="sky-account-preferences"><p class="panel-overline">PERSONAL PREFERENCES</p><h2>个人设置 · 观星偏好</h2><label class="sky-pref-check"><input type="checkbox" data-sky-pref="opening" checked />进入首页时播放巡天开场</label><label>光阴流转<select data-sky-pref="speed"><option value="1">舒缓 · 4 分钟 / 日</option><option value="2" selected>流转 · 100 秒 / 日</option><option value="4">疾行 · 45 秒 / 日</option></select></label><p class="muted">保存在当前浏览器。系统启用“减少动态效果”时自动跳过开场。</p><button class="book-secondary" type="button" data-sky-replay>返回观星，重播开场 ↗</button></section><button id="account-signout" class="book-secondary" type="button" hidden>退出当前全部登录</button><p id="logout-status" role="status"></p><p><a class="book-secondary" href="/download.html">客户端下载与更新 ↗</a></p></section>
       <section class="workspace-panel" id="private" data-view="private" hidden><p class="workspace-kicker">个人本机</p><h1>私密工作空间</h1><p class="muted">网站中的核心权限不会自动解锁他人电脑上的私密资料。</p><div id="private-access"></div></section>
-      <section class="workspace-panel" id="submissions" data-view="submissions" hidden><div class="workspace-title-row"><div><p class="workspace-kicker">整理 · 提交 · 等待审核</p><h1>我的提交</h1></div><a class="book-primary" href="#cards">去卡片库整理</a></div><p id="submission-account-note" class="muted"></p><div id="submission-editor"></div><div class="submission-toolbar"><label>审核状态<select id="submission-filter"><option value="all">全部提交</option><option value="pending">待审核</option><option value="approved">已发布</option><option value="rejected">已退回</option></select></label><button id="submission-refresh" class="book-secondary" type="button">刷新记录</button><p id="submission-status" role="status"></p></div><div id="submission-list"></div></section>
-      <section class="workspace-panel" id="review" data-view="review" hidden><div class="workspace-title-row"><div><p class="workspace-kicker">核心管理</p><h1>审核中心</h1></div><span class="workspace-tag">发布前的最后一次核对</span></div><p class="muted">核对原文和条件，确认计算规则。批准后，卡片库与模型同步更新。</p><section id="community-review" aria-label="社区审核"></section><div id="review-editor"></div><div class="submission-toolbar"><label>审核状态<select id="review-filter"><option value="pending">待审核</option><option value="all">全部提交</option><option value="approved">已发布</option><option value="rejected">已退回</option></select></label><button id="review-refresh" class="book-secondary" type="button">刷新队列</button><p id="review-status" role="status"></p></div><div id="review-list"></div></section>
-      <section class="workspace-panel" id="members" data-view="members" hidden><p class="workspace-kicker">仅创建者本人</p><h1>账户级别管理</h1><p class="muted">核心管理人可使用全部业务功能并审核发布。授予或撤销核心权限始终由你本人操作。</p><form id="members-form" class="member-form"><label>对方的账号识别码<input name="userId" maxlength="200" required autocomplete="off" placeholder="请对方登录后，在账户页复制" /></label><label>账户备注<input name="label" maxlength="80" required placeholder="便于你辨认的名称" /></label><label class="review-check"><input name="confirmed" type="checkbox" required />我已核对账号，同意应用所选级别。</label><label>授权级别<select name="role"><option value="public">公开</option><option value="special">特殊</option><option value="core">核心</option></select></label><button class="book-primary">保存账户级别</button></form><p id="members-status" role="status"></p><div id="members-list"></div></section>
+      <section class="workspace-panel" id="submissions" data-view="submissions" hidden><div class="workspace-title-row"><div><p class="workspace-kicker">整理 · 提交 · 等待审核</p><h1>我的技法提交</h1></div><a class="book-primary" href="#cards">去卡片库整理</a></div><p id="submission-account-note" class="muted"></p><div id="submission-editor"></div><div class="submission-toolbar"><label>审核状态<select id="submission-filter"><option value="all">全部提交</option><option value="pending">待审核</option><option value="approved">已发布</option><option value="rejected">已退回</option></select></label><button id="submission-refresh" class="book-secondary" type="button">刷新记录</button><p id="submission-status" role="status"></p></div><div id="submission-list"></div></section>
+      <section class="workspace-panel" id="review" data-view="review" hidden><div class="workspace-title-row"><div><p class="workspace-kicker">核心管理</p><h1>审核中心</h1></div><span class="workspace-tag">发布前的最后一次核对</span></div><p class="muted">核对技法、书籍摘录与社区内容，集中处理举报。审核与修改记录保留在历史中。</p><section id="community-review" aria-label="社区审核"></section><div id="excerpt-review" class="review-excerpt-queue" data-review-category="excerpts"><h2>书籍摘录审核</h2><div id="review-editor"></div><div class="submission-toolbar"><label>审核状态<select id="review-filter"><option value="pending">待审核</option><option value="all">全部提交</option><option value="approved">已发布</option><option value="rejected">已退回</option></select></label><button id="review-refresh" class="book-secondary" type="button">刷新队列</button><p id="review-status" role="status"></p></div><div id="review-list"></div></div></section>
+      <section class="workspace-panel" id="members" data-view="members" hidden><p class="workspace-kicker">仅创建者本人</p><h1>账户与权限</h1><p class="muted">核心管理人可使用全部业务功能并审核发布。授予或撤销核心权限始终由你本人操作。</p><form id="members-form" class="member-form"><label>对方的账号识别码<input name="userId" maxlength="200" required autocomplete="off" placeholder="请对方登录后，在账户页复制" /></label><label>账户备注<input name="label" maxlength="80" required placeholder="便于你辨认的名称" /></label><label class="review-check"><input name="confirmed" type="checkbox" required />我已核对账号，同意应用所选级别。</label><label>授权级别<select name="role"><option value="public">公开</option><option value="special">特殊</option><option value="core">核心</option></select></label><button class="book-primary">保存账户级别</button></form><p id="members-status" role="status"></p><div id="members-list"></div></section>
       <section class="book-library" id="library" data-view="library" hidden aria-labelledby="library-title">
         <div class="library-heading">
           <div><p class="eyebrow">PUBLIC BOOK LIBRARY</p><h1 id="library-title">从一句话，查回原书</h1></div>
@@ -204,25 +199,26 @@
       </section>
 
       <section id="cards" data-view="cards" hidden class="book-library cards-section" aria-labelledby="cards-title">
-        <div class="library-heading"><div><p class="eyebrow">技法整理</p><h2 id="cards-title">技法卡片库</h2></div><a class="book-secondary" href="#library">回到原文书库</a></div>
+        <div class="library-heading"><div><p class="eyebrow">技法整理</p><h2 id="cards-title">技法中心</h2></div><a class="book-secondary" href="#library">回到原文书库</a></div>
         <p class="cards-access-note" id="cards-access-note">按主题查找卡片，再回到原书核对依据。</p>
         <form id="cards-form" role="search" aria-label="查找技法卡片">
           <label for="cards-query">查找标题、原文、条件或术语</label>
           <div class="cards-query-row"><input id="cards-query" type="search" maxlength="160" placeholder="输入关键词，支持简体和繁体" /><button class="book-primary" type="submit">查找卡片</button><button id="cards-reset" class="book-secondary" type="button">清除筛选</button></div>
           <div class="cards-filters">
+            <label class="cards-source-filter">来源<select id="cards-source"><option value="all">全部来源</option><option value="authored">自编技法</option><option value="excerpt">书籍摘录</option></select></label>
             <label>卡片级别<select id="cards-level"><option value="all">全部有权访问的级别</option><option value="public">公开</option><option value="special">特殊</option></select></label>
             <label>出处书籍<select id="cards-book"><option value="all">全部书籍与文章</option></select></label>
             <label>卡片主题<select id="cards-topic"><option value="all">全部主题</option></select></label>
-            <label id="cards-owner-filter" hidden>审核状态<select id="cards-state"><option value="all">全部状态</option><option value="approved">已确认</option><option value="draft">草稿</option><option value="stale">出处待复核</option></select></label>
+            <label id="cards-owner-filter" hidden>审核状态<select id="cards-state"><option value="all">全部状态</option><option value="approved">已确认</option><option value="draft">草稿</option><option value="stale">出处待复核</option><option value="pending">待审核</option><option value="rejected">已退回</option></select></label>
           </div>
         </form>
-        <div class="cards-toolbar"><p id="cards-status" role="status" aria-live="polite">正在载入卡片…</p><div id="cards-counts" aria-label="当前筛选范围的卡片状态"></div></div>
-        <div id="cards-results" class="cards-results" aria-busy="false"></div><div id="cards-pagination" class="page-controls"></div>
+        <div class="cards-toolbar"><p id="cards-status" role="status" aria-live="polite">正在载入卡片…</p><p id="authored-count" class="tech-catalog-count" role="status"></p><div id="cards-counts" aria-label="当前筛选范围的卡片状态"></div></div>
+        <div id="catalog-unified" class="catalog-unified"><div id="authored-catalog" class="tech-catalog"></div><div id="cards-results" class="cards-results" aria-busy="false"></div></div><div id="cards-pagination" class="page-controls"></div>
       </section>
 
       <section id="rules" data-view="rules" hidden class="book-library rules-section" aria-labelledby="rules-title">
-        <div class="library-heading"><div><p class="eyebrow">从文字到条件</p><h2 id="rules-title">规则编辑与测试</h2></div><a class="book-secondary" href="#cards">从卡片库选择技法</a></div>
-        <p class="rule-help">用中文定义条件，再用案例逐项检查。这里只整理公开或特殊级材料；私密技法请在本机入口处理。</p>
+        <div class="library-heading"><div><p class="eyebrow">从文字到条件</p><h2 id="rules-title">编辑与测试</h2></div><a class="book-secondary" href="#cards">从卡片库选择技法</a></div>
+        <div id="authored-editor" class="authored-editor"></div><p class="rule-help">用中文定义条件，再用案例逐项检查。这里只整理公开或特殊级材料；私密技法请在本机入口处理。</p>
         <div class="rule-top-actions"><button type="button" id="rule-demo" class="book-secondary">体验虚构示例</button><span class="rule-help">本版由你填写和确认规则，无需付费 AI API。</span></div>
         <p id="rule-status" role="status" aria-live="polite"></p><div id="rule-workbench"></div>
       </section>
@@ -250,7 +246,7 @@
         </div>
       </section>
 
-      <section id="history" data-view="history" class="workspace-panel" hidden><p class="workspace-kicker">核心管理 · 版本留存</p><h1>历史记录</h1><p class="muted">保存技法的创建、修改、送审、退回与发布快照。修订通过审核后才更新线上版本。启用前的内容仅保留当前存档。</p></section><section id="lab" data-view="lab" hidden>
+      <section id="history" data-view="history" class="workspace-panel" hidden><p class="workspace-kicker">核心管理 · 版本留存</p><h1>历史记录</h1><p class="muted">按类别查看技法修订、文稿校订、摘录审核和社区处理记录。技法保留版本快照；只展示系统已经留存的历史。</p></section><section id="lab" data-view="lab" hidden>
       <section class="hero" id="demo" aria-labelledby="hero-title">
         <div class="hero-copy">
           <p class="eyebrow"><span>RESEARCH PROTOTYPE · 01</span> 传统知识 × 可解释推演</p>

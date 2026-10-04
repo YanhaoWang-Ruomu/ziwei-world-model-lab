@@ -26,7 +26,8 @@ export async function submissionRoute({path,method,request,db,viewer,guard,bookF
   requireCards(viewer);
   if(path==='/api/submissions'&&method==='GET') {
     const args=[...guard.args];let where=guard.sql;
-    if(!viewer.core){where+=' AND s.author_key=?';args.push(viewer.actor);}
+    const scope=url.searchParams.get('scope')||'all';if(!['all','mine'].includes(scope))throw new HttpError(400,'提交范围不正确。');
+    if(!viewer.core||scope==='mine'){where+=' AND s.author_key=?';args.push(viewer.actor);}
     const status=url.searchParams.get('status')||'all';
     if(!['all','pending','approved','rejected'].includes(status))throw new HttpError(400,'审核状态不正确。');
     if(status!=='all'){where+=' AND s.status=?';args.push(status);}

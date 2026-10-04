@@ -62,7 +62,7 @@ export function initRuleWorkbench({api,el,btn,openSource}) {
     const outcome=el('div','rule-step');outcome.append(el('h3','','5 · 判断结果与待核问题'),labeled('符合时的判断结果',input(definition.outcome,v=>{definition.outcome=v;},{max:4000,rows:3})),labeled('待核问题（没有则留空）',input(definition.unresolved,v=>{definition.unresolved=v;},{max:4000,rows:2})));form.append(outcome);editor.append(form);
     validation=el('div','rule-validation');validation.setAttribute('role','status');
     const actions=el('div','rule-actions');actions.append(btn('检查规则',validationView,'book-secondary'));
-    if(draft){human=null;confirmButton=null;actions.append(btn('保存到本次提交',()=>{const checked=validationView();if(checked)draft.onDone(structuredClone(checked.definition));},'book-primary'),btn('返回卡片，不带入修改',()=>draft.onCancel()));}
+    if(draft){human=null;confirmButton=null;actions.append(btn('保存到本次提交',()=>{const checked=validationView();if(checked){setDraftMode(false);draft.onDone(structuredClone(checked.definition));}},'book-primary'),btn('返回卡片，不带入修改',()=>{setDraftMode(false);draft.onCancel();}));}
     else if(owner&&!demo){actions.append(btn('保存规则草稿',saveRule,'book-primary'));human=el('input');human.type='checkbox';const check=el('label','review-check');check.append(human,document.createTextNode('我已核对保存的规则与原文含义，确认供有权限的读者使用。'));confirmButton=btn('确认已保存的规则',confirmRule,'book-secondary');confirmButton.disabled=dirty||!context.rule||!context.canConfirm;editor.append(check);actions.append(confirmButton);}
     else {human=null;confirmButton=null;}
     editor.append(actions,validation);
@@ -123,7 +123,9 @@ export function initRuleWorkbench({api,el,btn,openSource}) {
     const layout=el('div','rule-layout');editor=el('div','rule-editor');test=el('aside','rule-test');test.tabIndex=-1;layout.append(editor,test);root.append(layout);renderEditor();renderTest();
     heading.append(btn('填写案例与查看结果',()=>{test.scrollIntoView({behavior:'smooth',block:'start'});test.focus({preventScroll:true});},'book-primary'));
   }
+  function setDraftMode(active){document.querySelector('#rules').dataset.editorKind='book';document.dispatchEvent(new CustomEvent('ziwei:rule-draft',{detail:{active}}));}
   async function open(card){
+    setDraftMode(false);
     draft=null;
     const run=++generation;busy=false;say('正在载入规则…');root.replaceChildren();
     const url=`/api/books/${encodeURIComponent(card.book_id)}/pages/${card.page}/cards/${encodeURIComponent(card.id)}/rule`;
@@ -132,11 +134,11 @@ export function initRuleWorkbench({api,el,btn,openSource}) {
     catch(e){if(run===generation){context=null;endpoint='';root.replaceChildren(el('p','rule-warning',e.message));say('载入失败，可从卡片库重新打开。');}}
     if(run===generation){location.hash='rules';document.querySelector('#rules').scrollIntoView({behavior:'smooth',block:'start'});}
   }
-  function resetDemo(){++generation;draft=null;busy=false;demo=true;owner=false;context=null;endpoint='';definition=fictionalRule();facts={sample:'青松',branches:3,blocked:false};dirty=false;render();say('这是虚构的青松规则，可以修改条件并体验三种结果。');showResult(evaluateRule(definition,facts,fold));}
+  function resetDemo(){setDraftMode(false);++generation;draft=null;busy=false;demo=true;owner=false;context=null;endpoint='';definition=fictionalRule();facts={sample:'青松',branches:3,blocked:false};dirty=false;render();say('这是虚构的青松规则，可以修改条件并体验三种结果。');showResult(evaluateRule(definition,facts,fold));}
   document.querySelector('#rule-demo').addEventListener('click',resetDemo);
   document.addEventListener('ziwei:open-rule',event=>open(event.detail));
   resetDemo();
-  return {resetDemo,editDraft(options){++generation;draft=options;busy=false;demo=false;owner=false;context={card:options.card,rule:null,canConfirm:true};endpoint='';definition=structuredClone(options.definition||{version:1,scopeMode:'conditions',scopeNote:'',outcome:options.card.conclusion||'',unresolved:options.card.questions||'',fields:[],scope:[],required:[],excluded:[]});facts={};dirty=false;render();say('本次提交的规则草稿');location.hash='rules';},clear(){++generation;draft=null;context=null;endpoint='';root.replaceChildren();status.textContent='';},async refresh(){
+  return {resetDemo,editDraft(options){setDraftMode(true);++generation;draft=options;busy=false;demo=false;owner=false;context={card:options.card,rule:null,canConfirm:true};endpoint='';definition=structuredClone(options.definition||{version:1,scopeMode:'conditions',scopeNote:'',outcome:options.card.conclusion||'',unresolved:options.card.questions||'',fields:[],scope:[],required:[],excluded:[]});facts={};dirty=false;render();say('本次提交的规则草稿');location.hash='rules';},clear(){setDraftMode(false);++generation;draft=null;context=null;endpoint='';root.replaceChildren();status.textContent='';},async refresh(){
     if(!context||demo||draft||busy)return;
     const run=generation;
     try{await verifyCurrent();}catch(e){if(run!==generation)return;result?.replaceChildren();if(owner&&!e.clearRule&&![401,403,404].includes(e.status)){say(e.message);if(confirmButton)confirmButton.disabled=true;}else{++generation;context=null;endpoint='';root.replaceChildren(el('p','rule-warning','访问权限或规则版本已变化，请从卡片库重新打开。'));say('原规则已收起。');}}

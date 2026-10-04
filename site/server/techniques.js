@@ -19,16 +19,16 @@ export async function techniqueRoute({path,method,request,viewer,db,url}){
   }
   const visible="(published_payload IS NOT NULL AND (json_extract(published_payload,'$.level')='public' OR ?=1)) OR author=? OR ?=1";
   if(path==='/api/techniques'&&method==='GET'){
-    const q=safeText(url.searchParams.get('q')||'',160,false),review=url.searchParams.get('review')==='1';
+    const q=safeText(url.searchParams.get('q')||'',160,false),review=url.searchParams.get('review')==='1',mine=url.searchParams.get('mine')==='1';
     if(review&&!viewer.core)throw new HttpError(403,'审核需要核心权限。');
     // Restricted source must not be exposed indirectly through a prose search.
     const source='COALESCE(published_payload,payload)';
     const searchable=viewer.core?'payload':`COALESCE(json_extract(${source},'$.title'),'') || ' ' || COALESCE(json_extract(${source},'$.topic'),'') || ' ' || COALESCE(json_extract(${source},'$.outcome'),'')`;
-    const rows=(await db.prepare(`SELECT * FROM authored_techniques WHERE (${visible}) AND instr(${searchable},?)>0 ${review?"AND status='pending'":''} ORDER BY updated_at DESC LIMIT 200`).bind(viewer.role!=='public'?1:0,viewer.role!=='public'?viewer.actor:'',viewer.core?1:0,q).all()).results;
+    const rows=(await db.prepare(`SELECT * FROM authored_techniques WHERE (${visible}) AND instr(${searchable},?)>0 ${review?"AND status='pending'":''} ${mine?'AND author=?':''} ORDER BY updated_at DESC LIMIT 200`).bind(viewer.role!=='public'?1:0,viewer.role!=='public'?viewer.actor:'',viewer.core?1:0,q,...(mine?[viewer.role!=='public'?viewer.actor:'']:[])).all()).results;
     return {cards:rows.map(r=>{const published=r.published_payload?{id:r.id,revision:r.published_revision,status:'approved',releaseVersion:r.release_version,payload:JSON.parse(r.published_payload)}:null;
       const payload=JSON.parse(r.payload);
-      if(viewer.core){const {published_payload,...record}=r;return {...record,payload,published};}
-      const p=published?.payload||payload;return {id:r.id,revision:published?.revision||r.revision,status:published?'approved':r.status,level:p.level,releaseVersion:r.release_version,payload:{title:p.title,topic:p.topic,level:p.level,outcome:p.outcome,publicationMode:p.publicationMode}};
+      if(viewer.core){const {published_payload,...record}=r;return {...record,payload,published,mine:r.author===viewer.actor};}
+      const p=published?.payload||payload;return {mine:r.author===viewer.actor,id:r.id,revision:published?.revision||r.revision,status:published?'approved':r.status,level:p.level,releaseVersion:r.release_version,payload:{title:p.title,topic:p.topic,level:p.level,outcome:p.outcome,publicationMode:p.publicationMode}};
     })};
   }
   requireCards(viewer);

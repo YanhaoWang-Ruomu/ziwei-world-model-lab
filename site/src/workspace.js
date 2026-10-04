@@ -1,40 +1,44 @@
+import {workspaceGroup,WORKSPACE_GROUPS} from './workspace-sections.mjs';
 import {VIEW_LABELS as labels,viewAccess} from './workspace-access.mjs';
 export function initWorkspace({api,onSession}) {
   let viewer={role:'public'},current='model';
   const $=s=>document.querySelector(s);
+  let ruleDraft=false;
+  const access=key=>viewAccess(viewer,key,{ruleDraft});
   function navigate(){
     let key=location.hash.slice(1)||'model';if(key==='special')key=viewer.role==='public'?'account':'library';
     if(['top','demo','architecture'].includes(key))key=key==='top'?'model':'lab';
-    if(!viewAccess(viewer,key).allowed)key='model';
+    if(!access(key).allowed)key='model';
     current=key;
     document.body.dataset.workspaceView=key;
     document.querySelectorAll('[data-view]').forEach(node=>{node.hidden=node.dataset.view!==key;});
-    document.querySelectorAll('[data-nav]').forEach(node=>node.setAttribute('aria-current',node.dataset.nav===key?'page':'false'));
-    $('#workspace-location').textContent=labels[key];
+    document.querySelectorAll('[data-nav]').forEach(node=>node.setAttribute('aria-current',node.dataset.nav===workspaceGroup(key)?'page':'false'));
+    $('#workspace-location').textContent=WORKSPACE_GROUPS[workspaceGroup(key)].title+(workspaceGroup(key)===key?'':' / '+labels[key]);
     document.dispatchEvent(new CustomEvent('ziwei:view',{detail:key}));
   }
+  document.addEventListener('ziwei:rule-draft',e=>{ruleDraft=Boolean(e.detail?.active);document.body.dataset.ruleDraft=String(ruleDraft);});
   window.addEventListener('hashchange',navigate);
   document.addEventListener('ziwei:navigate',navigate);
   document.querySelectorAll('[data-nav]').forEach(node=>{
     node.addEventListener('click',event=>{
-      if(!viewAccess(viewer,node.dataset.nav).allowed){event.preventDefault();event.stopImmediatePropagation();}
+      if(!access(node.dataset.nav).allowed){event.preventDefault();event.stopImmediatePropagation();}
     },true);
     node.addEventListener('keydown',event=>{
-      if(['Enter',' '].includes(event.key)&&!viewAccess(viewer,node.dataset.nav).allowed)event.preventDefault();
+      if(['Enter',' '].includes(event.key)&&!access(node.dataset.nav).allowed)event.preventDefault();
     });
   });
   function setViewer(next){
-    viewer={...next,role:next.role||'public'};const role=viewer.role;document.body.dataset.role=role;
+    ruleDraft=false;document.body.dataset.ruleDraft='false';viewer={...next,role:next.role||'public'};const role=viewer.role;document.body.dataset.role=role;
     const titles={public:next.authenticated?'公开用户':'公开访客',special:'特殊用户',core:next.founder?'创建者 · 核心管理人':'核心管理人'};
     $('#viewer-status').textContent=titles[role];$('#workspace-role').textContent=titles[role];
     $('#workspace-role-note').textContent={public:'阅读与使用',special:'阅读、整理与提交',core:next.founder?'管理、审核与账户授权':'管理与审核'}[role];
     document.querySelectorAll('[data-nav]').forEach(node=>{
-      const access=viewAccess(viewer,node.dataset.nav);node.hidden=false;
-      node.setAttribute('aria-disabled',String(!access.allowed));
-      node.classList.toggle('workspace-nav-locked',!access.allowed);
-      node.title=access.allowed?'':access.reason;
-      node.setAttribute('aria-label',labels[node.dataset.nav]+(access.allowed?'':'，已锁定，'+access.reason));
-      if(access.allowed){node.href='#'+node.dataset.nav;node.removeAttribute('tabindex');}
+      const permission=access(node.dataset.nav);node.hidden=false;
+      node.setAttribute('aria-disabled',String(!permission.allowed));
+      node.classList.toggle('workspace-nav-locked',!permission.allowed);
+      node.title=permission.allowed?'':permission.reason;
+      node.setAttribute('aria-label',(WORKSPACE_GROUPS[node.dataset.nav]?.title||labels[node.dataset.nav])+(permission.allowed?'':'，已锁定，'+permission.reason));
+      if(permission.allowed){node.href='#'+node.dataset.nav;node.removeAttribute('tabindex');}
       else{node.removeAttribute('href');node.tabIndex=-1;}
     });
     document.querySelector('[data-level="special"]').hidden=role==='public';

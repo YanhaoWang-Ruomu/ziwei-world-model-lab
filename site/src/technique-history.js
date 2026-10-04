@@ -1,11 +1,12 @@
 import {describeCondition} from './technique-engine.mjs';
+import {initActivityHistory} from './activity-history.mjs';
 export function initTechniqueHistory({api,el,btn}){
   const root=document.querySelector('#history'),list=el('div','tech-history-list'),status=el('p'),search=el('input'),form=el('form','tech-history-search');
   let core=false,generation=0,next=null,card='',busy=false;
   search.type='search';search.placeholder='按技法标题查找';search.setAttribute('aria-label','历史记录标题搜索');search.maxLength=160;
   const submit=btn('查找',()=>load(false)),all=btn('查看全部技法',()=>{card='';search.value='';load(false);}),more=btn('加载更早记录',()=>load(true));more.hidden=true;
   status.setAttribute('role','status');form.append(search,submit,all);form.addEventListener('submit',e=>{e.preventDefault();load(false);});
-  root.append(form,status,list,more);
+  const detailRoot=el('section','technique-history-details');root.append(detailRoot);detailRoot.append(form,status,list,more);const activity=initActivityHistory({api,el,btn,detailRoot});
   const actions={baseline:'启用历史时的存档',create:'创建草稿',edit:'保存修改',revise:'修订已发布技法',submit:'提交审核',reject:'退回修改',publish:'审核通过并发布'};
   async function load(append){
     if(!core)return;const run=++generation;busy=true;more.disabled=true;if(!append)list.replaceChildren();status.textContent='正在读取历史记录…';
@@ -20,6 +21,6 @@ export function initTechniqueHistory({api,el,btn}){
     }catch(e){if(run===generation)status.textContent=e.message;}finally{if(run===generation){busy=false;more.disabled=false;}}
   }
   document.addEventListener('ziwei:technique-history',e=>{card=e.detail.id;search.value='';if(location.hash==='#history')load(false);else location.hash='history';});
-  document.addEventListener('ziwei:view',e=>{if(e.detail==='history')load(false);});
-  document.addEventListener('ziwei:session',e=>{generation++;core=Boolean(e.detail.core);busy=false;list.replaceChildren();status.textContent='';more.hidden=true;if(core&&location.hash==='#history')load(false);});
+  document.addEventListener('ziwei:view',e=>{if(e.detail==='history'&&activity.showingDetails)load(false);});
+  document.addEventListener('ziwei:session',e=>{generation++;core=Boolean(e.detail.core);busy=false;list.replaceChildren();status.textContent='';more.hidden=true;});
 }

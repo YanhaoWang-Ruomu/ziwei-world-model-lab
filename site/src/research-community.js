@@ -1,7 +1,7 @@
 import {mountScenario,scenarioComparison} from './scenario-workbench.js';
 import {initCommunity} from './community.js';
 export function initResearchCommunity({api,el,btn}){
-  let viewer={},generation=0,world=null,events=[],branches=[],reviews=[],runs=[];
+  let viewer={},generation=0,world=null,events=[],branches=[],reviews=[],runs=[],researchTab='state';
   const $=s=>document.querySelector(s),worldRoot=$('#world');
   initCommunity({api,el,btn});
   const labels={context:'当前情境',resources:'可用资源',constraints:'约束与阻力',unknowns:'未知与待核实'};
@@ -23,17 +23,21 @@ export function initResearchCommunity({api,el,btn}){
   }
   async function openWorld(id){const g=generation,data=await api('/api/world/projects/'+id);if(g!==generation)return;world=data.project;events=world.events.map(e=>({...e}));branches=data.branches;reviews=data.reviews;runs=data.runs||[];drawWorld();status.textContent='已载入个人研究。';}
   function drawWorld(){editor.replaceChildren();if(!viewer.authenticated)return;
+    const tabs=el('div','research-local-tabs'),statePane=el('section','research-section'),eventsPane=el('section','research-section'),branchPane=el('section','research-section');tabs.setAttribute('aria-label','个人研究步骤');
+    const panes={state:statePane,events:eventsPane,branches:branchPane};const tabButtons=new Map();
+    function showTab(key){researchTab=key;for(const [name,pane]of Object.entries(panes))pane.hidden=name!==key;for(const [name,b]of tabButtons)b.setAttribute('aria-pressed',String(name===key));}
+    for(const [key,label]of [['state','世界状态'],['events','事件时间线'],['branches','分支推演与复盘']]){const b=btn(label,()=>showTab(key));tabButtons.set(key,b);tabs.append(b);}editor.append(tabs,statePane,eventsPane,branchPane);showTab(researchTab);
     const f=form();f.append(field('title','研究名称',{max:100,required:true}),...Object.entries(labels).map(([k,l])=>field(k,l,{area:true})),submit(world?'保存状态与时间线':'创建研究'));
     if(world){f.elements.title.value=world.title;for(const k of Object.keys(labels))f.elements[k].value=world.state[k];}
     guarded(f,status,async v=>{const g=generation,p={title:v.title,state:Object.fromEntries(Object.keys(labels).map(k=>[k,v[k]])),events};const data=await api('/api/world/projects'+(world?'/'+world.id:''),{method:world?'PUT':'POST',body:JSON.stringify({...p,...(world?{revision:world.revision}:{})})});if(g!==generation)return;world=data.project;status.textContent='已保存，只有本账户可访问。';await loadProjects();drawWorld();});
-    editor.append(f,el('h2','','现实事件时间线'),el('p','muted','“已观察”与“计划”分别记录。添加或移除事件后，点击上方保存。'),timeline);drawTimeline();
+    statePane.append(f);eventsPane.append(el('h2','','现实事件时间线'),el('p','muted','“已观察”与“计划”分别记录。添加或移除后，保存状态与时间线。'),timeline);drawTimeline();
     const ef=form('research-form research-inline');ef.append(field('date','日期',{type:'date',required:true}),select('kind','记录性质',[['observed','已观察'],['planned','计划']]),field('title','事件名称',{max:100,required:true}),field('detail','观察证据 / 计划内容',{area:true}),submit('加入未保存的时间线'));ef.elements.date.value=new Date().toISOString().slice(0,10);
-    guarded(ef,status,async v=>{if(events.length>=200)throw Error('每份研究最多 200 条事件。');events.push({id:crypto.randomUUID(),...v});drawTimeline();ef.elements.title.value='';ef.elements.detail.value='';status.textContent='事件尚未保存，请点击保存状态与时间线。';});editor.append(ef);
-    if(!world)return;
-    editor.append(action('重新打开已保存内容',()=>openWorld(world.id)),action('删除这份个人研究',async()=>{if(!confirm('删除这份研究及全部分支和复盘？'))return;await api('/api/world/projects/'+world.id,{method:'DELETE',body:JSON.stringify({revision:world.revision})});world=null;events=[];branches=[];reviews=[];runs=[];drawWorld();await loadProjects();status.textContent='研究已删除。';}));
-    editor.append(el('h2','','情境分支对比'),el('p','muted','每条分支固定创建时已保存的状态、事件与版本。先保存状态，再创建分支。分支内容是你的条件假设。'),comparison);drawBranches();
+    guarded(ef,status,async v=>{if(events.length>=200)throw Error('每份研究最多 200 条事件。');events.push({id:crypto.randomUUID(),...v});drawTimeline();ef.elements.title.value='';ef.elements.detail.value='';status.textContent='事件尚未保存，请点击保存状态与时间线。';});eventsPane.append(ef,btn('保存状态与时间线',()=>{if(!f.checkValidity()){showTab('state');f.reportValidity();return;}f.requestSubmit();},'book-primary'));
+    if(!world){branchPane.append(el('p','muted','先保存世界状态，再建立分支、推演与复盘。'),btn('填写世界状态',()=>showTab('state')));return;}
+    statePane.append(action('重新打开已保存内容',()=>openWorld(world.id)),action('删除这份个人研究',async()=>{if(!confirm('删除这份研究及全部分支和复盘？'))return;await api('/api/world/projects/'+world.id,{method:'DELETE',body:JSON.stringify({revision:world.revision})});world=null;events=[];branches=[];reviews=[];runs=[];drawWorld();await loadProjects();status.textContent='研究已删除。';}));
+    branchPane.append(el('h2','','情境分支对比'),el('p','muted','每条分支固定创建时已保存的状态、事件与版本。先保存状态，再创建分支。分支内容是你的条件假设。'),comparison);drawBranches();
     const bf=form();bf.append(field('title','分支名称',{max:100,required:true}),field('hypothesis','条件 / 假设',{area:true,required:true}),field('action','拟采取的行动',{area:true,required:true}),field('expected','可核实的预期结果',{area:true,required:true}),field('observeOn','预定观察日',{type:'date',required:true}),submit('固定已保存基线并创建分支'));
-    guarded(bf,status,async v=>{const g=generation;await api('/api/world/projects/'+world.id+'/branches',{method:'POST',body:JSON.stringify({...v,revision:world.revision})});if(g!==generation)return;await openWorld(world.id);status.textContent='分支已保存，基线固定。';});editor.append(bf);
+    guarded(bf,status,async v=>{const g=generation;await api('/api/world/projects/'+world.id+'/branches',{method:'POST',body:JSON.stringify({...v,revision:world.revision})});if(g!==generation)return;await openWorld(world.id);status.textContent='分支已保存，基线固定。';});branchPane.append(bf);
   }
   function drawTimeline(){timeline.replaceChildren();events.sort((a,b)=>a.date.localeCompare(b.date));for(const e of events){const item=el('article','research-card');item.append(el('strong','',e.date+' · '+(e.kind==='observed'?'已观察':'计划')+' · '+e.title),el('p','research-copy',e.detail),action('移除此事件',()=>{events=events.filter(x=>x.id!==e.id);drawTimeline();status.textContent='移除尚未保存，请点击保存。';}));timeline.append(item);}if(!events.length)timeline.append(el('p','muted','没有事件记录。'));}
   function drawBranches(){comparison.replaceChildren();if(!branches.length){comparison.append(el('p','muted','创建两条或更多分支即可并列比较。'));return;}

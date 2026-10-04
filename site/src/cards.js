@@ -10,7 +10,7 @@ export function initCardLibrary({ api, el, btn, openSource }) {
     return previous!==select.value;
   }
   function renderCard(card) {
-    const article=el('article','catalog-card');const badges=el('div','catalog-badges');
+    const article=el('article','catalog-card');article.append(el('p','catalog-origin','书籍摘录'));const badges=el('div','catalog-badges');
     badges.append(el('span',`catalog-state state-${card.state}`,stateNames[card.state]),el('span','catalog-topic',card.topic||'未分类'),el('span','',card.level==='special'?'特殊':'公开'));
     article.append(badges,el('h3','',card.title),el('blockquote','catalog-quote',card.quote.length>220?card.quote.slice(0,220)+'…':card.quote));
     const summary=el('dl','catalog-summary');
@@ -25,12 +25,15 @@ export function initCardLibrary({ api, el, btn, openSource }) {
     const actions=el('div','catalog-actions');actions.append(btn(owner?'查看原文与校订':'查看原文',async()=>{try{await openSource(card);}catch(e){$('#cards-status').textContent=e.message;}},'book-secondary'),btn(owner?'编辑规则与测试':'编辑并提交审核',()=>document.dispatchEvent(new CustomEvent(owner?'ziwei:open-rule':'ziwei:submit-card',{detail:card})),'book-primary'));article.append(actions);
     return article;
   }
+  let searchTimer;
   async function load(reset=true) {
+    document.dispatchEvent(new Event('ziwei:catalog-filter'));
     if(reset)offset=0;
     const request=++generation;
     $('#cards-results').replaceChildren();$('#cards-pagination').replaceChildren();$('#cards-counts').replaceChildren();
     $('#cards-status').textContent='正在查找卡片…';$('#cards-results').setAttribute('aria-busy','true');
     try {
+      if($('#cards-source').value==='authored'||['pending','rejected'].includes($('#cards-state').value)){$('#cards-status').textContent='书籍摘录 · 0 张';return;}
       const params=new URLSearchParams({q:$('#cards-query').value,level:$('#cards-level').value,book:$('#cards-book').value,status:$('#cards-state').value,offset:String(offset)});
       if($('#cards-topic').value!=='all')params.set('topic',$('#cards-topic').value.slice(2));
       let data;
@@ -45,7 +48,7 @@ export function initCardLibrary({ api, el, btn, openSource }) {
       const changedTopic=options($('#cards-topic'),data.topics.map(t=>({value:'t:'+t.value,label:t.label||'未分类'})),'全部主题');
       if(changedBook||changedTopic){await load();return;}
       offset=data.offset;
-      $('#cards-status').textContent=`找到 ${data.total} 张卡片${data.total?` · 显示 ${offset+1}–${offset+data.cards.length}`:''}`;
+      $('#cards-status').textContent=`书籍摘录 · ${data.total} 张${data.total?` · 显示 ${offset+1}–${offset+data.cards.length}`:''}`;
       const labels=owner?['approved','draft','stale']:['approved'];
       for(const state of labels){const label=el('span','catalog-count');label.append(el('strong','',String(data.counts[state])),document.createTextNode(` ${stateNames[state]}`));$('#cards-counts').append(label);}
       $('#cards-access-note').textContent=owner?'你可以整理草稿、核对出处并审核卡片。卡片的访问级别跟随原书。':'这里只展示你有权查看、且对应当前校订版本的已确认卡片。';
@@ -58,7 +61,8 @@ export function initCardLibrary({ api, el, btn, openSource }) {
     finally{if(request===generation)$('#cards-results').setAttribute('aria-busy','false');}
   }
   $('#cards-form').addEventListener('submit',e=>{e.preventDefault();load();});
-  for(const id of ['cards-level','cards-book','cards-topic','cards-state'])$('#'+id).addEventListener('change',()=>load());
-  $('#cards-reset').addEventListener('click',()=>{$('#cards-query').value='';for(const id of ['cards-level','cards-book','cards-topic','cards-state'])$('#'+id).value='all';load();});
+  $('#cards-query').addEventListener('input',()=>{clearTimeout(searchTimer);searchTimer=setTimeout(()=>load(),300);});
+  for(const id of ['cards-source','cards-level','cards-book','cards-topic','cards-state'])$('#'+id).addEventListener('change',()=>load());
+  $('#cards-reset').addEventListener('click',()=>{$('#cards-query').value='';for(const id of ['cards-source','cards-level','cards-book','cards-topic','cards-state'])$('#'+id).value='all';load();});
   return { async refresh(viewer) {++generation;$('#cards-results').replaceChildren();$('#cards-counts').replaceChildren();$('#cards-pagination').replaceChildren();if(viewer.role==='public'){options($('#cards-book'),[],'全部书籍与文章');options($('#cards-topic'),[],'全部主题');return;}owner=Boolean(viewer.owner);$('#cards-owner-filter').hidden=!owner;if(!owner)$('#cards-state').value='all';await load();} };
 }
