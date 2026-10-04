@@ -1,0 +1,134 @@
+/* Time layers remain readable in both layouts; mutation hue still means 禄权科忌. */
+.atlas-layer-settings{flex:1 0 100%;min-width:0;border:1px solid #b89a6345;border-radius:10px;padding:12px;background:#081421b8}
+.atlas-layer-settings legend{color:#d8c292;padding:0 7px;font-size:14px}
+.atlas-layer-settings>label{font-size:14px;display:flex;gap:10px;align-items:center}
+.atlas-layer-settings select{min-height:36px}
+.atlas-layer-choices{display:flex;flex-wrap:wrap;gap:5px 14px;margin:10px 0}
+.atlas-layer-choices label{display:flex;gap:6px;align-items:center;min-height:36px;font-size:14px;cursor:pointer}
+.atlas-layer-choices input{accent-color:#d3b77e;width:17px;height:17px}
+.atlas-layer-settings button{margin:3px 7px 3px 0;min-height:38px;font-size:13px}
+.atlas-layer-status{font-size:12px;line-height:1.6;margin:8px 0 0;color:#c1cedb}
+.square-chart .square-palace{background:radial-gradient(ellipse at 10% 0%,#28455955,transparent 65%),linear-gradient(135deg,#152637e8,#091323f5 64%,#111d2bef);border-color:#829cb43d;box-shadow:inset 0 1px 0 #e4c89126,inset 1px 0 0 #91b9c415,inset 0 -8px 20px #02071138}
+.square-chart .square-palace:after{content:'';position:absolute;pointer-events:none;inset:4px;border:1px solid #b3a17e17;background:linear-gradient(90deg,#d1b77565,transparent) top left/22px 1px no-repeat,linear-gradient(#d1b77565,transparent) top left/1px 22px no-repeat,linear-gradient(270deg,#d1b77545,transparent) bottom right/22px 1px no-repeat}
+.square-chart .square-palace.related{background:radial-gradient(ellipse at 50% 0%,#3e69713d,transparent 75%),linear-gradient(140deg,#1b3446,#102031);box-shadow:inset 0 0 0 1px #8db5c24d}
+.square-chart .square-palace.selected{background:radial-gradient(ellipse at 25% 10%,#b9985740,transparent 80%),linear-gradient(135deg,#243441,#122335);border-color:#dcc28bc2;box-shadow:inset 0 0 0 1px #d7b77a68,inset 0 0 32px #bb915615,0 0 12px #c8a76716}
+.atlas-orrery .palace-resonance>.celestial-hit{stroke:#ffe7a5;stroke-width:1.3;fill:#ffe7a518;animation:palace-star-beacon 2.8s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.atlas-orrery .palace-resonance .stellar-point,.atlas-orrery .palace-resonance .orrery-globe{filter:drop-shadow(0 0 4px #ffdf99)}
+.atlas-orrery .palace-resonance .stellar-halo{opacity:1;fill:#ffe3a3}
+.atlas-orrery:not(.explorable) .palace-resonance .orrery-label{display:block;fill:#ffe2a2;font-weight:600;paint-order:stroke;stroke:#07111f;stroke-width:3px}
+.atlas-orrery:not(.explorable) .orrery-sun.palace-resonance{opacity:1}
+@keyframes palace-star-beacon{0%,100%{opacity:.35;stroke-width:.7}50%{opacity:1;stroke-width:2.3}}
+@media(prefers-reduced-motion:reduce){.atlas-orrery .palace-resonance>.celestial-hit{animation:none;opacity:.85}}
+.atlas-stacking-note{flex-basis:100%;margin:4px 0;font-size:12px;color:#b8c7d7}
+.palace-time-layers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px 8px;margin:6px 0;flex:none;border-top:1px solid #87a4c526;padding-top:4px}
+.palace-time-layer{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;min-width:0;font-size:12px;line-height:1.5;color:var(--layer-color)}
+.palace-time-layer.current .layer-palace-name{font-weight:600}
+.palace-time-layer.scope-life .layer-palace-name{box-shadow:inset 2px 0 currentColor;padding-left:4px}
+.layer-palace-name{white-space:nowrap}
+.layer-flow-stars{font-size:10px;color:color-mix(in srgb,var(--layer-color) 70%,#a9b4c8);line-height:1.4}
+.palace-position-stack [data-layer],.palace-flow-heading{color:var(--layer-color)}
+.palace-flow-heading{font-size:14px;margin:16px 0 5px}
+.palace-flow-detail p{font-size:13px;line-height:1.7;margin:4px 0;color:#becfdf}
+.palace-flow-detail{padding:0 0 8px;border-bottom:1px solid #789aae26}
+.celestial-wheel .wheel-natal-name{font:21px 'Songti SC',SimSun,serif;fill:#efd6a3;text-anchor:middle}
+.celestial-wheel .wheel-time-layer{font:12px 'Microsoft YaHei',sans-serif;text-anchor:middle;fill:var(--layer-color)}
+.celestial-wheel .wheel-time-layer.current{font-weight:700}
+.celestial-wheel .wheel-time-layer.scope-life{text-decoration:underline;text-underline-offset:2px}
+.celestial-wheel .wheel-layer-star{font:16px 'Microsoft YaHei',sans-serif;fill:#c7d9ec;text-anchor:middle}
+.celestial-wheel .wheel-layer-mutagen{font:11px 'Microsoft YaHei',sans-serif;text-anchor:middle;fill:var(--mutagen-color)}
+.celestial-wheel .wheel-layer-star.flight-star{fill:var(--star-mutagen-color);font-weight:700}
+/* Quiet astronomical texture: photographed sky beneath ink and fine metal rims. */
+.square-chart .square-palace,.square-chart .square-palace.related,.square-chart .square-palace.selected{background-image:linear-gradient(155deg,#0a182ade,#071221eb 63%,#192336dd),url('./sky/milkyway-gaia.jpg');background-size:auto,700% 450%;background-position:center,var(--palace-texture-x,50%) 54%;border-color:#a4afbf3b;box-shadow:inset 0 1px #e9d5a12b,inset 1px 0 #d4e1ee0d,inset 0 -12px 28px #02061145}
+.square-chart .square-palace:after{inset:4px;border-color:#c6b9991d;box-shadow:inset 0 0 15px #01071026}
+.square-chart .square-palace.related{background-image:linear-gradient(155deg,#183546d9,#0a1b2ee5 65%,#182d3cdd),url('./sky/milkyway-gaia.jpg');box-shadow:inset 0 0 0 1px #95c4cf55}
+.square-chart .square-palace.selected{background-image:linear-gradient(155deg,#504735bd,#122334e0 64%,#182538d9),url('./sky/milkyway-gaia.jpg');border-color:#d8bc7ebd;box-shadow:inset 0 0 0 1px #e0c79472,inset 0 1px 14px #ceb27415}
+.square-chart .star-name:is(button){appearance:none;display:block;margin:0;padding:0;border:0;border-radius:2px;background:none;box-shadow:none;min-height:0;min-width:0;color:inherit;font:inherit;line-height:inherit;letter-spacing:inherit;text-align:inherit;cursor:pointer}
+.square-chart .star-name:is(button):focus-visible{outline:1px solid #e5cda0;outline-offset:2px}
+.square-chart .star-focused .star-name{color:#f8e4ae;text-shadow:0 0 8px #efd39b45}
+.celestial-wheel .sector-wedge{fill:#0a1728eb;stroke:#b9b7a34d;stroke-width:1}
+.celestial-wheel .wheel-sector.related .sector-wedge{fill:#193040e8;stroke:#91b8c17d}
+.celestial-wheel .wheel-sector.selected .sector-wedge{fill:#374037ed;stroke:#e4c68abf;animation:none}
+.celestial-wheel .sector-galaxy{pointer-events:none;opacity:.75}
+.celestial-wheel .wheel-sector .wheel-natal-name{font:19px 'Songti SC',SimSun,serif;fill:#e2cfa8;letter-spacing:2px}
+.celestial-wheel .wheel-sector .wheel-time-layer{font:11px 'Microsoft YaHei',sans-serif;fill:color-mix(in srgb,var(--layer-color) 65%,#aeb7c5);opacity:.9}
+.celestial-wheel .wheel-sector .wheel-time-layer.current{font-weight:500;opacity:1;fill:var(--layer-color)}
+.celestial-wheel .wheel-content-divider{fill:none;stroke:#b7b4a92b;stroke-width:.7}
+.celestial-wheel .wheel-sector .wheel-layer-star,.celestial-wheel .wheel-sector text.flight-star{font:15px 'Microsoft YaHei',sans-serif;fill:#c7d4e2;filter:none;font-weight:400;letter-spacing:1px}
+.celestial-wheel .wheel-sector text.flight-star{fill:var(--star-mutagen-color)}
+.celestial-wheel .wheel-star-hit{fill:transparent;stroke:none;cursor:pointer}
+.celestial-wheel .star-focused .wheel-star-hit,.celestial-wheel [data-star]:focus-visible .wheel-star-hit{fill:#d8bd8020;stroke:#d8bd8070;stroke-width:.7}
+.celestial-wheel .star-focused .wheel-layer-star{fill:#fae7b9}
+.celestial-wheel .wheel-mutagen-chip rect{fill:color-mix(in srgb,var(--mutagen-color) 9%,#071321);stroke:color-mix(in srgb,var(--mutagen-color) 32%,transparent);stroke-width:.6}
+.celestial-wheel .wheel-sector .wheel-layer-mutagen{font:10px 'Microsoft YaHei',sans-serif;fill:var(--mutagen-color);filter:none;font-weight:400;letter-spacing:0}
+.celestial-wheel .wheel-sector .branch{font-size:15px;fill:#b5b4ae;letter-spacing:2px}
+.celestial-wheel .wheel-center-text{font-size:29px;letter-spacing:3px}
+.celestial-wheel .atlas-wheel-kicker{opacity:.6}
+.wheel-mobile-reading{display:none}
+.atlas-orrery .orrery-hidden-star .hidden-star-orbit{fill:none;stroke:#c7bae4;stroke-width:.7;stroke-dasharray:2 3;opacity:.7;transform-box:fill-box;transform-origin:center;animation:hidden-star-breath 6s ease-in-out infinite}
+.atlas-orrery .orrery-hidden-star .stellar-point{fill:#d5c8ef}
+.atlas-orrery .orrery-hidden-star .stellar-halo{fill:#a9a0d8;opacity:.18}
+.atlas-orrery .orrery-hidden-star .orrery-label{display:block;fill:#bdafce;font-size:9px}
+.atlas-orrery .orrery-hidden-caption{fill:#9a9aaa;font:7px 'Microsoft YaHei',sans-serif;letter-spacing:1px;opacity:.7}
+.atlas-orrery .orrery-hidden-star.palace-resonance .hidden-star-orbit{stroke:#ffe3a3;opacity:1}
+.atlas-orrery .orrery-hidden-star.celestial-selected .hidden-star-orbit{stroke:#ffe3a3;stroke-width:1.2}
+@keyframes hidden-star-breath{0%,100%{opacity:.3;transform:scale(.9)}50%{opacity:.9;transform:scale(1.12)}}
+@media(prefers-reduced-motion:reduce){.atlas-orrery .orrery-hidden-star .hidden-star-orbit{animation:none}}
+body.chart-fit-active #destiny-wheel:not([data-density=spacious]) .star-column[data-celestial-linked=true]:not(.primary):not(.has-mutagen){display:grid!important}
+@media(max-width:700px) and (min-height:680px){
+ body.chart-fit-active #destiny-wheel:not(.square-mode):not([data-reading=large]){flex-direction:column;gap:10px}
+ body.chart-fit-active #destiny-wheel:not(.square-mode):not([data-reading=large]) .celestial-wheel{height:auto;aspect-ratio:1;flex:0 0 auto}
+ #destiny-wheel:not([data-reading=large]) .wheel-mobile-reading{display:block;width:calc(100% - 22px);max-height:190px;overflow:auto;flex:0 1 auto;padding:12px 14px;border:1px solid #c4ae773d;border-radius:8px;background:linear-gradient(135deg,#172434e8,#091321f2);font:13px/1.5 'Microsoft YaHei',sans-serif;box-sizing:border-box}
+ .wheel-mobile-reading header{display:flex;justify-content:space-between;align-items:center;gap:8px;color:#e0c994}
+ .wheel-mobile-reading button{min-height:30px;padding:2px 4px;background:transparent;border:0;font:inherit;color:inherit;box-shadow:none}
+ .wheel-mobile-reading header button{color:#b6c4d6;font-size:11px}
+ .wheel-reader-layers{display:flex;flex-wrap:wrap;gap:3px 10px;font-size:11px;margin:5px 0 7px;padding-bottom:6px;border-bottom:1px solid #b5b6bb20}
+ .wheel-reader-stars{display:flex;flex-wrap:wrap;gap:5px 14px;color:#d0dae8}
+ .wheel-reader-stars>div{display:flex;flex-wrap:wrap;gap:3px;align-items:center}
+ .wheel-reader-stars span{color:var(--mutagen-color);border:1px solid color-mix(in srgb,var(--mutagen-color) 35%,transparent);font-size:11px;padding:0 3px;border-radius:2px}
+}
+.center-layer-legend{display:flex;justify-content:center;flex-wrap:wrap;gap:3px 9px;margin:4px 0;font:11px/1.4 'Microsoft YaHei',sans-serif}
+.center-layer-legend span{color:var(--layer-color);white-space:nowrap}
+@media screen{
+ body.chart-fit-active .square-chart:not([data-scope=natal]) .square-stars{flex:1 1 auto;min-height:0;overflow:auto;scrollbar-width:thin;scrollbar-color:#798b9a55 transparent;align-content:start;padding-bottom:2px}
+ body.chart-fit-active .palace-time-layers{grid-template-columns:repeat(2,minmax(0,1fr));margin:3px 0 1px;gap:1px 5px;padding-top:3px}
+ body.chart-fit-active .palace-time-layer{font:12px/1.3 'Microsoft YaHei',sans-serif;flex-wrap:nowrap;gap:5px;white-space:nowrap}
+ body.chart-fit-active .layer-flow-stars{display:none}
+ body.chart-fit-active .square-chart:not([data-scope=natal]) .palace-calendars{margin-top:1px;min-height:14px}
+ body.chart-fit-active .square-chart:not([data-scope=natal]) .palace-calendars button.decade-range{min-height:14px;height:14px;margin:0;padding:0;font-size:10px;border:0}
+ body.chart-fit-active .square-chart:not([data-scope=natal]) .palace-corner>small{bottom:3px;right:6px}
+ body.chart-fit-active .star-mutations .context-mutagen{opacity:1}
+ body.chart-fit-active #destiny-wheel[data-density=spacious] .palace-time-layers{grid-template-columns:repeat(3,minmax(0,1fr));gap:3px 8px;padding-top:5px;margin-top:6px}
+ body.chart-fit-active #destiny-wheel[data-density=spacious] .palace-time-layer{font-size:14px;flex-wrap:wrap}
+ body.chart-fit-active #destiny-wheel[data-density=spacious] .layer-flow-stars{display:block;font-size:11px;white-space:normal}
+ body.chart-fit-active #destiny-wheel[data-density=spacious] .square-chart:not([data-scope=natal]) .star-mutations{display:grid;grid-template-columns:repeat(2,minmax(22px,auto));gap:2px}
+ body.chart-fit-active #destiny-wheel[data-density=spacious] .square-chart:not([data-scope=natal]) .star-mutations b{font-size:13px;min-width:28px}
+ body.chart-fit-active #destiny-wheel[data-density=tight] .palace-time-layers{padding-top:1px;margin-top:1px;gap:0 3px}
+ body.chart-fit-active #destiny-wheel[data-density=tight] .palace-time-layer{font-size:10px;line-height:12px}
+ body.chart-fit-active #destiny-wheel:not(.square-mode)[data-reading=large]{display:block;overflow:auto;touch-action:pan-x pan-y}
+ body.chart-fit-active #destiny-wheel:not(.square-mode)[data-reading=large] .celestial-wheel{width:900px;min-width:900px;height:900px;max-width:none}
+ .chart-mobile-sheet:has([data-chart-layout=wheel][aria-pressed=true]) #chart-enlarge{display:block}
+}
+@media(max-width:700px){
+ body.chart-fit-active .palace-time-layer{font-size:10px;line-height:13px}
+ body.chart-fit-active .palace-time-layers{gap:0 3px;padding-top:2px}
+ body.chart-fit-active #destiny-wheel:not([data-density=spacious]) .square-chart:not([data-scope=natal]) .square-stars{gap:3px}
+ body.chart-fit-active #destiny-wheel:not([data-density=spacious]) .square-chart:not([data-scope=natal]) .star-column .star-name{font-size:12px;line-height:15px}
+ body.chart-fit-active #destiny-wheel:not([data-density=spacious]) .square-chart:not([data-scope=natal]) .star-mutations b{font-size:10px;line-height:12px}
+ body.chart-fit-active .center-layer-legend{font-size:9px;gap:2px 5px;max-width:160px;align-self:center}
+}
+@media(max-height:600px){body.chart-fit-active .center-layer-legend{font-size:9px;margin:2px 0;gap:2px 5px}}
+@media(max-width:375px){
+ body.chart-fit-active #destiny-wheel:not([data-density=spacious]) .square-chart:not([data-scope=natal]) .star-column{display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;gap:1px 2px}
+ body.chart-fit-active #destiny-wheel:not([data-density=spacious]) .square-chart:not([data-scope=natal]) .star-column .star-name{min-width:26px;line-height:13px}
+ body.chart-fit-active #destiny-wheel:not([data-density=spacious]) .square-chart:not([data-scope=natal]) .star-mutations{display:contents}
+}
+@media(max-height:670px){
+ body.chart-fit-active .square-chart:not([data-scope=natal]) .palace-calendars{display:none}
+ body.chart-fit-active .square-chart:not([data-scope=natal]) .palace-time-layers{padding-top:1px;margin-top:1px}
+}
+@media(max-width:375px) and (max-height:670px){
+ body.chart-fit-active #destiny-wheel .square-chart:not([data-scope=natal]) .square-palace{padding-top:3px;padding-bottom:2px}
+ body.chart-fit-active #destiny-wheel .square-chart:not([data-scope=natal]) .palace-corner{height:14px;min-height:14px;margin-bottom:1px}
+ body.chart-fit-active #destiny-wheel:not([data-density=spacious]) .square-chart:not([data-scope=natal]) .square-stars{gap:1px}
+ body.chart-fit-active .palace-time-layer{line-height:12px}
+}

@@ -1,0 +1,42 @@
+/* The moving catalogue follows the chart into its focus dialog. */
+.chart-stage{isolation:isolate}
+.chart-stage>#starfield{position:absolute;inset:0;z-index:-1;width:100%;height:100%;pointer-events:none;opacity:.85;touch-action:auto}
+.chart-stage:before{content:'';position:absolute;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(ellipse at 18% 34%,#47699c21,transparent 44%),radial-gradient(ellipse at 85% 66%,#6651711c,transparent 47%);background-size:140% 120%;animation:atlas-nebula 45s ease-in-out infinite alternate}
+.square-center{background:radial-gradient(ellipse at 50% 40%,#172d43d9,#07111fd9 75%)}
+.center-astrolabe svg.atlas-orrery{width:98%;height:98%;animation:none;overflow:visible;stroke:none}
+.atlas-orrery .orrery-boundary{fill:none;stroke:#e0bd783c;stroke-width:.65}
+.atlas-orrery .orrery-track{fill:none;stroke:#87bacc42;stroke-width:.65;stroke-dasharray:1 0}
+.orrery-planet{offset-rotate:0deg;animation:orrery-revolution var(--orbit-duration) linear infinite;animation-delay:var(--orbit-delay);filter:drop-shadow(1px 2px 2px #01040aaa)}
+.orrery-globe{transform-origin:0 0;animation:orrery-depth var(--orbit-duration) linear infinite;animation-delay:var(--orbit-delay)}
+.orrery-surface{transform-origin:0 0;animation:orrery-surface-turn var(--spin-duration) ease-in-out infinite alternate}
+.orrery-orbit-accent{fill:none;stroke:#d5c092;stroke-width:.8;stroke-dasharray:5 95;opacity:.3;animation:orrery-trace var(--orbit-duration) linear infinite;animation-delay:var(--orbit-delay)}
+.orrery-compass{fill:none;stroke:#d5b77d80;stroke-width:.8;transform-origin:200px 200px;animation:atlas-slow-turn 96s linear infinite reverse}
+.square-center>.center-birth,.square-center>.center-cycle{text-shadow:0 1px 3px #030b17,0 0 8px #030b17}
+.square-flight-overlay{position:absolute;inset:0;z-index:3;width:100%;height:100%;overflow:visible;pointer-events:none}
+.flight-stream{fill:none;stroke:var(--flight-color);pointer-events:none}
+.flight-memory{stroke-width:.7;stroke-dasharray:2 7;opacity:.18}
+.flight-tail{stroke-width:1.2;stroke-dasharray:8 1000;stroke-linecap:round;animation:flight-tail-pass var(--flight-duration) linear infinite;animation-delay:var(--flight-delay)}
+.flight-tail-halo{stroke-width:7;opacity:.18;filter:blur(2px)}
+.flight-comet{fill:#f4f9ff;stroke:var(--flight-color);stroke-width:1.2;offset-rotate:0deg;filter:drop-shadow(0 0 4px var(--flight-color));animation:flight-comet-pass var(--flight-duration) linear infinite;animation-delay:var(--flight-delay)}
+.flight-origin{fill:var(--flight-color);stroke-width:1;opacity:.9}
+.flight-arrival{stroke-width:1;transform-box:fill-box;transform-origin:center;animation:flight-arrival var(--flight-duration) linear infinite;animation-delay:var(--flight-delay)}
+.wheel-procession{fill:none;stroke:#d0b779;stroke-width:1;transform-origin:450px 450px;animation:atlas-slow-turn 110s linear infinite;opacity:.75;pointer-events:none}
+.wheel-procession.reverse{stroke:#8bc6d0;animation-duration:63s;animation-direction:reverse;opacity:.5}
+.atlas-wheel-ticks{transform-origin:450px 450px;animation:atlas-slow-turn 230s linear infinite reverse;pointer-events:none}
+.atlas-wheel-aura{transform-origin:450px 450px;animation:wheel-breath 7.8s ease-in-out infinite}
+.wheel-heart-orrery{opacity:.72;pointer-events:none}
+.wheel-sector.selected .sector-wedge{animation:palace-resonance 6.5s ease-in-out infinite}
+.celestial-wheel .atlas-wheel-base{fill-opacity:.87}
+@keyframes orrery-revolution{from{offset-distance:0%}to{offset-distance:100%}}
+@keyframes orrery-depth{0%,100%{transform:scale(1);opacity:.95}25%{transform:scale(.78);opacity:.72}75%{transform:scale(1.12);opacity:1}}
+@keyframes orrery-surface-turn{from{transform:rotate(-12deg)}to{transform:rotate(15deg)}}
+@keyframes orrery-trace{to{stroke-dashoffset:-100}}
+@keyframes atlas-nebula{to{background-position:100% 60%}}
+@keyframes flight-comet-pass{0%{offset-distance:0%;opacity:0}5%{opacity:1}72%{offset-distance:100%;opacity:1}79%,100%{offset-distance:100%;opacity:0}}
+@keyframes flight-tail-pass{0%{stroke-dashoffset:8;opacity:0}5%{opacity:.8}72%{stroke-dashoffset:-92;opacity:.75}84%,100%{stroke-dashoffset:-114;opacity:0}}
+@keyframes flight-arrival{0%,65%{opacity:.15;transform:scale(.6)}76%{opacity:.85;transform:scale(1)}96%,100%{opacity:0;transform:scale(2.1)}}
+@keyframes wheel-breath{0%,100%{opacity:.45;transform:scale(.994)}50%{opacity:1;transform:scale(1.014)}}
+@keyframes palace-resonance{0%,100%{fill:#67533170;stroke-opacity:.75}50%{fill:#9c7c384f;stroke-opacity:1}}
+.chart-stage[data-motion=paused] *,.chart-stage[data-motion=paused]:before,.chart-stage[hidden] *,.page-hidden .chart-stage *,.page-hidden .chart-stage:before{animation-play-state:paused!important}
+@media(prefers-reduced-motion:reduce){.chart-stage *,.chart-stage:before{animation:none!important}.flight-comet,.flight-tail,.flight-arrival{display:none}.flight-memory{opacity:.65}}
+@media print{.chart-stage>#starfield,.square-flight-overlay,.center-astrolabe,.wheel-heart-orrery{display:none}.chart-stage *,.chart-stage:before{animation:none!important}}

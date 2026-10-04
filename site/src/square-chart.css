@@ -1,0 +1,88 @@
+/* Traditional fixed-branch twelve-palace board. */
+.age-number{display:inline-block;white-space:nowrap;margin-right:3px}.age-list-label{display:inline-block;margin-right:7px}
+.chart-legend{color:#8d9fb9;text-align:center;font-size:12px;line-height:1.8;margin-top:12px}.chart-legend b{font-weight:400;background:#885c43;color:#fff0d8;padding:2px 4px;border-radius:2px}.chart-legend b:last-child{background:#2c6370;color:#d5fbff}
+#birth-form .chart-settings{grid-row:auto}
+.chart-stage{grid-template-columns:minmax(700px,1fr) 245px;gap:20px;padding:22px 20px 48px}
+.birth-panel{grid-column:1/-1;padding:20px 23px}.birth-panel>.panel-overline,.birth-panel>h2{display:none}
+#birth-form{display:grid;grid-template-columns:1.1fr 1.1fr .9fr .9fr .65fr;gap:16px;align-items:end}#birth-form>label{margin:0}#birth-form .gender-field{margin:0}#birth-form .gender-field label{min-height:43px;margin:0}#birth-form>.cosmic-primary{margin:0;height:43px;min-height:43px}
+#birth-form>label input{color-scheme:dark;background:#080d16;color:#d4dbe6;border:1px solid #3b4556;border-radius:4px;width:100%;min-width:0;min-height:43px;padding:8px 10px;font-size:14px;margin-top:7px}
+#birth-form .chart-settings{grid-column:1/-1;margin:0;padding-top:11px}#birth-form .chart-settings[open]{display:grid;grid-template-columns:1fr 1fr 1fr;gap:15px}#birth-form .chart-settings summary{grid-column:1/-1}#birth-form .chart-settings p{grid-column:1/-1;margin:0}.birth-panel .chart-status{display:inline-block;margin:10px 20px 0 0;font-size:13px}.birth-panel .chart-small-actions{display:inline-flex}.birth-panel .local-note{float:right;border:0;padding:0;margin:12px 0 0}
+.wheel-deck{width:100%;min-width:0}.chart-mode-label{justify-content:space-between;margin:0 0 12px}.chart-layout-switch{display:flex;align-items:center;gap:7px;margin:0 0 12px}.chart-layout-switch button,.cycle-scope button{background:#101a29;color:#aebacf;border:1px solid #3b475a;border-radius:3px;padding:8px 12px;font-size:14px}.chart-layout-switch button[aria-pressed=true],.cycle-scope button[aria-pressed=true]{background:#d2b886;color:#172131;border-color:#d2b886}.chart-layout-switch>span{margin-left:auto;font-size:12px;color:#90a0b6}
+.destiny-wheel.square-mode{aspect-ratio:auto;max-width:none;margin:0 0 14px;filter:none;overflow:auto;border-radius:5px;border:1px solid #7b7055;scrollbar-color:#887756 #111d2f;scrollbar-width:thin;overscroll-behavior-x:contain}
+.square-chart{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(4,minmax(246px,auto));min-width:840px;background:#101929;gap:1px;color:#bcc9db}
+.square-palace{position:relative;display:flex;flex-direction:column;min-width:0;min-height:246px;background:#0c1422;padding:12px 11px 10px;cursor:pointer;outline-offset:-3px;border:1px solid transparent;text-align:left;transition:background .2s}
+.square-palace:hover{background:#1b2638}.square-palace:focus-visible{outline:2px solid #f1d696}.square-palace.selected{background:#252839;border-color:#d0b680}.square-palace.related{background:#141f2e;border-color:#536077}
+.palace-corner{display:flex;align-items:center;justify-content:space-between;gap:5px;margin-bottom:12px}.palace-corner>span{font:600 20px/1.3 'Songti SC',SimSun,serif;letter-spacing:.12em;color:#dfcea9}.palace-corner>strong{font:500 18px/1.3 'Songti SC',SimSun,serif;color:#dfbc83}.palace-corner>small{font-size:12px;color:#f0a5a1;min-width:24px}
+.square-stars{display:flex;flex-wrap:wrap;align-items:flex-start;gap:5px;min-height:75px;margin-bottom:10px}.star-column{display:flex;flex-direction:column;align-items:center;min-width:15px;gap:4px}.star-column .star-name{writing-mode:vertical-rl;text-orientation:upright;font-size:15px;line-height:1.05;letter-spacing:2px;max-height:86px;color:#9cb3cf}.star-column.primary .star-name{color:#edc58a;font-size:18px;font-weight:500}.star-column.auxiliary .star-name{color:#87c9ca}.star-column.tough .star-name{color:#d68f90}.star-column .star-brightness{font-size:12px;color:#9cabbc;line-height:1}.star-column b{font-size:12px;font-weight:500;line-height:1.1;padding:2px 3px;border-radius:2px}.natal-mutagen{background:#885c43;color:#fff0d8}.scope-mutagen{background:#2c6370;color:#d5fbff}.empty-major{font-size:12px;color:#8295b0}
+.palace-age-lists{margin-top:auto;margin-bottom:6px}.palace-age-lists p{font-size:12px;line-height:1.6;margin:0;color:#8c9db5;overflow-wrap:anywhere}.palace-calendars{display:grid;grid-template-columns:1fr auto;gap:4px;color:#98adbd;font-size:12px;line-height:1.5}.palace-calendars .decade-range{grid-column:1/-1;color:#d3c39f;font-size:16px;font-weight:500}.palace-calendars>span:last-child{text-align:right}.palace-overlay{border-top:1px solid #45566d;margin:3px 0 8px;padding-top:7px;font-size:12px;line-height:1.8;color:#8ac7d2}.palace-overlay strong{display:block;font-size:14px;font-weight:400}.palace-overlay.scope-life strong{color:#c0f3e8}
+.square-center{grid-row:2/4;grid-column:2/4;display:flex;flex-direction:column;justify-content:center;padding:25px 27px;background:radial-gradient(ellipse at center,#1f2c43,#0c1422);text-align:center;min-width:0}.square-center>.panel-overline{font-size:12px;letter-spacing:.13em}.square-center h2{font:400 32px/1.5 'Songti SC',SimSun,serif;color:#f0dfba;margin:7px 0;overflow-wrap:anywhere}.center-identity{color:#c8b180;font-size:16px;margin:0 0 21px}.center-birth{font-size:14px;color:#b7c5d9;text-align:left;margin:0}.center-birth>div{display:grid;grid-template-columns:92px 1fr;gap:7px;line-height:1.65;margin:6px 0}.center-birth dt{color:#8197b4}.center-birth dd{margin:0;overflow-wrap:anywhere}.chart-pillars{display:flex;justify-content:center;gap:29px;margin:20px 0}.chart-pillars small{display:block;font-size:12px;color:#8598b2;margin:0 0 7px}.chart-pillars strong{writing-mode:vertical-rl;font:500 25px/1.5 'Songti SC',SimSun,serif;letter-spacing:6px;color:#e2bf8d}.center-cycle{border-top:1px solid #3d4e66;border-bottom:1px solid #3d4e66;padding:14px 0}.center-cycle>strong{font-size:16px;font-weight:500;color:#d9c393}.center-cycle p{font-size:13px;line-height:1.8;margin:7px 0 0;color:#a6bbd5}.center-relation{font-size:13px;line-height:1.9;color:#baab8c;margin:16px 0 5px}.center-convention{font-size:12px;line-height:1.9;white-space:pre-line;color:#8198b6;margin:0}
+.palace-inspector{position:sticky;top:20px}.cycle-dock{display:flex;flex-wrap:wrap;gap:18px}.cycle-heading{max-width:none;flex:1}.cycle-heading h2{font-size:22px}.cycle-scope{display:flex;flex-wrap:wrap;gap:7px;align-self:center}.cycle-controls{width:100%;justify-content:flex-start;gap:20px}.cycle-dock input[type=time]{color-scheme:dark;background:#0c1422;color:#ccd8e9;border:1px solid #405169;border-radius:3px;padding:8px 12px;min-height:42px;font-size:14px;display:block;margin-top:7px}.cycle-controls .cosmic-secondary{margin-left:auto}.cycle-dock #cycle-status{width:100%;font-size:14px;line-height:1.8}
+.chart-stage>.cycle-dock{grid-column:1/-1;pointer-events:auto;margin:0;padding:18px 22px;gap:12px;background:#0d1623ef}.chart-stage .cycle-heading{flex:1;min-width:230px}.chart-stage .cycle-heading h2,.chart-stage .cycle-heading>.panel-overline{display:none}.chart-stage .cycle-heading p:last-child{margin:0;max-width:none}.chart-stage .cycle-controls{gap:16px;align-items:end}.chart-stage .cycle-controls label{font-size:13px}.chart-stage #cycle-status{margin:0;color:#9daec6;font-size:13px}
+@media(max-width:1450px){.chart-stage{grid-template-columns:minmax(0,1fr);padding:20px 18px 45px}.palace-inspector{position:static;display:grid;grid-template-columns:1fr 1fr;gap:0 24px;min-height:0}.palace-inspector>.panel-overline,.palace-inspector>h2,.palace-inspector>.palace-subtitle{grid-column:1/-1}.palace-inspector>.star-symbol-profile{grid-row:4/7;grid-column:2}.palace-inspector .palace-extra{font-size:14px}.birth-panel .local-note{float:none;display:inline-block;margin-left:20px}.square-chart{min-width:840px}}
+@media(max-width:900px){#birth-form{grid-template-columns:repeat(3,1fr)}#birth-form .gender-field{grid-column:1/3;grid-row:auto}#birth-form>.cosmic-primary{grid-column:3;grid-row:auto}.chart-layout-switch{flex-wrap:wrap}.chart-layout-switch>span{width:100%;margin:0 0 0 3px}.birth-panel .local-note{display:block;margin-left:0}.chart-stage{padding:16px 12px 45px}.square-chart{grid-template-rows:repeat(4,minmax(260px,auto))}.square-palace{min-height:260px}}
+@media(max-width:570px){.chart-stage{display:grid;grid-template-columns:minmax(0,1fr);gap:20px}.birth-panel{padding:17px}#birth-form{grid-template-columns:1fr 1fr;gap:13px}#birth-form>label:first-child{grid-column:1/-1}#birth-form .gender-field{grid-column:1;grid-row:auto}#birth-form>.cosmic-primary{grid-column:2;grid-row:auto}#birth-form .chart-settings[open]{display:block}#birth-form .chart-settings[open]>label{margin:10px 0}.chart-mode-label{font-size:12px}.chart-layout-switch button{font-size:14px}.square-chart{min-width:840px}.palace-inspector{display:block}.cycle-controls{gap:14px;width:100%}.cycle-controls>label{width:calc(50% - 7px)}.cycle-controls input{width:100%!important}.cycle-scope button{padding:8px 10px}.cycle-controls .cosmic-secondary{margin:0;width:auto;flex:1}.year-scrubber{width:45%}.cycle-dock #cycle-status{font-size:13px}.birth-panel .chart-status{font-size:13px}.star-symbol-profile p{font-size:16px!important}}
+
+.palace-inspector .star-symbol-profile p{font-size:16px;line-height:1.8}
+
+.annual-deities{display:block;color:#98b1c9}
+
+/* A readable overview on touch screens, with complete data in the palace sheet. */
+.wheel-deck{max-width:none}
+.palace-compact-note{display:none}
+.decade-range{display:flex;flex-wrap:wrap;column-gap:2px}
+.palace-complete-stars{display:flex;flex-wrap:wrap;gap:7px;margin:15px 0;font-size:14px;line-height:1.6}
+.palace-complete-stars>span{padding:6px 9px;background:#a7c9e00a;border:1px solid #a7c9e025;border-radius:5px;color:#c4d4e3}
+#palace-dialog{padding:0;border:1px solid #8fa9c755;border-radius:20px 20px 0 0;background:#0b1524;color:#c5d5e6;width:min(700px,100%);max-width:100%;max-height:85dvh;margin:auto auto 0;box-shadow:0 -20px 100px #0008;overflow:hidden}
+#palace-dialog::backdrop{background:#02081199;backdrop-filter:blur(4px)}
+.palace-dialog-toolbar{display:flex;gap:8px;padding:10px 16px;border-bottom:1px solid #93abc133;background:#102034}
+.palace-dialog-toolbar button{min-height:44px;min-width:44px;border:1px solid #819fbc40;border-radius:8px;background:#b0c9e00b;color:#e4d1ac;font-size:16px;padding:6px 15px;cursor:pointer}
+.palace-dialog-toolbar button:last-child{margin-left:auto;font-size:14px}
+#palace-dialog .palace-inspector{display:block;position:static;border:0;border-radius:0;max-height:calc(85dvh - 66px);overflow:auto;overscroll-behavior:contain;padding:22px 24px calc(30px + env(safe-area-inset-bottom,0px));min-height:0}
+#palace-dialog .palace-inspector>h2{font-size:27px}
+#palace-dialog .palace-details{font-size:15px;line-height:1.8}
+#palace-dialog .palace-star-list button{min-height:44px}
+@media(max-width:1200px){
+ .square-chart{min-width:0;width:100%;grid-template-rows:repeat(4,minmax(210px,auto))}
+ .square-palace{min-height:210px;padding:9px 7px}
+ .palace-corner{gap:3px}.palace-corner>span{font-size:17px}.palace-corner>strong{font-size:16px}.palace-corner>small{min-width:0}
+ .square-stars{gap:4px}.star-column .star-name{font-size:13px}.star-column.primary .star-name{font-size:16px}
+ .square-center{padding:20px 15px}.center-birth>div{grid-template-columns:78px 1fr}
+ .palace-calendars{grid-template-columns:1fr}.palace-calendars>span:last-child{text-align:left}
+}
+@media(max-width:1024px){
+ .chart-stage{min-width:0}.destiny-wheel.square-mode{overflow:visible}
+ .square-chart{grid-template-rows:repeat(4,minmax(194px,auto))}
+ .square-palace{min-height:194px}
+ .palace-age-lists{display:none}.palace-calendars{margin-top:auto}
+ .palace-compact-note{display:block;color:#8ca8bd;font-size:12px;line-height:1.6;margin:3px 0 7px}
+ .square-center .center-convention{line-height:1.5}
+ .chart-stage>.palace-inspector{display:none}
+ .chart-layout-switch button,.cycle-scope button{min-height:44px}
+ #birth-form>label input,.cycle-controls input{font-size:16px}
+}
+@media(max-width:700px){
+ .chart-stage{padding:12px 8px 28px;gap:14px}
+ .square-chart{grid-template-rows:repeat(4,minmax(167px,auto));gap:1px}
+ .square-palace{min-height:167px;padding:7px 5px}
+ .palace-corner{flex-wrap:wrap;justify-content:flex-start;gap:3px 6px;margin-bottom:9px}
+ .palace-corner>span{font-size:13px;letter-spacing:0}.palace-corner>strong{font-size:14px}.palace-corner>small{font-size:10px;position:absolute;right:4px;bottom:5px}
+ .square-stars{min-height:55px;gap:4px;margin:0 0 4px;flex-wrap:wrap}
+ .star-column:not(.primary):not(.has-mutagen){display:none}
+ .star-column .star-name,.star-column.primary .star-name{font-size:14px;line-height:1.25;letter-spacing:1px}
+ .star-column{min-width:12px;gap:3px}.star-column .star-brightness{font-size:11px}.star-column b{font-size:10px;padding:1px 2px}
+ .palace-calendars .decade-range{font-size:12px;white-space:normal}.palace-calendars>span{display:none}
+ .palace-overlay{font-size:11px;line-height:1.5;padding-top:3px;margin:3px 0}
+ .palace-overlay strong{font-size:11px}.palace-overlay>span{display:none}
+ .palace-compact-note{font-size:10px;white-space:nowrap;margin:3px 0 5px}
+ .square-center{padding:13px 10px;justify-content:flex-start;gap:0}
+ .square-center>.panel-overline{font-size:10px;letter-spacing:0;margin:0}.square-center h2{font-size:20px;margin:5px 0}
+ .center-identity{font-size:12px;margin-bottom:9px}.center-birth{font-size:11px}
+ .center-birth>div{grid-template-columns:1fr;gap:0;margin:6px 0;line-height:1.45}.center-birth dt{font-size:10px}
+ .chart-pillars{gap:clamp(5px,1.4vw,12px);margin:9px 0}.chart-pillars small{font-size:10px;margin-bottom:2px}.chart-pillars strong{font-size:18px;line-height:1.15;letter-spacing:2px}
+ .center-cycle{padding:7px 0}.center-cycle>strong{font-size:12px}.center-cycle p{font-size:11px;line-height:1.5;margin-top:4px}
+ .center-relation{font-size:11px;line-height:1.6;margin:8px 0}.center-convention{font-size:10px;line-height:1.5}
+ .chart-stage .cycle-heading{min-width:0;width:100%}.chart-stage>.cycle-dock{padding:14px 13px}
+ .chart-stage .cycle-controls{gap:12px}.chart-stage .cycle-controls>label{min-width:0;width:calc(50% - 6px)}
+ .chart-stage .cycle-controls input{min-width:0}.chart-stage .year-scrubber{width:100%}
+ #palace-dialog .palace-inspector{padding-left:19px;padding-right:19px}
+}

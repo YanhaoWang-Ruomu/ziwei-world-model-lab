@@ -1,0 +1,67 @@
+/* Persistent chart relationships, separated from the temporary selection. */
+.square-palace.related{background:linear-gradient(145deg,#254255,#112334);border-color:#a4c8d482;box-shadow:inset 0 0 28px #80bac50b}
+.square-relation-line{fill:none;stroke:#dabd79;stroke-width:1;stroke-dasharray:4 7;opacity:.5}
+.intrinsic-arrow{fill:none;stroke:var(--flight-color);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 3px var(--flight-color));opacity:.9}
+.intrinsic-mutagen{background:#151d2b;border:1px solid currentColor;color:#a5d5ed;white-space:nowrap}
+.intrinsic-mutagen[data-mutagen=禄]{color:#9ae0c0}.intrinsic-mutagen[data-mutagen=权]{color:#d4acf0}.intrinsic-mutagen[data-mutagen=科]{color:#9cccf2}.intrinsic-mutagen[data-mutagen=忌]{color:#efa0ab}
+.star-mutations{display:flex;flex-direction:column;align-items:center;gap:3px;position:static;overflow:visible;flex-shrink:0}
+.star-mutations b{display:block;position:static;white-space:nowrap;line-height:1.2;flex:none}
+.star-column[data-flight-mutagen]{border-radius:4px;background:color-mix(in srgb,var(--star-mutagen-color) 12%,transparent);box-shadow:0 0 0 1px color-mix(in srgb,var(--star-mutagen-color) 48%,transparent);padding:3px 2px;margin:-3px -2px}
+.square-stars .star-column.flight-star .star-name{color:var(--star-mutagen-color);font-weight:700;text-shadow:0 0 13px color-mix(in srgb,var(--star-mutagen-color) 65%,transparent)}
+.star-mutations [data-mutagen=禄]{--mutagen:#9ae0c0}.star-mutations [data-mutagen=权]{--mutagen:#d4acf0}.star-mutations [data-mutagen=科]{--mutagen:#9cccf2}.star-mutations [data-mutagen=忌]{--mutagen:#e9a3b1}
+.star-mutations b[data-mutagen]{color:var(--mutagen);background:color-mix(in srgb,var(--mutagen) 12%,#0c1624);border:1px solid color-mix(in srgb,var(--mutagen) 40%,transparent)}
+.star-mutations b.context-mutagen{opacity:.65}
+.mutagen-color-key{display:flex;align-items:center;justify-content:center;gap:14px;margin:5px 0;font-size:13px}
+.celestial-wheel .wheel-sector text.flight-star{fill:var(--star-mutagen-color);font-weight:700;filter:drop-shadow(0 0 5px var(--star-mutagen-color))}
+.square-stars{gap:6px;margin-bottom:12px}.square-palace .palace-age-lists{font-size:11px;opacity:.7}.square-palace .palace-calendars{gap:5px}.square-palace.flight-source:after{content:none}
+.intrinsic-legend{display:flex;justify-content:center;flex-wrap:wrap;gap:8px 14px;font-size:12px;color:#a6b4c7;margin:8px 0}
+.center-palace-details{background:#c3a77615;color:#e7ce99;border:1px solid #d0b07665;border-radius:5px;min-height:36px;padding:6px 12px;font-size:14px;align-self:center}
+.celestial-wheel .wheel-mutation-summary{font-size:12px;text-anchor:middle;fill:#cbb797}
+.chart-mobile-bar{display:none}
+.mobile-chart-hint{display:none}
+.chart-mobile-sheet{padding:0;color:#d8e3ed;background:#0c1625;border:1px solid #66809c70;border-radius:18px 18px 0 0;width:min(650px,100%);max-width:100%;max-height:92dvh;margin:auto auto 0;overflow:hidden}
+.chart-mobile-sheet::backdrop{background:#030914aa;backdrop-filter:blur(6px)}
+.chart-mobile-sheet>header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 18px;border-bottom:1px solid #8197af30}
+.chart-mobile-sheet h2{font:20px 'Songti SC',SimSun,serif;color:#dec58e;margin:0}
+.chart-mobile-sheet>header button{background:transparent;color:#deccaa;border:0;min-height:44px;font-size:14px}
+.chart-mobile-sheet-body{overflow:auto;max-height:calc(92dvh - 67px);padding:15px 16px calc(22px + env(safe-area-inset-bottom,0px));overscroll-behavior:contain}
+.chart-mobile-sheet .birth-panel{padding:0;border:0;box-shadow:none;margin:0;background:none}
+.chart-mobile-sheet .chart-layout-switch{display:flex}.chart-mobile-sheet .chart-layout-switch>span{display:none}
+.chart-mobile-sheet .atlas-toolbar{display:flex;flex-wrap:wrap}.chart-mobile-sheet .atlas-toolbar button{flex:1 1 40%;min-height:44px}
+.chart-mobile-sheet .cycle-utility{display:flex}.chart-mobile-sheet .cycle-manual{flex-basis:100%;order:2}
+.chart-mobile-sheet .chart-stem-proof{display:block}
+/* Time navigation lives in the chart; its expanded controls never resize it. */
+.cycle-control-home{max-width:380px;margin:10px auto;width:100%}
+.cycle-control-home[hidden]{display:none!important}
+.square-cycle-slot{width:100%;margin:12px 0 8px;flex-shrink:0}
+.chart-cycle-launcher{width:100%;max-width:360px;margin:auto;pointer-events:auto}
+.cycle-launcher-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cycle-launcher-row button{display:flex;align-items:center;justify-content:center;gap:10px;min-width:0;min-height:44px;padding:8px 12px;border:1px solid #b79d635c;border-radius:6px;background:#102135e8;color:#ecd6a8;font:16px/1.4 'Songti SC',SimSun,serif;letter-spacing:.04em;cursor:pointer;touch-action:manipulation;white-space:nowrap}
+.cycle-launcher-row .cycle-menu-trigger{background:linear-gradient(140deg,#c5a96b2a,#153044);border-color:#cfb37185}
+.cycle-launcher-row #cycle-now{width:auto;margin:0;position:static;font:14px/1.4 'Songti SC',SimSun,serif;min-height:44px;padding:8px}
+.cycle-menu-chevron{font:18px/1 sans-serif;color:#b69e70}
+.cycle-compact-period{border:0;background:none;color:#b2c5da;min-height:36px;padding:5px 2px;font-size:13px;line-height:1.4;width:100%;cursor:pointer;font-variant-numeric:tabular-nums}
+.cycle-compact-period:after{content:' ⌄';color:#cfb584}
+.chart-cycle-launcher button:focus-visible{outline:2px solid #efd096;outline-offset:2px}
+.chart-cycle-launcher button:hover{border-color:#ead099;color:#fff0ce}
+.cycle-menu-dialog{padding:0;width:min(520px,calc(100vw - 24px));max-width:calc(100vw - 24px);max-height:calc(100dvh - 32px);margin:auto;border:1px solid #b49c686e;border-radius:14px;background:#0c1828;color:#dce5f0;box-shadow:0 20px 90px #0009;overflow:auto;overscroll-behavior:contain;color-scheme:dark}
+.cycle-menu-dialog:not([open]){display:none}
+.cycle-menu-dialog::backdrop{background:#02091499;backdrop-filter:blur(3px)}
+.cycle-menu-header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 18px;border-bottom:1px solid #c6b17c26;background:#122238}
+.cycle-menu-header h2{font:22px/1.4 'Songti SC',SimSun,serif;color:#e4cf9e;margin:0;letter-spacing:.08em}
+.cycle-menu-header button{background:transparent;border:0;color:#d2c39f;font-family:inherit;font-size:14px;line-height:1.4;min-height:44px;padding:6px 10px;cursor:pointer}
+.cycle-menu-dialog .chart-time-console{display:block;margin:0;padding:16px 18px 20px;border:0;border-radius:0;min-width:0;background:none}
+.cycle-menu-dialog .cycle-scope{grid-template-columns:repeat(3,minmax(0,1fr));max-width:none;gap:6px;padding:5px}
+.cycle-menu-dialog .cycle-scope button{min-height:44px;font-size:16px;letter-spacing:.08em}
+.cycle-menu-dialog .cycle-heading{display:none}
+.cycle-menu-dialog .cycle-pickers{grid-template-columns:repeat(2,minmax(0,1fr))}
+.cycle-menu-dialog .cycle-pickers label:last-child:nth-child(odd){grid-column:1/-1}
+.cycle-menu-dialog .cycle-pickers label,.cycle-menu-dialog .cycle-manual-body label{font-size:13px}
+.cycle-menu-dialog .cycle-pickers select,.cycle-menu-dialog .cycle-manual-body input{font-size:16px;min-height:44px}
+.cycle-menu-dialog .cycle-stepper{margin:12px 0 0;padding-top:10px;gap:8px}
+.cycle-menu-dialog .cycle-stepper button{min-height:44px;height:auto;width:42px}
+.cycle-menu-dialog #cycle-picker-toggle{width:auto;flex:1}
+.cycle-menu-dialog #cycle-step-label{font-size:14px}
+.cycle-menu-dialog .cycle-utility{display:flex;margin-top:12px}
+.cycle-menu-dialog .cycle-manual[open]{flex-basis:100%;order:3}
+.cycle-menu-dialog #cycle-status{font-size:13px;line-height:1.6}

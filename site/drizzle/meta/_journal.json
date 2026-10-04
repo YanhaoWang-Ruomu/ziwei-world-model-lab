@@ -1,0 +1,83 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1789811669268,
+      "tag": "0000_silky_vengeance",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1789817098674,
+      "tag": "0001_tearful_hitman",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1789818763337,
+      "tag": "0002_special_account_access",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1789821592321,
+      "tag": "0003_review_and_cards",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1789824027479,
+      "tag": "0004_card_catalog",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1789825835647,
+      "tag": "0005_card_rules",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1789828630022,
+      "tag": "0006_fluffy_sheva_callister",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1789913313497,
+      "tag": "0007_personal_accounts_and_cases",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1789960624766,
+      "tag": "0008_outstanding_photon",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1790078528612,
+      "tag": "0009_dusty_forgotten_one",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1790094294459,
+      "tag": "0010_technique_revision_history",
+      "breakpoints": true
+    }
+  ]
+}

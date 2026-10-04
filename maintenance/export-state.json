@@ -1,0 +1,918 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "c849f21d084eb4e4681d25b9dee3eb5b3969afce",
+  "files": [
+    {
+      "path": "site/db/schema.ts",
+      "sha256": "5c2efb50d18678f0c44344dd49b6eec1e09cb3006d54359977a67636b6cb4eff"
+    },
+    {
+      "path": "site/drizzle.config.ts",
+      "sha256": "1b971da8f8eb163e47ae808af9207df95367dbf15c6c8a54d39ac3a095101be6"
+    },
+    {
+      "path": "site/drizzle/0000_silky_vengeance.sql",
+      "sha256": "2036bdea30a11e411fe4c8faddafc9215c1d63a48dbfec0e6e87a9ce5e651aea"
+    },
+    {
+      "path": "site/drizzle/0001_tearful_hitman.sql",
+      "sha256": "247b18b5bc8be74bda62a7b344577901f0ff7317e84403cd88f18126059f3c52"
+    },
+    {
+      "path": "site/drizzle/0002_special_account_access.sql",
+      "sha256": "54fab168eef66dd34144fb30343095979be4ac457c132e6501dc130592066a94"
+    },
+    {
+      "path": "site/drizzle/0003_review_and_cards.sql",
+      "sha256": "e655acdcff9e776fb44354451ba9a3ceab15b2739653ae27210efe895375fc71"
+    },
+    {
+      "path": "site/drizzle/0004_card_catalog.sql",
+      "sha256": "7a91ee3c292264078ae4c6e71268b6372a27aa639f3325afb8827ba9b8da5c59"
+    },
+    {
+      "path": "site/drizzle/0005_card_rules.sql",
+      "sha256": "39a0b4000c9c3cfd193415d22850c20e346ea70fdce5aa561fcf7593aebe6d64"
+    },
+    {
+      "path": "site/drizzle/0006_fluffy_sheva_callister.sql",
+      "sha256": "9107a387b7a53a14377fe7bd1171f3a3339ec97f309c58918bd5bdf6188112c4"
+    },
+    {
+      "path": "site/drizzle/0007_personal_accounts_and_cases.sql",
+      "sha256": "fdf298b3332d877dd7401da65694388fe4b19b597cde07f0566c4267e92a407f"
+    },
+    {
+      "path": "site/drizzle/0008_outstanding_photon.sql",
+      "sha256": "5c49cce9eab2ce1c72fc2178a219cef3a1c4f6204c6e925cbbbeb18edc2f61e4"
+    },
+    {
+      "path": "site/drizzle/0009_dusty_forgotten_one.sql",
+      "sha256": "6c25c3936ccfa074e24423c5c3a5ac16bb38bb4b01fe48776e25171fc13f4b1d"
+    },
+    {
+      "path": "site/drizzle/0010_technique_revision_history.sql",
+      "sha256": "9619e84692566ea5e9d4635607d75af00a6ae4a082ca159be167de38eded5779"
+    },
+    {
+      "path": "site/drizzle/meta/0000_snapshot.json",
+      "sha256": "c19e8b2924661a0626aa4d9b8444d30efbe9487a9b88206fd95306aad5979379"
+    },
+    {
+      "path": "site/drizzle/meta/0001_snapshot.json",
+      "sha256": "d56b7950a2ee9b0432351c36bdb3f16c6ddef6fd18357cc2895d6d733eb08606"
+    },
+    {
+      "path": "site/drizzle/meta/0002_snapshot.json",
+      "sha256": "08c0d32c80d62f3c8d12518c816fda27a599544d71034c0bcad799b057d724dd"
+    },
+    {
+      "path": "site/drizzle/meta/0003_snapshot.json",
+      "sha256": "1636d198d3ab6ed275554424eecde19e44eb2bffdb0d4d9a66c5ce3913274f27"
+    },
+    {
+      "path": "site/drizzle/meta/0004_snapshot.json",
+      "sha256": "c5572c55aa1155157d1c18f10beb94d36325c76290ed1b3bd9dc92362b330576"
+    },
+    {
+      "path": "site/drizzle/meta/0005_snapshot.json",
+      "sha256": "65df1b11b7793a5a0bc3a32dd541bc54839af343db1ef185d88fbccf9d7a542a"
+    },
+    {
+      "path": "site/drizzle/meta/0006_snapshot.json",
+      "sha256": "039fec926059c109adb1de138c4209caef495a13d76722b1c9c7f69419628588"
+    },
+    {
+      "path": "site/drizzle/meta/0007_snapshot.json",
+      "sha256": "989235c16c3a4701bee39e35607045c3faa973e5302e75d5404aa7df8058f7bd"
+    },
+    {
+      "path": "site/drizzle/meta/0008_snapshot.json",
+      "sha256": "59216761baad5671f079ba77929ba7755f8a1cbbf3785855826a19291b862675"
+    },
+    {
+      "path": "site/drizzle/meta/0009_snapshot.json",
+      "sha256": "401fb9ca663750ff779a4f6c428c15c32fa8d34e682b1f7cf5c90de2d7ccd1ff"
+    },
+    {
+      "path": "site/drizzle/meta/0010_snapshot.json",
+      "sha256": "dd7e63af70c1729fdc5cb95e54c7c7b983f19484511776bca741c75ab0634358"
+    },
+    {
+      "path": "site/drizzle/meta/_journal.json",
+      "sha256": "0539c93ac582034d6f5233835a6462f778d4d4c928af4b8c8a48a9471ff9a988"
+    },
+    {
+      "path": "site/package.json",
+      "sha256": "a4ffba6abd2bbd4e04e3df9e9cfd03903dcf2bd92d5efe255f98e70643209064"
+    },
+    {
+      "path": "site/pnpm-lock.yaml",
+      "sha256": "ded5edde5f6fd2c9894f4370467e9d370d00621da3d84da4e301e04b4a755fb5"
+    },
+    {
+      "path": "site/pnpm-workspace.yaml",
+      "sha256": "7b628c83d2f0edf3fa78928d1949ddea8ccacd78c7d7d144153b5992628cb311"
+    },
+    {
+      "path": "site/scripts/build.js",
+      "sha256": "87399e724a679969cdbac84b2ea0f6b814d6337058f0eec8c730835706b2e3c6"
+    },
+    {
+      "path": "site/scripts/preview.mjs",
+      "sha256": "fbc5dc3cd698dd998ebb7fce4a864c34446eb58e379009e0b104261014ff63f2"
+    },
+    {
+      "path": "site/server/accounts.js",
+      "sha256": "7720c5ceb0be4a5b0a700fc48b89736c685d77a72adf08fd327f47f4601c8f5a"
+    },
+    {
+      "path": "site/server/book-deletion.mjs",
+      "sha256": "db41d64eb7271f747117c95ac7ab76f6108fa140184c3d3d71f400b8f55b1569"
+    },
+    {
+      "path": "site/server/cards.js",
+      "sha256": "75d735a047d8482f87f9841e2c7394bb5c83802ac52dd18f85ebed95c7b25d0f"
+    },
+    {
+      "path": "site/server/chart-cases.js",
+      "sha256": "53a47a6754b42f64cd66ae32b497a65b2cb69ab811fbea5f5cdb90fca2c55872"
+    },
+    {
+      "path": "site/server/chart-route.mjs",
+      "sha256": "12661cd1ef8627dbf7083f8ea9269cd81c9f63f76b3b9adcf101f079bf0970f9"
+    },
+    {
+      "path": "site/server/library-search.mjs",
+      "sha256": "1575d02d8b0b77f68b4d02d27d3bfeb6db2706e540b63b1389a4677abb6524db"
+    },
+    {
+      "path": "site/server/model.js",
+      "sha256": "e6fe9cdbb6eb9e69b88d325120c9571ee36ea04b4bec902396ac70aa31282b43"
+    },
+    {
+      "path": "site/server/review.js",
+      "sha256": "9110a1ee5a12585e538af7e1fde3c5f9474cb07be186540ae42e78b8c97adf3d"
+    },
+    {
+      "path": "site/server/roles.js",
+      "sha256": "6ef62a22086eaf5235cf0bf79d0efdd1c7e803d4123b04b40c671767f1eae063"
+    },
+    {
+      "path": "site/server/rules.js",
+      "sha256": "129653b9c89142462fae3f206351a5f57a92e5fc290290a58125965287701cea"
+    },
+    {
+      "path": "site/server/security.js",
+      "sha256": "bd79f379f7a15f3164f15836e6492e8ad2b908a096aee666179ad0b684509c6a"
+    },
+    {
+      "path": "site/server/special-access.js",
+      "sha256": "8321ac6cb48fdb44030b931fade2a2140e5fede1f9cc2f034869bd28cd7345ca"
+    },
+    {
+      "path": "site/server/storage.js",
+      "sha256": "a64aab812781c3282a7b30efae5c33b034b80469c362c8c6320a046164e34e7f"
+    },
+    {
+      "path": "site/server/submissions.js",
+      "sha256": "e1402ea858703ede853b9f0d3f505f80ddcff4f3f260465320912f3e58ffd524"
+    },
+    {
+      "path": "site/server/technique-history.js",
+      "sha256": "5f84dca38fe286da7ac3e44968bf3028151bbf5401f531c9a574737285891739"
+    },
+    {
+      "path": "site/server/techniques.js",
+      "sha256": "be015288549ad417f624c956c98ebe0ee9bd9e503cee70fb53b30baf4b5019c6"
+    },
+    {
+      "path": "site/server/worker.js",
+      "sha256": "3049655781b1aaf1fd864a81ee3ef154bd49bff61d000926e38d020520f2c6e1"
+    },
+    {
+      "path": "site/src/app.js",
+      "sha256": "46c5463c9fd2060971131506ac926611fde0e767c0af5469843891fe3f418097"
+    },
+    {
+      "path": "site/src/assets/cosmic-silk.png",
+      "sha256": "e316b17887bc89942d7933bbe9f147bc55fa9a91dc553877626f86b24f1e44ee"
+    },
+    {
+      "path": "site/src/assets/gilded-cosmos.png",
+      "sha256": "9a6ac7312bf0b8b818c7837e1e4a7705da131305d80832f0e36b0069781294c9"
+    },
+    {
+      "path": "site/src/audio-playback.mjs",
+      "sha256": "7d38ef542573b9bb9f7aa94101420d10551a3af77d463585ea3a8c2c0bd9328f"
+    },
+    {
+      "path": "site/src/cards.css",
+      "sha256": "ea8822afee898db96574ffa24a7f1740c9bcc02776294d2b9ddf4e345005dbcb"
+    },
+    {
+      "path": "site/src/cards.js",
+      "sha256": "10b5f300bf3631d2591737765081beb04f8467c4ab2981712bdc5015bb4ab2cb"
+    },
+    {
+      "path": "site/src/celestial-events.mjs",
+      "sha256": "c835dc6f92589ad6dd9e0f37a40171cc774152fa618756e859cd1c2d15d2956b"
+    },
+    {
+      "path": "site/src/celestial-light.mjs",
+      "sha256": "6d9bd6e6f092eb04ba7ffdc215e4f33e88377582f5792634f2f79f887fa1fc3c"
+    },
+    {
+      "path": "site/src/chart-atlas.css",
+      "sha256": "49c09638dd3ac8dc072b03eb115ccae0d9a9ba1ebff9858aed3e09882f150479"
+    },
+    {
+      "path": "site/src/chart-atlas.mjs",
+      "sha256": "9c32f9137142a38b897cd0e58c379fe17385c3f9c21f1e4fa8139864fbc04c1e"
+    },
+    {
+      "path": "site/src/chart-cases.mjs",
+      "sha256": "0111478dd1e8e5779ec9327c76e3ab3fa2d2c2752dfd0f545d5c147952645090"
+    },
+    {
+      "path": "site/src/chart-engine.mjs",
+      "sha256": "3fb6ecfc81b0584fc5d94e6c3e7d7f25115488b04263cc4bf4a2ddecfba6f694"
+    },
+    {
+      "path": "site/src/chart-fit.css",
+      "sha256": "a0c0a3a197f21f0a4cbef159eb807119f8e30df33768e9aec930b014b01d9495"
+    },
+    {
+      "path": "site/src/chart-insights.mjs",
+      "sha256": "f4cc0bf5e41c5689cbf03eb112203bc4fea8ba4ea0de5906e34b62c2a38f8b79"
+    },
+    {
+      "path": "site/src/chart-layer-selection.mjs",
+      "sha256": "3b28ddc4e3b5765f5731198f17faa96103b219e772c4a34cbf77a50ca7a8c7b6"
+    },
+    {
+      "path": "site/src/chart-layers.css",
+      "sha256": "bfc0e3f57266dc0fcf7780bbc31c7ed210d5d1205269305a75115f96049c2423"
+    },
+    {
+      "path": "site/src/chart-mobile.mjs",
+      "sha256": "4efbc8365ec42352f33ff971c77cd22ca91f4db9d4c59a443f0b52a732f34523"
+    },
+    {
+      "path": "site/src/chart-motion.css",
+      "sha256": "02c8b4c1f2c0c65c9fc717c3a1467a51d3828d9b720430b95d3ae650c5dd70bf"
+    },
+    {
+      "path": "site/src/chart-motion.mjs",
+      "sha256": "33cc188c5f9122565c1cd218e9c9ab33be4089a436628aba33e1daff0d6b7f1a"
+    },
+    {
+      "path": "site/src/chart-projection.mjs",
+      "sha256": "63a0ca92e9ce1ffdea9917ead88fa9889a509b32de4deea18b26f46e0817c079"
+    },
+    {
+      "path": "site/src/chart-responsive.css",
+      "sha256": "76a174acef501ac9cb92e6ba8c6b8d24bf630d08e0559428d9be9693b6d25324"
+    },
+    {
+      "path": "site/src/chart-service.mjs",
+      "sha256": "1e3057f2755d379521a2753243245ca3bf74f7aea86351ca328b97aab4a7b252"
+    },
+    {
+      "path": "site/src/cinematic.css",
+      "sha256": "36b0565e205dfca0707fd5804496ad13b087c22dad32ffb3543310c7167d6aee"
+    },
+    {
+      "path": "site/src/compact-controls.mjs",
+      "sha256": "46b029743614b2154afea6d00090cdc9c9501526c6620533584a46c4df981753"
+    },
+    {
+      "path": "site/src/cosmos.css",
+      "sha256": "8cd7d88a06ceba8e659b23b4a9fbc8f5204b4f7103cc22334a6942186745d99b"
+    },
+    {
+      "path": "site/src/cosmos.js",
+      "sha256": "8adfb99254ec9044cfc86d33a375b7fa680d4a49f9ba0408df3f946ec904e814"
+    },
+    {
+      "path": "site/src/cycle-controls.css",
+      "sha256": "0c2e445e770a94f59e9df81e3fecf76e01c97f9d218cea2c53452d99fbc941da"
+    },
+    {
+      "path": "site/src/cycle-controls.mjs",
+      "sha256": "c3f03c4fbc90dc50a18d42c8ee2b318dfd5f42ca85fb3a077289160d0977b92e"
+    },
+    {
+      "path": "site/src/cycle-navigation.mjs",
+      "sha256": "210ffe88e574b3363e12a2474c8162322e0fd0aeac0180df02a13ada0b13fcd7"
+    },
+    {
+      "path": "site/src/cycle-panel.mjs",
+      "sha256": "387a906cea23bdbdca963d84eafece0495f3189a2ade46378c722787f715d166"
+    },
+    {
+      "path": "site/src/deep-sky.mjs",
+      "sha256": "3aa7fb45842e7d5740893736eb8eaf597a35f51f341c26160934636cef513f24"
+    },
+    {
+      "path": "site/src/download.css",
+      "sha256": "f6555be87a2599a323e7ec210a061a9e2769c18a28c49b8df67a6a95222dc34f"
+    },
+    {
+      "path": "site/src/download.html",
+      "sha256": "927e6b3eaada0e5bea93a9681fb7f8a2a71c4df218540dbda9489a22a3ee0614"
+    },
+    {
+      "path": "site/src/download.js",
+      "sha256": "b2990a7d957a87cb384fb847b02d7dfbe2d684eab29102082274c1538e7d1d38"
+    },
+    {
+      "path": "site/src/downloads-manifest.json",
+      "sha256": "d69664e93d69c819797b5e09ed50eebd7cf120404c10c099841c5afc22a7ea97"
+    },
+    {
+      "path": "site/src/earth-globe.mjs",
+      "sha256": "2474857687ace1ab2cd23323c940b3670e9a834d02c8ec2aa647bcd62fb6c108"
+    },
+    {
+      "path": "site/src/earth-tour.mjs",
+      "sha256": "a5d2a3002cd654b9caf9eefaa2e0ed1f54302a89ade5cd353477bbefe10e19a6"
+    },
+    {
+      "path": "site/src/gilded-theme.css",
+      "sha256": "4932cb62d838dee49ddf133e85c5185d8b07da71c144f9431b867ee75bd8f548"
+    },
+    {
+      "path": "site/src/immersive.css",
+      "sha256": "166ef4fbb30eb1954ce977a5f1a442df36e5286b90c4fa448d009f1c787834c5"
+    },
+    {
+      "path": "site/src/index.html",
+      "sha256": "f690eb0cc00974ad8d2b8189783849f76914e5481788769ff1eb962f63409f36"
+    },
+    {
+      "path": "site/src/journey-motion.mjs",
+      "sha256": "c88d27a5dca86c79609027ac876f20bc3ae18becae8c8576406e0276ff933e94"
+    },
+    {
+      "path": "site/src/landscape-journey.mjs",
+      "sha256": "ca3c219a5186503996c7d5fe51c3db02f08f5ffb3628264fe060e468a3a8a85c"
+    },
+    {
+      "path": "site/src/library-search.js",
+      "sha256": "60d2d100fe7369edf4f19681a5d360c628e152b7e2e52518b9ae78d595d855a2"
+    },
+    {
+      "path": "site/src/library.css",
+      "sha256": "d5b56de4db1817ca4ed0d882fc8023de5dbe90f5c1275b636d33ae1e7b18cf5e"
+    },
+    {
+      "path": "site/src/library.js",
+      "sha256": "9c5ffdfc9e9e7511c55e6b752ed59dd80bfb7b998c2dfa9d26bf98e8424401fd"
+    },
+    {
+      "path": "site/src/living-landscape.mjs",
+      "sha256": "bc7680d73c65ccd89971e2054ebd2b8ff2fe57d2aaefff64e3e410248f04eb56"
+    },
+    {
+      "path": "site/src/living-weather.mjs",
+      "sha256": "2b473fc923fe1333b7804c49a798066eacc5c2254a1b55111de55ac957883fe9"
+    },
+    {
+      "path": "site/src/management.js",
+      "sha256": "e4a71f387008c351f9eb0676b4c44903e3bbd2fbf943449fba33cda17d8468a0"
+    },
+    {
+      "path": "site/src/material-delete.mjs",
+      "sha256": "80311675f7fe5cfc145db64528edb77666c3c9ccca3a007161198f7d9a9d23f1"
+    },
+    {
+      "path": "site/src/members.js",
+      "sha256": "fb9301eeaeb3972ef01dc82fcce93c551093139fbec37e94a17aa0a2bf20dac1"
+    },
+    {
+      "path": "site/src/model.js",
+      "sha256": "909e33d063b2bf60e4904440fdb2952d2b28b99b8fba96c843be47db206970a0"
+    },
+    {
+      "path": "site/src/orrery-data.mjs",
+      "sha256": "0dd5166906d57768fe51a839c5eaf9eeabaea8161565f508c27cbca1f31b1870"
+    },
+    {
+      "path": "site/src/orrery-explorer.mjs",
+      "sha256": "c4ef66e4acfd87c3aa1c3b2e7f7e5489e05a35a370fe2369fc4b48b904ae43ba"
+    },
+    {
+      "path": "site/src/orrery.css",
+      "sha256": "e4fa3c71d6812ed7b09c9d75326ea7ee62fbbefbd666d5bf15172304a966fcc3"
+    },
+    {
+      "path": "site/src/orrery.mjs",
+      "sha256": "ec5c3c073078547cb00ef5e4a66ea3387847a1d53aa2241868210cc9cc4a5ccf"
+    },
+    {
+      "path": "site/src/page-image-highlights.mjs",
+      "sha256": "893bae784f3724b4295b31c00a2f634f837c29779cf1d5bbcacdfb164061fcae"
+    },
+    {
+      "path": "site/src/palace-dialog.mjs",
+      "sha256": "b6b6c71132defc4bb7e07558b3e118dad3ea9f8de4ea7c9c2718349acd15fe35"
+    },
+    {
+      "path": "site/src/palace-resonance.mjs",
+      "sha256": "4a05a0125ddb75738de085ca56c6cd71c88e0ca224f841e819996b2b9c9e9f2b"
+    },
+    {
+      "path": "site/src/personal-account.css",
+      "sha256": "5641b6d050aa3be523809faccb1171351af59f28844d1f15e61de4a182a46180"
+    },
+    {
+      "path": "site/src/personal-account.js",
+      "sha256": "858ea2f615f9a30287de0db188569aff58748069ffe056161520849df22a6dac"
+    },
+    {
+      "path": "site/src/private-vault.mjs",
+      "sha256": "45f92dfd987130c9a0295c5d9c2aa52635b77e2b3b37e2236e85e1d37334df0d"
+    },
+    {
+      "path": "site/src/review.css",
+      "sha256": "9b59baabaf056085b2eafb9c5f10ee14a4519b4abc9a2dc01464dbdbb8427e35"
+    },
+    {
+      "path": "site/src/review.js",
+      "sha256": "1f410e1c674f5fd9d137c05563943d0f05b38a8e0606c76b091f77f6edf4798c"
+    },
+    {
+      "path": "site/src/rule-engine.mjs",
+      "sha256": "1d578e627a8d1beac3d93f86e4640b2f699f8aeb6e15d82c81bbc8720be40586"
+    },
+    {
+      "path": "site/src/rules.css",
+      "sha256": "467406f41506d9ba1e43c98f8b684ba00914b7bdcd88db7d5c58197e2c5c3ca7"
+    },
+    {
+      "path": "site/src/rules.js",
+      "sha256": "c42921f482f11f499e96bc8d5554102f9b9b60cb5daae6d98c9d82cba2403165"
+    },
+    {
+      "path": "site/src/scene-geometry.mjs",
+      "sha256": "ffd347a3b04f384d43a1a3c917bf3c747b2888215d9dc6cff097869285749201"
+    },
+    {
+      "path": "site/src/scene-gl.mjs",
+      "sha256": "b1a3673e18532fdb5ba3231f7c0689fc8ce5c2ef0a6c29fe1b7f46fa10c079d6"
+    },
+    {
+      "path": "site/src/scene-presence.mjs",
+      "sha256": "c39af985a2e49957e1988e6216d400fec727fbd7b81aef1344b994d631765293"
+    },
+    {
+      "path": "site/src/scene-sound.mjs",
+      "sha256": "e96b0d25273880e9fc0fadf7fe736dba71306eea85ecebb566f2bf8a1cc445cb"
+    },
+    {
+      "path": "site/src/scenic-depth.mjs",
+      "sha256": "cb3d12350945a6575e4b42d67afcf0a9f820be56848ec0658e10ecbb18a5baf4"
+    },
+    {
+      "path": "site/src/search-highlights.mjs",
+      "sha256": "9511f1e6758b54d2e364717b97bc3477c615957b13b21e7c98c2cf3254a6148e"
+    },
+    {
+      "path": "site/src/search-ranking.mjs",
+      "sha256": "a35df3f03bde2dacca881a32b9a2c84a08cb613ede71e3b787a4e129a9e2d2b7"
+    },
+    {
+      "path": "site/src/shanhe-profile.mjs",
+      "sha256": "3df7b14f42d4f5837e3255038bb0b3875baf16affcb8f8c94803fcd3b8181ec7"
+    },
+    {
+      "path": "site/src/silk-cranes.mjs",
+      "sha256": "12703565620d3a636c12ea2f67e0442da7e3daa226371423f03618fa842e43f6"
+    },
+    {
+      "path": "site/src/sky-cinema.mjs",
+      "sha256": "32eb20b51253d21b3adf783a7e650c03c66e3110fba1c082194a4c30b5747450"
+    },
+    {
+      "path": "site/src/sky-ephemeris.mjs",
+      "sha256": "1fd099797f78983458bc014c53f84257666ec1a0349df8c9a761e40ac3bf7058"
+    },
+    {
+      "path": "site/src/sky-phenomena.mjs",
+      "sha256": "c432480ce397c1cbfd129182bf47c68802872eb21d6c6cbf122100edc0d1c41b"
+    },
+    {
+      "path": "site/src/sky-preferences.mjs",
+      "sha256": "90b3060e09a0a1b086d8305e5ce78dc59d1bff3cb41268e3c786ed38ab73e37b"
+    },
+    {
+      "path": "site/src/sky/EARTH-SOURCE.txt",
+      "sha256": "c1c73760704944b18ce1d3f3fd5d9daa38d7f756afcd794a2f8d15b3510a2447"
+    },
+    {
+      "path": "site/src/sky/LANDSCAPE-SOURCE.txt",
+      "sha256": "305ea1774f3e3e1ee0deaa5f489f393c81c798d53179b9fe6c35151ea261c99d"
+    },
+    {
+      "path": "site/src/sky/LICENSE.txt",
+      "sha256": "d8d3127d99375e7f778a5a0807191f410e6fc42ebc7b99b19ff05a781cd18e35"
+    },
+    {
+      "path": "site/src/sky/LIVING-WORLD-SOURCES.txt",
+      "sha256": "708a2b9fe1a2f36bf09c1ce1abcc233a647a5b62438609f841cbf83377ae48f8"
+    },
+    {
+      "path": "site/src/sky/SOUTH-STARS-SOURCES.txt",
+      "sha256": "c890f3a6ecabf933e8456e1219dc330d710d2ea47b8fd2e8ed8e7f3318f12ac8"
+    },
+    {
+      "path": "site/src/sky/catalog.json",
+      "sha256": "5b429b3cdd6d0f0ac6f38c0bcd8e1e99e15bf354d372d8249c54e8399b29bb31"
+    },
+    {
+      "path": "site/src/sky/celestial-terrain.png",
+      "sha256": "6fb71df1418230aca6b07df264ad03f70144d5eb76c1468125f9f8416c453973"
+    },
+    {
+      "path": "site/src/sky/cloudsea-hermetic.png",
+      "sha256": "f22dbcbfe27dd6359a3eef5f9051d86fb0300e37704afa0214e58c7eb3bd9645"
+    },
+    {
+      "path": "site/src/sky/crane-silk-right-atlas.png",
+      "sha256": "c3b7ef41da4de0e57d483be59a5bd0ae8f35615486d10cf8d216e933d5e6a542"
+    },
+    {
+      "path": "site/src/sky/crane-sprite-sheet.png",
+      "sha256": "5dbdcc78083152f1fccb9932a67df46173d260ab285e1839898c6400f6c271d6"
+    },
+    {
+      "path": "site/src/sky/dawn-cloudsea.png",
+      "sha256": "332cc6b44e83b05aaa12a45db9b99047e5b0fca804c41681c6ae78fdc674c46d"
+    },
+    {
+      "path": "site/src/sky/drifting-cloud-bank.png",
+      "sha256": "03de0241e1b0814ca20062b2e1eb491d59d94a152eaa78e3bd78b604e02a3df9"
+    },
+    {
+      "path": "site/src/sky/earth-blue-marble.jpg",
+      "sha256": "99f5faad74efe985fbf1714c8be7296ca9999759a1215b65f99b7f1df278dde5"
+    },
+    {
+      "path": "site/src/sky/earth-clouds.jpg",
+      "sha256": "fffd7f68d41b37274822150e54a6ef605af1d3ec35624d9f628c3b896bfa42ed"
+    },
+    {
+      "path": "site/src/sky/earth-night-2016.jpg",
+      "sha256": "d87de751a264e4f8ff69c68de5dab9606daee87a6f15ae743c93200743bd7ec1"
+    },
+    {
+      "path": "site/src/sky/guilin-terrain.png",
+      "sha256": "741a0cf65aecc1e5dc5a6b6cee114cf37804700fc33a71301a578afe533a9bc0"
+    },
+    {
+      "path": "site/src/sky/milkyway-gaia.jpg",
+      "sha256": "4b85a638ee2ad13d640f20eb80f54f0ef8d43a4aecd7444d6eb119f97c614356"
+    },
+    {
+      "path": "site/src/sky/moon-lro-2025.jpg",
+      "sha256": "f7130a1822681fa7512d7dcfd40db8c10b9ba4f06777910348698260ed7a2170"
+    },
+    {
+      "path": "site/src/sky/mountain-river-daylight.png",
+      "sha256": "d66fadf6f0a5de2f0345a3a9599225c55a5c4a763b2a477b5370bdf0062fc0bd"
+    },
+    {
+      "path": "site/src/sky/mountain-river.png",
+      "sha256": "28aff205b8ef14b891eb69493112b14f319810cbe64f27d4de07b5824198d0b6"
+    },
+    {
+      "path": "site/src/sky/night-hermetic.png",
+      "sha256": "bc17f62a4afbf75f3e3b71b6d62277a025c3633992df69aeb87f9c9e9ca0b7e4"
+    },
+    {
+      "path": "site/src/sky/observatory-foreground.png",
+      "sha256": "f54ff11be525386ea881b4557b0d7a54d69565b238b8bc835a3f04533195c4f0"
+    },
+    {
+      "path": "site/src/sky/river-gorge.png",
+      "sha256": "df1dba0506b0cbf66ad35d7b77e727978aef04f7ab144df5dce65dfb2028a0b6"
+    },
+    {
+      "path": "site/src/sky/river-hermetic.png",
+      "sha256": "3edc32ec6369f8163760d1a023d7a0eacf41dd70527adc836ed19062052c1528"
+    },
+    {
+      "path": "site/src/sky/shanhe-silk.png",
+      "sha256": "1c2ec11eefc4c2e301877db190fe04fc72108d105fdc2b0a6656ffafaf755b42"
+    },
+    {
+      "path": "site/src/square-chart.css",
+      "sha256": "00d5ce7ed8303df2838a9d58826a1642258314aa5aa7020b4bbdb7d8a9c75e58"
+    },
+    {
+      "path": "site/src/square-chart.mjs",
+      "sha256": "8f5ab30a1d3d08fb1d0eb95af9d6b5ed08b37388e71d0ed32935a0984a8c2bc3"
+    },
+    {
+      "path": "site/src/star-profiles.mjs",
+      "sha256": "62ffac651df93ad12dc9935ebd8b0910d310b22f19f2e5cdf3085594d7690fcc"
+    },
+    {
+      "path": "site/src/starfield.mjs",
+      "sha256": "b9e036a49abbd77ba2c131664ff05a29577c06ed50fc3aa9147633151e8ce45f"
+    },
+    {
+      "path": "site/src/storage.css",
+      "sha256": "77ed90274644390287ee1d7b28a34fe70cda113bed70593fd1c703e014dd8f5a"
+    },
+    {
+      "path": "site/src/storage.js",
+      "sha256": "18f75e89b41e0a0dfaf8110d9e2a5060aa6958b5ebed8c6ba4866bafb49212d4"
+    },
+    {
+      "path": "site/src/styles.css",
+      "sha256": "bdab628fca9adcb00fbfe15c6ef92624752e6cf792b4ad4c3b3bc7130b6b4ab2"
+    },
+    {
+      "path": "site/src/submissions.js",
+      "sha256": "d60c734ca5d9479b6dd268c71be3bae6c734e86a255133264d7b768a635e9191"
+    },
+    {
+      "path": "site/src/tech-workbench.css",
+      "sha256": "10014ef03e1f9f6bab4fae62681dccaa6035fbc13b5d3cef6679acc2b781fe41"
+    },
+    {
+      "path": "site/src/technique-engine.mjs",
+      "sha256": "44103644864804f4b513160c4d26eb852003153356ed0ee2273ce7cbba8ff41a"
+    },
+    {
+      "path": "site/src/technique-history.js",
+      "sha256": "6555b86a6775e7a47939f237bc7e90f195212a987104ed62048b77b2c9128c1a"
+    },
+    {
+      "path": "site/src/technique-scan.mjs",
+      "sha256": "d5e9ec3c0ff464edc2dbaa26c1af8b8b73628d2e418b4e3920130b78d8dcc68b"
+    },
+    {
+      "path": "site/src/techniques.css",
+      "sha256": "0137cfbcb72c4d810b2eafaa24930c482e16091e21191b15ecf03bfca840965f"
+    },
+    {
+      "path": "site/src/techniques.js",
+      "sha256": "287f38ecff00eb7f5d3d5234a74b49dbb37f8844eb1f4870685a10cfeb174064"
+    },
+    {
+      "path": "site/src/terrain-profile.mjs",
+      "sha256": "3e37decccfc79ae9ff6a7b2c93a4864eadc437ce3edeefb852315c3859c0d2eb"
+    },
+    {
+      "path": "site/src/text-recognition.mjs",
+      "sha256": "720997f46eefe596801309f8468219fc32984c3b507eaa5de032da2297810227"
+    },
+    {
+      "path": "site/src/upload.js",
+      "sha256": "358241841fcdbc9ccbf8ad058c67c1adcbca7e47812a79f03ceb0c2efa721a56"
+    },
+    {
+      "path": "site/src/wheel-chart.mjs",
+      "sha256": "75f1e0eabe61b9eca8749f23b52927e06420c58429f4596d456dce8349c4fce0"
+    },
+    {
+      "path": "site/src/workspace.css",
+      "sha256": "2cb87ddcca7b1bde4256bb1332aa90ec1813d8b534407f66daefe44727c0884a"
+    },
+    {
+      "path": "site/src/workspace.js",
+      "sha256": "328fe6638e2ecfe755fec2dfef9f27e5a0119e33b3c829179554d41bab09953c"
+    },
+    {
+      "path": "site/src/world-time.mjs",
+      "sha256": "d9a51b2c2dd39ad17830921c07ccd0f14b69aca9652473a4846886786db10d15"
+    },
+    {
+      "path": "site/tests/audio-playback.test.mjs",
+      "sha256": "6b76cf8e05fc0dcba6cec3c377460174b5b0558a10f2d648d14efc3c9fbd8074"
+    },
+    {
+      "path": "site/tests/celestial-events.test.mjs",
+      "sha256": "add51545305ffca747ac25d736f5bfd780dc8db72c6621171c180d1c315e1c77"
+    },
+    {
+      "path": "site/tests/celestial-light.test.mjs",
+      "sha256": "aad28b8a5a7b357c35f610ec3c4913724534bb45cd5f2ee427ba0db46b345cd2"
+    },
+    {
+      "path": "site/tests/chart.test.mjs",
+      "sha256": "4ae63db738b70f24014f5d6a1cdfed5ee7cbb491cfc31edfaaff0266aee40dca"
+    },
+    {
+      "path": "site/tests/cycle-navigation.test.mjs",
+      "sha256": "1d9c25c11ddef1564121ea550b87bdaf7f9b3b5011f09c5557d662ab89d6c279"
+    },
+    {
+      "path": "site/tests/landscape-journey.test.mjs",
+      "sha256": "c0bcf7ed56aabb6bcfeb625f5cf03b2c1786bb1920c7823a26ef5397f796e913"
+    },
+    {
+      "path": "site/tests/library-recognition.test.mjs",
+      "sha256": "5aa9898c20e593cfc9480fda073f9b3387fb977cd48778d1eefb4018eab6f55c"
+    },
+    {
+      "path": "site/tests/orrery.test.mjs",
+      "sha256": "16691b47e407a90b8bc8553b859ceb3852a9cb3145e69b0a99f70bfe9e5798fe"
+    },
+    {
+      "path": "site/tests/scene-geometry.test.mjs",
+      "sha256": "e4bf857ba8e573a7f027f45188ac771e9dd5a313982f432b4f4905f86b5951bd"
+    },
+    {
+      "path": "site/tests/scene-presence.test.mjs",
+      "sha256": "d1402a41ff702457d97047c7a74eb35b50e14c93630dfdadf349c4255eeca23e"
+    },
+    {
+      "path": "site/tests/scene-sound.test.mjs",
+      "sha256": "06f7f677311bb4c42a4315775f4bcbceb44e67e857f9bbaeb936c456cc991214"
+    },
+    {
+      "path": "site/tests/search-highlights.test.mjs",
+      "sha256": "ae81cd85e7a1537f5f6752fd53710c6e52ca0c7c265fd056b52275180d089523"
+    },
+    {
+      "path": "site/tests/shanhe-profile.test.mjs",
+      "sha256": "f5b20ea6bb70f2bb70469dc26bb8950f933c6a1d0b8ec430a71ab2c3ae8bbefa"
+    },
+    {
+      "path": "site/tests/sky-phenomena.test.mjs",
+      "sha256": "9657b5d0511d1c5d6e320be297d78f8f867fd8bdf7ffe8544187dc5e42641da2"
+    },
+    {
+      "path": "site/tests/world-time.test.mjs",
+      "sha256": "749052824223870f45f9d33d7c96b0f360f8c072e8834ed446b2cd7b1c7febcf"
+    },
+    {
+      "path": "site/vendor-models/LICENSE",
+      "sha256": "a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9"
+    },
+    {
+      "path": "site/vendor-models/README.md",
+      "sha256": "d592951f8a70fb81e7e7032c2582815561edbc8d37625018a21e47c6b52ea060"
+    },
+    {
+      "path": "site/vendor-models/chi_sim.traineddata",
+      "sha256": "4fef2d1306c8e87616d4d3e4c6c67faf5d44be3342290cf8f2f0f6e3aa7e735b"
+    },
+    {
+      "path": "site/vendor-models/chi_sim_vert.traineddata",
+      "sha256": "ea672a78157199c333aa12ec4e74550077689b545df5fc770903716850c8b2e5"
+    },
+    {
+      "path": "site/vendor-models/chi_tra.traineddata",
+      "sha256": "1aa60488574cafa69486d919284f079ca9b68fcc7f6ad8dc1ff1b318dfd97028"
+    },
+    {
+      "path": "site/vendor-models/chi_tra_vert.traineddata",
+      "sha256": "bbe518f94b9e3852109113507357bfe7e257834d88d2d1ead44178046bcd2181"
+    },
+    {
+      "path": "site/wrangler.jsonc",
+      "sha256": "feba3f3df9dc1b5f7a9023df7cf17e4313c4f77cfc7aa509214e2daee178d26e"
+    },
+    {
+      "path": "desktop/README.md",
+      "sha256": "303f0b662f5afe988932460a2d25929ad282c1134908a38f0753dee123fa955e"
+    },
+    {
+      "path": "desktop/app/icon.png",
+      "sha256": "76f58b9b440babf4e5615c1f34576e23dff3e467bed214f53be38c58ec6cf684"
+    },
+    {
+      "path": "desktop/app/identity.cjs",
+      "sha256": "67b3296cf8a092795f5ded1d9b40d4a75f0ea739a7008f3b8e9259fd4efe0341"
+    },
+    {
+      "path": "desktop/app/main.cjs",
+      "sha256": "dc9ab86d48b95167fda1a2511014c6b7839bd9ad8f39ac564a8dff58ed727773"
+    },
+    {
+      "path": "desktop/app/offline.css",
+      "sha256": "0f3b725ba209b654dae241556de543d93b0ec2a93b983966e4421e3d3efc213b"
+    },
+    {
+      "path": "desktop/app/offline.html",
+      "sha256": "fed736a9df5d0cd6e22d8d2c48d0dc8db942eb2a71862ac6331072e503984254"
+    },
+    {
+      "path": "desktop/app/policy.cjs",
+      "sha256": "15cee37b4d28b034d1794ce54098f1f99e694712743252ec0f62547d4ef71834"
+    },
+    {
+      "path": "desktop/app/update-policy.cjs",
+      "sha256": "db92e5cecb3b15559c6a5359056f1f49cadc5b832acca587d34f1a71871bb98e"
+    },
+    {
+      "path": "desktop/app/updates.cjs",
+      "sha256": "95624f106a6777272178e47a0a1b7a673295cee9a23adf9b6a091f9daffd7cf5"
+    },
+    {
+      "path": "desktop/app/window.cjs",
+      "sha256": "2f6878a3f3154c05ce3fb56e8c843bb655f14f8507f65d579dab4f3bf30c4711"
+    },
+    {
+      "path": "desktop/build/icon.ico",
+      "sha256": "768220e05a141279a7e7504e3b52ee4843d0ae0a548afaefca82bc4b7998d06a"
+    },
+    {
+      "path": "desktop/package.json",
+      "sha256": "1f5850088c0bf91a34171f76e95bbdeb06d19397f6bfde7e504040a3b6503b3b"
+    },
+    {
+      "path": "desktop/pnpm-lock.yaml",
+      "sha256": "9c72697623660b5539a4b52fe1243f81522713ae74d1ecd782f500cabb524197"
+    },
+    {
+      "path": "desktop/pnpm-workspace.yaml",
+      "sha256": "2683f81380b8ad5267b5d08c35d5b7b971a94c5143c26ad481075dd2e9f7aca9"
+    },
+    {
+      "path": "desktop/scripts/build.cjs",
+      "sha256": "f064f58f2a2435e1e8cbe811f9e3455b20a7ee27bae1d6b9b549b9221de6cdb1"
+    },
+    {
+      "path": "desktop/scripts/make-icon.py",
+      "sha256": "b7c833da6950cb4e67f8e4554641c7f676f1a41f7c3852a4590804a1f447158c"
+    },
+    {
+      "path": "desktop/scripts/verify-package.cjs",
+      "sha256": "9e94936b2836311ef16f7bec9366df45fc2e36989fd3f9cb371d513a005de2a2"
+    },
+    {
+      "path": "desktop/tests/policy.test.cjs",
+      "sha256": "4813f839df5f24412973d5457693e00dc01be20f4c9c65bf3b0073db98df998a"
+    },
+    {
+      "path": "desktop/tests/smoke.cjs",
+      "sha256": "980d8b07ef6736efc717059fc609a8fdcc6a9e24e157b47433981bd82ddc20d3"
+    },
+    {
+      "path": "desktop/tests/updates.test.cjs",
+      "sha256": "e25894468cd9e6c1426f56b3d317ee47660a43411ec95afa4060ed8503ec4c4d"
+    },
+    {
+      "path": "android/AndroidManifest.xml",
+      "sha256": "7d00cd97e477c2cb17662b2d8352d6658f357dc22b979691e1f103e65a9cda04"
+    },
+    {
+      "path": "android/README.md",
+      "sha256": "064704c085a2596cf0a616c2234173930eda6526f6066547c731e4b24277320e"
+    },
+    {
+      "path": "android/res/drawable/icon.png",
+      "sha256": "76f58b9b440babf4e5615c1f34576e23dff3e467bed214f53be38c58ec6cf684"
+    },
+    {
+      "path": "android/res/values/styles.xml",
+      "sha256": "361c794cb88e3c4743d06b7e0650eebd0060b510b04ec9b19a8408ee2df6f0dd"
+    },
+    {
+      "path": "android/scripts/build.ps1",
+      "sha256": "348c666d9e0ef3745d5b007a4530f05fa1befd7324a0787ab2849c174224c73e"
+    },
+    {
+      "path": "android/scripts/extract.py",
+      "sha256": "006e426ee5145009f9bd0720d1b26cd41b37b5cf73f06928fd10899216eacf57"
+    },
+    {
+      "path": "android/scripts/setup.mjs",
+      "sha256": "a208773d6ed7a77ba08a9be204373a3ec96ab5f1c1814cf4b3894d0b8862be02"
+    },
+    {
+      "path": "android/src/site/guanxingtai/android/AppUpdates.java",
+      "sha256": "faf46902d9843e7b57a7b639a4c9024f13e46147effa5e45322f200b38c9f3a4"
+    },
+    {
+      "path": "android/src/site/guanxingtai/android/MainActivity.java",
+      "sha256": "55384d9fc3de11ef0232187e534faeb14e95615da0ec8d2e25d75d06112fba03"
+    },
+    {
+      "path": "android/src/site/guanxingtai/android/UpdatePolicy.java",
+      "sha256": "8c1f631e2f8bec9c275d84b4f6b13470c6943ec08056416fab20fcae482d04c6"
+    },
+    {
+      "path": "android/src/site/guanxingtai/android/UpdateProvider.java",
+      "sha256": "588282106374f047d9fa86120fda7e85abac1b157b7a8ddca0de65c8e3d0811e"
+    },
+    {
+      "path": "android/src/site/guanxingtai/android/UrlPolicy.java",
+      "sha256": "939ec3d756c11957679844e3436c1fd6ecd493bf11b970bc98ff78f85b4f6c3d"
+    },
+    {
+      "path": "android/tests/PolicyTest.java",
+      "sha256": "9e66d348ec465371f64f0b435c19a7ed99400bce135015236e3acb57031b79c9"
+    },
+    {
+      "path": "android/tests/UpdatePolicyTest.java",
+      "sha256": "a7fd5ee7b1b4650ed5ed1ec67424cdb1ee0bd4e8a7f08291626f487f32da836c"
+    }
+  ]
+}

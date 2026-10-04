@@ -1,0 +1,64 @@
+/* The clock belongs to the chart. Selectors describe the same observation instant. */
+.wheel-deck>.chart-time-console{display:block;margin:0;border-radius:6px 6px 0 0;padding:15px 17px;background:#0e1828;border-color:#7b7055;border-bottom:0;pointer-events:auto;min-width:0}
+.chart-time-console+.destiny-wheel.square-mode{border-top-color:#344356;border-radius:0 0 6px 6px}
+.chart-time-console .cycle-toolbar{display:flex;align-items:center;gap:14px;justify-content:space-between}
+.chart-time-console .cycle-scope{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:3px;flex:1;max-width:610px;background:#080f1b;padding:4px;border:1px solid #293548;border-radius:5px}
+.chart-time-console .cycle-scope button{min-height:42px;padding:7px 9px;border:0;background:transparent;color:#acbdd3;border-radius:3px;font-size:14px}
+.chart-time-console .cycle-scope button[aria-pressed=true]{background:#d2b886;color:#142033}
+.chart-time-console button{touch-action:manipulation;cursor:pointer}
+.chart-time-console button:disabled,.decade-range:disabled{opacity:.38;cursor:default}
+.chart-time-console button:focus-visible,.chart-time-console summary:focus-visible,.decade-range:focus-visible,.palace-select:focus-visible{outline:2px solid #efcf8e;outline-offset:2px}
+#cycle-now{border:1px solid #917b4f;background:#b6995721;border-radius:4px;padding:10px 15px;color:#edce91;font-size:14px;min-height:44px;white-space:nowrap}
+.cycle-stepper{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;border-top:1px solid #2b394c;padding-top:10px}
+.cycle-stepper button{background:#152237;color:#d8c397;border:1px solid #37475d;border-radius:4px;width:42px;min-height:40px;font:25px/1 Georgia,serif;flex-shrink:0}
+.cycle-stepper strong{color:#d6c59e;font-size:14px;font-weight:500;text-align:center;line-height:1.5}
+.cycle-stepper #cycle-picker-toggle{width:auto;flex:1;background:transparent;border-color:transparent;padding:4px 8px;font-family:inherit}
+#cycle-picker-toggle>span{color:#8ba0bc;font-size:12px;margin-left:6px;display:inline-block}
+#cycle-picker-toggle[aria-expanded=true]>span{transform:rotate(180deg)}
+.cycle-pickers{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:10px;margin-top:10px}
+.cycle-pickers label,.cycle-manual-body label{display:block;font-size:11px;letter-spacing:.06em;color:#839ab7;min-width:0}
+.cycle-pickers select,.cycle-manual-body input{display:block;width:100%;min-width:0;max-width:100%;min-height:42px;margin-top:5px;border:1px solid #34475e;border-radius:4px;background:#091322;color:#d3dded;padding:8px 9px;font-size:14px;line-height:1.4;font-family:inherit;color-scheme:dark}
+.chart-time-console .cycle-heading{min-width:0;margin-top:10px;max-width:none}
+.chart-time-console .cycle-heading p{font-size:12px;line-height:1.7;color:#b3c1d4;margin:2px 0;overflow-wrap:anywhere}
+.chart-time-console .cycle-heading #cycle-time-note{color:#91a7c4;font-variant-numeric:tabular-nums}
+.cycle-utility{display:flex;align-items:center;flex-wrap:wrap;gap:5px 16px;margin-top:8px;padding-top:8px;border-top:1px solid #28374b}
+.cycle-follow{display:inline-flex;align-items:center;gap:7px;min-height:36px;color:#b7c7dd;font-size:12px;cursor:pointer}
+.cycle-follow input{width:16px;height:16px;accent-color:#ceb282;margin:0}
+.cycle-manual{flex:1;min-width:130px}
+.cycle-manual summary{cursor:pointer;list-style:none;color:#9baec8;font-size:12px;padding:9px 0;min-height:36px}
+.cycle-manual summary:after{content:' ＋';color:#c4ae81}.cycle-manual[open] summary:after{content:' −'}
+.cycle-manual-body{display:grid;grid-template-columns:1fr 1fr;gap:10px;background:#0c1524;padding:13px;border:1px solid #304058;border-radius:4px}
+.cycle-manual-body button{align-self:end;color:#d9c394;background:#223046;border:1px solid #756649;border-radius:4px;min-height:40px}
+.cycle-manual-body p{grid-column:1/-1;font-size:11px;color:#8fa5c2;line-height:1.8;margin:2px 0 0}
+.chart-time-console #chart-export{background:transparent;border:0;color:#9aacc5;padding:9px 0;font-size:12px;min-height:36px}
+.chart-time-console #cycle-status{margin-top:7px;font-size:12px;line-height:1.7;color:#a3b6cf}
+.chart-time-console #cycle-status.error{color:#f5ad9c}
+#cycle-lunar-note{margin:5px 0 0;font-size:10px;line-height:1.6;color:#748ba8;letter-spacing:.02em}
+.square-palace .palace-select{width:100%;padding:0;border:0;background:transparent;text-align:left;border-radius:0;min-height:28px;cursor:pointer;font-family:inherit}
+.palace-calendars button.decade-range{display:flex;align-items:center;justify-content:center;gap:4px;width:100%;min-height:34px;padding:4px 5px;border:1px solid #62583e;border-radius:3px;background:#aa8e4714;font-variant-numeric:tabular-nums;color:#d9c493;line-height:1.25;margin:2px 0;cursor:pointer}
+.palace-calendars button.decade-range:hover:not(:disabled){background:#ab8e493b;border-color:#d1b481}
+.palace-calendars button.decade-range[aria-pressed=true]{background:#c5ad79;color:#152034;border-color:#e0c998;box-shadow:0 0 15px #d0a95518}
+.palace-inspector .palace-decade-action{display:block;min-height:42px;width:100%;margin:10px 0;padding:8px 12px;border:1px solid #756545;border-radius:4px;background:#b294471c;color:#d7c08e;font-size:13px;cursor:pointer}
+@media(max-width:1024px){
+ .cycle-pickers select,.cycle-manual-body input{font-size:16px;min-height:44px}
+ .palace-calendars button.decade-range{min-height:40px}
+}
+@media(max-width:700px){
+ .wheel-deck>.chart-time-console{padding:11px 10px}
+ .chart-time-console .cycle-toolbar{flex-wrap:wrap;gap:8px}
+ .chart-time-console .cycle-scope{flex-basis:100%;max-width:none;gap:1px;padding:3px}
+ .chart-time-console .cycle-scope button{font-size:12px;min-height:40px;padding:7px 2px;letter-spacing:0}
+ #cycle-now{min-height:36px;padding:7px 12px;font-size:12px;margin-left:auto}
+ .cycle-pickers{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ .cycle-pickers label:last-child:nth-child(odd){grid-column:1/-1}
+ .cycle-stepper strong{font-size:12px}.cycle-stepper button{width:38px;min-height:38px}
+ .cycle-utility{gap:2px 12px}.cycle-utility>.cycle-follow{font-size:11px}.cycle-manual{min-width:120px}
+ .cycle-manual[open]{flex-basis:100%;order:3}
+ .chart-time-console #cycle-status{font-size:11px}
+ .chart-time-console #cycle-lunar-note{display:none}
+ .palace-calendars button.decade-range{font-size:11px;flex-wrap:wrap;gap:2px;min-height:36px;padding:3px 0}
+ .palace-calendars button.decade-range .decade-unit{font-size:9px}
+ .square-palace .palace-select{min-height:36px}
+}
+
+.chart-time-console [hidden]{display:none!important}

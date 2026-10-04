@@ -1,0 +1,65 @@
+/* Appearance only: retain chart geometry, controls and semantic colors. */
+:root {
+ --silk-weave:linear-gradient(118deg,#e6c79007,transparent 24%,#cfb78004 64%,transparent);
+ --silk-light:radial-gradient(ellipse at 12% 5%,#fffdf480,transparent 58%),linear-gradient(125deg,#f9f4e8,#eee6d5 65%,#f7f1e3);
+ --foil-edge:#b89a606b;
+}
+body:not(.immersive-sky):not(.chart-fit-active){background:#eee7d8;background-image:var(--silk-light)}
+body:not(.immersive-sky) .workspace-sidebar{background:linear-gradient(#07101be8,#10131ae8),url('./assets/cosmic-silk.png') center/cover;border-right:1px solid var(--foil-edge);box-shadow:inset -3px 0 #d8bd7220}
+body:not(.immersive-sky) .site-header{background:linear-gradient(100deg,#080f1bf5,#171a24f5);border-bottom-color:var(--foil-edge)}
+.workspace-brand,.workspace-star{color:#e6c98c}
+.workspace-brand small,.sidebar-caption,.sidebar-account small{color:#bcb09a}
+.workspace-nav a{color:#d3cbbd}.workspace-nav a:hover{background:#c8a95d17}
+.workspace-nav a[aria-current=page]{color:#f4ddb0;border-color:#d6b37175;background:var(--silk-weave),linear-gradient(115deg,#ae893a3d,#67533720);box-shadow:inset 0 1px #ecd19338}
+.workspace-nav a[aria-current=page] span{color:#d4b979}
+.site-header .workspace-breadcrumb,.site-header .header-actions .text-link{color:#c5b9a4}
+.site-header .workspace-breadcrumb strong,.site-header .privacy-pill{color:#ead6b3;border-color:var(--foil-edge)}
+.workspace-panel:not(#model),.book-library{background-image:var(--silk-light)}
+.workspace-panel:not(#model) h1,.book-library .library-heading h1{color:#433b2f}
+.workspace-intro{border-bottom-color:#9d824838}.intro-seal{border-color:#967844;color:#856633}
+.book-library .book-detail,.book-result,.tech-card,.catalog-card,.tech-space,.submission-row,.submission-form,.member-form,.access-panel,.model-form,.model-result-panel,.reviewed-block,#upload-form,.rule-editor,.rule-test{background-image:var(--silk-light);background-color:#f5efdf;border-color:#a98b5159;box-shadow:inset 0 1px #fffdf4,inset 0 0 0 3px #f8f1e04d,0 6px 24px #3225120a}
+#cosmic-rules{background-image:var(--silk-light);border:1px solid var(--foil-edge)}
+.workspace-panel input:not([type=checkbox]):not([type=radio]):not([type=range]),.workspace-panel select,.workspace-panel textarea,.book-library input,.book-library select,.book-library textarea{background-color:#fffaf0;border-color:#9e895f75;color:#28312e}
+.book-primary{background:linear-gradient(115deg,#70603c,#514731);border-color:#a98b51;color:#fff8e7;box-shadow:inset 0 1px #e7c97e50}.book-primary:hover{background:linear-gradient(115deg,#827048,#625235)}
+.book-secondary{background:#fcf7eac9;border-color:#ad966755;color:#554b36}
+.library-tabs>*{background-image:var(--silk-light);border-color:#ab955c61}.library-tabs [aria-pressed=true]{background:#e5d9bd;border-color:#8e7745;box-shadow:inset 0 -3px #9b7e40}
+.book-result:focus-within,.tech-card:focus-within{border-color:#927035}
+.personal-account-card{background:var(--silk-weave),linear-gradient(135deg,#18202b,#0b1420);border-color:var(--foil-edge);box-shadow:inset 0 1px #e4c68330}
+.personal-account-card h2{color:#ead3a4}.personal-account-card .personal-auth-tabs{border-color:var(--foil-edge)}
+.personal-account-card .personal-auth-tabs button{color:#d1c5ae}.personal-account-card .personal-auth-tabs button[aria-pressed=true]{color:#ffe5b2;background:#b6934c35}
+.personal-account-card #personal-account-status,.personal-account-card #personal-profile-code,.personal-account-card>small,.personal-account-card #personal-auth-entry>small{color:#bbc8c8}
+/* Decorative painted sky only in charts; live astronomy keeps its own layers. */
+#cosmic-observatory[data-mode=chart]{background:#030914 url('./assets/cosmic-silk.png') center/cover}
+.chart-stage{background:transparent}
+.square-chart .square-palace,.square-chart .square-palace.related,.square-chart .square-palace.selected{background-image:var(--silk-weave),linear-gradient(150deg,#081222e8,#101421ed),url('./assets/cosmic-silk.png');background-size:auto,auto,340% 230%;background-position:center,center,var(--palace-texture-x,50%) 65%;border-color:#bda56b99;box-shadow:inset 0 1px #ecd29748,inset 1px 0 #d3c39920,inset 0 -16px 26px #02071140}
+.square-chart .square-palace::after{border-color:#c5ac7342;box-shadow:inset 0 0 18px #02091833;pointer-events:none}
+.square-chart .square-palace::before{border-color:#e4c88a88;pointer-events:none}
+.square-chart .square-palace.related{background-image:var(--silk-weave),linear-gradient(145deg,#1d3938e8,#0c1825ee),url('./assets/cosmic-silk.png');border-color:#a6c8b999}
+.square-chart .square-palace.selected{background-image:var(--silk-weave),linear-gradient(145deg,#51402ddd,#151b29ed),url('./assets/cosmic-silk.png');border-color:#f1d391;box-shadow:inset 0 0 0 1px #ead08b50,inset 0 0 28px #d2ae4912,0 0 14px #ceac4520}
+.square-chart .square-center{background:radial-gradient(ellipse,#060b164d,#060b1699);box-shadow:inset 0 0 45px #02091028}
+.square-chart .square-center::after{border-color:#cdb47b55;box-shadow:inset 0 0 0 3px #080e1944,inset 0 0 0 4px #c1ac691c}
+.square-center h2{color:#f0ddad;text-shadow:0 2px 10px #0009}.square-center .panel-overline{color:#c9b384}
+/* No rejected golden instrument asset; existing interactive astronomy is retained. */
+.celestial-wheel .atlas-wheel-base{fill:url(#wheel-silk);stroke:url(#wheel-antique-gold);stroke-width:1.7}
+.celestial-wheel .atlas-wheel-ring{stroke:#c3ac7480}.celestial-wheel .sector-wedge{fill:#091322ea;stroke:#c6ae798f;stroke-width:1}
+.celestial-wheel .sector-galaxy{opacity:.22}.celestial-wheel .related .sector-wedge{fill:#1e393be8;stroke:#a8c6acb0}
+.celestial-wheel .selected .sector-wedge{fill:#51402fed;stroke:#efd396;stroke-width:1.6}
+.celestial-wheel .wheel-natal-name,.celestial-wheel .wheel-center-text{fill:#eddaad}.celestial-wheel .branch{fill:#cfb784}.celestial-wheel .wheel-content-divider{stroke:#bda66b47}
+.wheel-mobile-reading{background:var(--silk-weave),linear-gradient(135deg,#152132f2,#091320f5);border-color:#bea56c72}
+.orrery-explorer,.case-dialog{background:var(--silk-weave),linear-gradient(145deg,#121e2c,#080f1c);border-color:var(--foil-edge)}
+.orrery-scene{background:linear-gradient(#07111d99,#081321bd),url('./assets/cosmic-silk.png') center/cover}.orrery-information{border-color:#b6a67540}
+/* Warm gilded light and a quiet violet sheen, without recoloring planetary surfaces. */
+.atlas-orrery .orrery-orbit-accent{stroke:#dec290;opacity:.38}
+.atlas-orrery .orrery-track{stroke:#c7b69738}
+.atlas-orrery .stellar-point{fill:#f4e9d1}
+.atlas-orrery [data-asterism=文昌] .stellar-point{fill:#e3d5fa}
+.atlas-orrery [data-asterism=北斗] .stellar-halo{fill:#b8a1db}
+.atlas-orrery .orrery-globe{filter:drop-shadow(0 0 1.5px #e9d5a52a)}
+.atlas-orrery .palace-resonance .orrery-globe,.atlas-orrery .palace-resonance .stellar-point{filter:drop-shadow(0 0 3px #f4d291) drop-shadow(0 0 7px #baa0e677)}
+.atlas-orrery .palace-resonance>.celestial-hit{stroke:#ffe4aa;fill:#e9c87414}
+.atlas-orrery .palace-resonance .stellar-halo{fill:#dfc795;opacity:.7}
+.chart-mobile-bar button,.cosmic-tabs,.sky-menu-toggle{border-color:#cbb17570;box-shadow:inset 0 1px #efce7d20}
+.chart-stage .flight-memory{stroke-opacity:.45}.chart-stage .flight-tail{stroke-linecap:round}
+/* Layout, layered badges, OCR highlights, disabled controls and status colors remain unchanged. */
+@media print{body,.workspace-panel,.book-library,.square-chart .square-palace,.square-chart .square-center{background-image:none!important;box-shadow:none!important}.celestial-wheel .atlas-wheel-base{fill:#fff}.celestial-wheel .sector-galaxy{display:none}}
+.book-library[data-view],#lab{background-image:var(--silk-light)}

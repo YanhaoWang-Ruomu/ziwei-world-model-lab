@@ -1,0 +1,6 @@
+HYG v4.1 subset — David Nash / Astronomy Nexus
+Source: https://raw.githubusercontent.com/astronexus/HYG-Database/main/hyg/CURRENT/hygdata_v41.csv
+License: Creative Commons Attribution-ShareAlike 4.0 International
+https://creativecommons.org/licenses/by-sa/4.0/
+Changes: selected 20,000 brightest entries; rounded coordinates; omitted unneeded columns; distances >=100000 pc changed to null.
+This adapted dataset is distributed under the same CC BY-SA 4.0 license.

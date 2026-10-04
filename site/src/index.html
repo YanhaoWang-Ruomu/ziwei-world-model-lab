@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#101a1f" />
+    <meta
+      name="description"
+      content="在真实星空中探索紫微命盘，查阅原典，核对规则。"
+    />
+    <title>观星台 · 紫微斗数世界模型实验室</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./library.css" />
+    <link rel="stylesheet" href="./review.css" />
+  <link rel="stylesheet" href="./cards.css" />
+  <link rel="stylesheet" href="./techniques.css" />
+  <link rel="stylesheet" href="./rules.css" />
+  <link rel="stylesheet" href="./workspace.css" />
+  <link rel="stylesheet" href="./cosmos.css" />
+  <link rel="stylesheet" href="./cinematic.css" />
+  <link rel="stylesheet" href="./square-chart.css" />
+  <link rel="stylesheet" href="cycle-controls.css" />
+  <link rel="stylesheet" href="chart-atlas.css" />
+  <link rel="stylesheet" href="chart-motion.css" />
+  <link rel="stylesheet" href="orrery.css" />
+  <link rel="stylesheet" href="chart-responsive.css" />
+  <link rel="stylesheet" href="chart-fit.css" />
+  <link rel="stylesheet" href="tech-workbench.css" />
+  <link rel="stylesheet" href="chart-layers.css" />
+  <link rel="stylesheet" href="personal-account.css" />
+  <link rel="stylesheet" href="storage.css" />
+  <link rel="stylesheet" href="gilded-theme.css" />
+</head>
+  <body data-role="public" class="immersive-sky sky-pending">
+    <div class="grain" aria-hidden="true"></div>
+    <aside class="workspace-sidebar" aria-label="工作区导航">
+      <a class="workspace-brand" href="#model"><span class="workspace-star" aria-hidden="true">✳︎</span><span>观星台<small>CELESTIAL OBSERVATORY</small></span></a>
+      <p class="sidebar-caption">观天 · 察人 · 求知</p>
+      <button id="sky-menu-toggle" class="sky-menu-toggle" type="button" aria-expanded="false" aria-controls="workspace-navigation">工作区 <span aria-hidden="true">☰</span></button>
+      <nav class="workspace-nav" id="workspace-navigation">
+        <a href="/download.html"><span aria-hidden="true">↓</span>下载应用</a>
+        <a href="#model" data-nav="model"><span aria-hidden="true">01</span>星辰与命盘</a>
+        <a href="#library" data-nav="library"><span aria-hidden="true">02</span>书籍与文章</a>
+        <a href="#cards" data-nav="cards" hidden><span aria-hidden="true">03</span>技法卡片库</a>
+        <a href="#submissions" data-nav="submissions" hidden><span aria-hidden="true">04</span>我的提交</a>
+        <a href="#review" data-nav="review" hidden><span aria-hidden="true">05</span>审核中心</a>
+        <a href="#rules" data-nav="rules" hidden><span aria-hidden="true">06</span>规则工作台</a>
+        <a href="#materials" data-nav="materials" hidden><span aria-hidden="true">07</span>材料管理</a>
+        <a href="#private" data-nav="private" hidden><span aria-hidden="true">08</span>本机私密入口</a>
+        <a href="#members" data-nav="members" hidden><span aria-hidden="true">09</span>核心账户</a>
+        <a href="#lab" data-nav="lab" hidden><span aria-hidden="true">10</span>研究实验室</a><a href="#history" data-nav="history" hidden><span aria-hidden="true">11</span>历史记录</a>
+      </nav>
+      <div class="sidebar-account"><span class="account-dot" aria-hidden="true"></span><div><strong id="workspace-role">公开访客</strong><small id="workspace-role-note">阅读与使用</small></div><a href="#account" aria-label="账户与访问">↗</a></div>
+    </aside>
+    <header class="site-header">
+      <a class="brand" href="#model" aria-label="观星台首页">
+        <svg class="brand-mark" viewBox="0 0 44 44" aria-hidden="true">
+          <circle cx="22" cy="22" r="19"></circle>
+          <path d="M22 7v30M7 22h30M11.5 11.5l21 21M32.5 11.5l-21 21"></path>
+          <circle class="brand-core" cx="22" cy="22" r="4"></circle>
+        </svg>
+        <span><strong>观星台</strong><small>ZIWEI WORLD MODEL LAB</small></span>
+      </a>
+      <p class="workspace-breadcrumb">观星台 <span>/</span> <strong id="workspace-location">模型工作台</strong></p>
+      <div class="header-actions">
+        <span class="privacy-pill" id="viewer-status">书库</span>
+        <a class="text-link" href="#account">账户</a>
+        <a class="text-link" id="header-owner-login" href="#account">登录</a><button id="header-signout" class="text-link" type="button" hidden>退出登录</button>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="workspace-panel cosmic-workspace" id="model" data-view="model" aria-labelledby="model-title">
+        <div class="cosmic-heading"><div><p class="cosmic-kicker">THE CELESTIAL ATLAS <span>天人之间</span></p><h1 id="model-title">观星，落子成局。</h1><p id="role-description">在星辰中起一张命盘，沿着原典核对每一条规则。</p></div><div class="cosmic-tabs" role="group" aria-label="模型工作台视图"><button data-cosmic-tab="chart" aria-pressed="true">紫微命盘</button><button data-cosmic-tab="sky" aria-pressed="false">观星</button><button data-cosmic-tab="rules" aria-pressed="false">规则推演</button><a class="sky-library-link" href="#library">书库 ↗</a></div></div>
+        <div id="cosmic-observatory" class="cosmic-observatory" data-mode="sky">
+          <img id="sky-landscape" src="./sky/shanhe-silk.png" alt="" fetchpriority="high" aria-hidden="true" /><div class="sky-atmosphere" aria-hidden="true"></div>
+          <canvas id="living-landscape" aria-hidden="true"></canvas><canvas id="living-weather" aria-hidden="true"></canvas><canvas id="scenic-depth" aria-hidden="true"></canvas><canvas id="earth-globe" aria-hidden="true"></canvas>
+          <div id="landscape-journey" class="landscape-journey" tabindex="0" role="region" aria-label="山河长卷：拖动平移，滚轮拉近，左右方向键切换画面" hidden>
+            <img id="journey-cloudsea" src="./sky/cloudsea-hermetic.png" alt="古金穹顶下，青绿群峰浮于绢云之上" decoding="async" fetchpriority="high" />
+            <img id="journey-river" src="./sky/river-hermetic.png" alt="幽谷石门间，碧色长河流向远方" decoding="async" />
+            <img id="journey-night" src="./sky/night-hermetic.png" alt="紫金星图与月华映照山河的金箔绢画" decoding="async" />
+            <canvas id="journey-motion" aria-hidden="true"></canvas><canvas id="journey-creatures" aria-hidden="true"></canvas>
+          </div>
+          <div id="journey-caption" class="journey-caption" hidden><span id="journey-number"></span><h2 id="journey-title"></h2><p id="journey-line"></p><button id="journey-return" type="button" hidden>进入星空观测 <span aria-hidden="true">↗</span></button></div>
+          <div id="scene-sound-dock"><button id="scene-sound-toggle" type="button" aria-pressed="false"><span class="sound-waves" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span id="scene-sound-label">开启环境声</span></button></div>
+          <div id="scene-audio-entry" hidden aria-label="环境声播放"><button id="scene-audio-start" type="button"><span aria-hidden="true">♫</span> 轻触，听见山河</button><button id="scene-audio-mute" type="button">静音观看</button></div>
+          <div id="sky-intro-controls" class="sky-intro-controls"><button id="sky-intro-skip" type="button">跳过开场 <span aria-hidden="true">↗</span></button><div class="sky-tour-track" aria-hidden="true"><i id="sky-tour-progress"></i></div></div>
+          <div id="star-tooltip" class="star-tooltip" hidden></div><p id="sky-event-status" class="sky-event-status" hidden></p>
+          <canvas id="starfield" tabindex="0" aria-label="真实恒星星图。拖动或使用方向键转动，悬停或点击星星查看详情；也可使用星名选择器。"></canvas>
+          <div class="observatory-vignette" aria-hidden="true"></div>
+          <div class="observatory-topline"><span><i></i> <span id="star-count">正在展开星空</span></span><span>J2000.0 <span class="topline-sep">/</span> HYG 4.1</span></div>
+          <div class="chart-stage" id="chart-stage">
+            <aside class="birth-panel glass-panel">
+              <p class="panel-overline">01 <span>起盘</span></p><h2>一刻，入十二宫</h2>
+              <form id="birth-form" autocomplete="off">
+                <label>安星方法<select id="chart-provider"><option value="public-server">公开算法 · 服务端计算</option><option value="public" selected>公开算法 · 本页计算</option></select></label>
+                <label>姓名或称呼 <span>选填</span><input name="name" id="birth-name" maxlength="40" placeholder="无名" /></label>
+                <label>出生日期 <span>公历</span><input id="chart-birth-date" name="date" type="date" min="1901-01-01" max="2099-12-31" value="2000-08-16" required /></label>
+                <label>出生时间 <span>当地时间</span><input id="chart-birth-time" name="time" type="time" value="03:30" required /></label>
+                <fieldset class="gender-field"><legend>传统排盘性别</legend><label><input type="radio" name="gender" value="男" checked />男命</label><label><input type="radio" name="gender" value="女" />女命</label></fieldset>
+                <button class="cosmic-primary" id="cast-chart">起盘 <span aria-hidden="true">↗</span></button>
+                <details class="chart-settings"><summary>排盘口径 <span>历法与时制</span></summary><label>晚子时换日<select name="dayDivide"><option value="forward">23:00 起归次日</option><option value="current">00:00 起归次日</option></select></label><label>本命闰月处理<select name="fixLeap"><option value="true">前十五日作本月，之后作下月</option><option value="false">闰月全部作本月</option></select></label><label class="check-line"><input name="daylight" type="checkbox" />出生时间含夏令时，减去一小时</label><p>请使用出生地钟表时间。未自动校正时区或真太阳时；特殊历史时制需先核对。年界采用农历正月初一。运限的闰月依引擎通行规则，以十五日为界。</p></details>
+              </form>
+              <div class="chart-case-actions"><button type="button" data-case-save disabled>保存命例</button><button type="button" data-cases-open>我的命例</button></div><p id="chart-status" class="chart-status" role="status">示例使用虚构出生资料。</p><div class="chart-small-actions"><button id="chart-example" type="button">恢复示例</button><button id="chart-clear" type="button">清空本页</button></div><p class="local-note" id="chart-privacy-note">起盘时姓名不发送，结果不自动保存；点击保存命例后，出生资料存入个人账户。</p>
+            </aside>
+            <div class="wheel-deck">
+              <header class="atlas-title"><p>THE CELESTIAL INSTRUMENT</p><h2>观命 · 十二宫天仪</h2><span>一盘十二宫，循时观万象。</span></header>
+              <div class="chart-mode-label"><span id="chart-example-badge">虚构示例</span><span id="chart-layer-label">本命十二宫</span></div>
+              <p class="chart-source-label" id="chart-source-label">正在起盘</p><p class="chart-pending-badge" id="chart-pending-badge" hidden>输入已修改 · 下方仍为上一次命盘</p>
+              <div class="chart-layout-switch" role="group" aria-label="排盘布局"><button data-chart-layout="square" aria-pressed="true">十二宫方盘</button><button data-chart-layout="wheel" aria-pressed="false">命运轮盘</button><span>点宫位看星曜 · 点年龄切大限</span></div>
+              <div id="destiny-wheel" class="destiny-wheel square-mode" aria-label="紫微十二宫命盘"></div>
+              <div class="wheel-navigation"><button id="palace-prev" type="button" aria-label="上一个宫位">←</button><p>选择宫位，观三方四正</p><button id="palace-next" type="button" aria-label="下一个宫位">→</button></div>
+              <div class="chart-summary" id="chart-summary"></div><p class="chart-legend">金色主星 · 青色辅曜 · 浅蓝杂曜<br>四化标记：<b>本</b> 生年 · <b>大 / 年 / 月 / 日 / 时</b> 运限 · <b>飞</b> 所选宫干飞化 · ↗ 离心自化 · ↘ 对宫引动</p>
+              <details class="chart-stem-proof"><summary id="chart-stem-summary">十二宫干支对照</summary><div id="chart-stem-records"></div><p>方盘与轮盘共用当前命盘。宫支位置固定；本命宫干按生年干确定，同年只改时辰时不一定变化，命身宫与星曜仍会重排。叠加运限时，外围保留本命宫干，所选运限干支另行显示。</p><p id="chart-method-note"></p></details>
+            </div>
+            <aside class="palace-inspector glass-panel" id="palace-inspector" aria-live="polite"></aside>
+          </div>
+          <div class="sky-stage" id="sky-stage" hidden>
+            <details class="sky-explore glass-panel" id="sky-search-panel"><summary aria-label="展开寻星"><span aria-hidden="true">⌕</span> 寻星</summary><div class="sky-search-body"><button id="sky-search-close" class="sky-sheet-close" type="button" aria-label="关闭寻星">×</button><p class="panel-overline">CELESTIAL EXPLORER</p><h2>远近皆有来处</h2><p>拖动星空，悬停识星。</p><label for="sky-target">定位星群与星曜</label><select id="sky-target"><option value="北斗">北斗七星</option><option value="Sun">太阳 · Sun</option><option value="Moon">月球 · Moon</option><option value="南斗">南斗六星</option><option value="北极">北极星</option><option value="贪狼">贪狼 · 天枢</option><option value="天府">天府 · 斗宿六</option></select><label for="star-query">查找星名或 HIP 编号</label><input id="star-query" type="search" maxlength="80" placeholder="天枢 / Dubhe / 54061" autocomplete="off" /><div id="star-search-results"></div><fieldset class="sky-projection"><legend>观看方式</legend><label><input type="radio" name="projection" value="sky" checked />地球视角</label><label><input type="radio" name="projection" value="depth" />距离纵深</label></fieldset><p class="sky-note" id="projection-note">两种地景的星空均参照北纬 28°、东经 112°，随所示时刻转动；底部地球为艺术构图。</p></div></details>
+            <aside id="star-sheet" class="star-sheet glass-panel" aria-label="选中星曜的介绍" hidden><button id="star-sheet-close" class="sky-sheet-close" type="button" aria-label="关闭星曜介绍">×</button><div id="star-inspector" class="star-inspector" aria-live="polite"></div></aside>
+          </div>
+          <div id="sky-whisper" class="sky-whisper"><span>观 天 地 · 察 万 象</span><p class="earth-hint">拖动巡天，点亮一颗星。</p><div class="journey-chapters" role="group" aria-label="山河场景"><button type="button" data-journey="0" aria-pressed="false"><small>01</small> 云海</button><button type="button" data-journey="1" aria-pressed="false"><small>02</small> 大河</button><button type="button" data-journey="2" aria-pressed="true"><small>03</small> 星夜</button></div><p class="journey-drag-hint">拖动取景 · 滚轮拉近 · 三卷山河自由切换</p><div class="mountain-journey"><p>拖动巡天 · 滚轮深入 · 点星解意</p><label for="scene-travel">沿河深入</label><input id="scene-travel" type="range" min="0" max="1" step="0.02" value="0" aria-label="沿河深入" /><button id="scene-night" type="button">留住星夜</button></div></div>
+          <button id="sky-mobile-launcher" type="button" aria-expanded="false" aria-controls="sky-mobile-panel"><span aria-hidden="true">☷</span> 观星工具</button><section id="sky-mobile-panel" aria-labelledby="sky-mobile-title" hidden><div class="sky-mobile-heading"><h2 id="sky-mobile-title">观星工具</h2><button id="sky-mobile-close" type="button" aria-label="收起观星工具">×</button></div><button id="sky-mobile-search" type="button"><span aria-hidden="true">⌕</span> 寻星与星曜介绍</button></section><div id="sky-edge-dock" class="sky-edge-dock"><button id="sky-settings-toggle" type="button" aria-expanded="false" aria-controls="sky-settings-panel"><span aria-hidden="true">☷</span> 观星设置</button></div>
+          <section id="sky-settings-panel" class="sky-settings-panel glass-panel" aria-labelledby="sky-settings-title" hidden><button id="sky-settings-close" class="sky-sheet-close" type="button" aria-label="关闭观星设置">×</button><p class="panel-overline">YOUR OBSERVATORY</p><h2 id="sky-settings-title">让星空，依你而动</h2><label class="sky-pref-check"><input type="checkbox" data-sky-pref="opening" checked />进入首页时播放巡天开场</label><p class="sky-setting-hint">关闭后，下次直接进入场景。山河开场约 28 秒，从云海、大河走入星夜；地球开场约 28 秒，从月夜、月落走向日出。随时可跳过。</p><label>光阴流转<select data-sky-pref="speed"><option value="1">舒缓 · 4 分钟 / 日</option><option value="2" selected>流转 · 100 秒 / 日</option><option value="4">疾行 · 45 秒 / 日</option></select></label><label>地景<select data-sky-pref="landscape"><option value="mountains">山河之间</option><option value="earth">地球之上</option></select></label><div class="sound-settings"><label for="scene-sound-volume">环境声音量 <output id="scene-volume-value">40%</output></label><input id="scene-sound-volume" type="range" min="0" max="100" step="1" value="40" /><p id="scene-sound-status" class="sky-setting-hint" role="status">轻点开启环境声。</p></div><div class="world-controls"><label for="world-clock-mode">时光</label><select id="world-clock-mode"><option value="cycle">日夜流转</option><option value="lunar">一月盈亏 · 3 分钟</option><option value="live">此刻天空</option></select><div class="world-clock-readout"><strong id="world-time-display">星夜 · 19:15</strong><small id="world-date-display"></small><small id="world-lunar-phase"></small></div><label for="world-hour" class="sr-only">选择一天中的时刻</label><input id="world-hour" type="range" min="0" max="23.99" step="0.02" value="19.25" /><div class="world-hour-marks" aria-hidden="true"><span>子夜</span><span>晨曦</span><span>正午</span><span>暮色</span><span>深夜</span></div><p class="sky-setting-hint">四时不同，日出方位与白昼长短也不同。</p><div class="moon-phase-steps" role="group" aria-label="跳到下一次指定月相"><button type="button" data-moon-phase="0">新月</button><button type="button" data-moon-phase="90">上弦</button><button type="button" data-moon-phase="180">满月</button><button type="button" data-moon-phase="270">下弦</button></div><p class="sky-setting-hint">月相按钮跳到下一次相应月相并暂停；地平线以下的月亮会被地景遮住。</p><div class="world-seasons" role="group" aria-label="切换节气"><button type="button" data-world-season="spring" aria-pressed="false">春分</button><button type="button" data-world-season="summer" aria-pressed="false">夏至</button><button type="button" data-world-season="autumn" aria-pressed="false">秋分</button><button type="button" data-world-season="winter" aria-pressed="false">冬至</button></div></div><section class="sky-phenomena-settings"><label class="sky-pref-check"><input id="sky-events-enabled" type="checkbox" checked />偶遇天象</label><p id="sky-event-help" class="sky-setting-hint">夜间低频偶遇流星、火流星、流星群、双尾彗星与月晕。下方可演示连珠和日月食；演示非当前天象预报，日月与光迹适度放大。</p><div class="sky-event-demo"><select id="sky-event-kind" aria-label="天象演示类型"><option value="meteor">流星</option><option value="fireball">火流星</option><option value="shower">流星群</option><option value="comet">双尾彗星</option><option value="halo">22° 月晕</option><option value="alignment">五星连珠</option><option value="solar-eclipse">日全食</option><option value="lunar-eclipse">月全食</option></select><button id="sky-event-preview" type="button">演示一次</button></div><label for="sky-event-progress" class="sky-setting-hint">演示进度 · 拖动定格观察</label><input id="sky-event-progress" type="range" min="0" max="100" step="1" value="0" disabled /><button id="sky-event-return" class="sky-event-return" type="button">结束演示 · 回到此刻</button></section><label class="sky-pref-check"><input type="checkbox" data-sky-pref="guides" />显示星官连线与星名</label><button class="sky-replay" type="button" data-sky-replay>重看巡天开场 ↗</button><p id="sky-preference-status" class="sky-setting-hint" role="status">偏好保存在此浏览器，无需登录。</p><details class="sky-data-notes"><summary>星空与地景说明</summary><p id="sky-catalogue-note">恒星来自 HYG 4.1 / J2000。日月、五大可见行星的位置、月相、自转与季节日照按画面所示时刻计算；日月显示大小适当放大。</p><p>山河参照北纬 28°、东经 112°的天空，时钟为 UTC+8，并非自动定位。云海、大河、星夜是三幅独立的原创金箔绢画，融合青绿山水、古典穹顶和西式星图，分别呈现流云与鹤影、流水与波光、紫云与星光；可拖动取景、拉近。画卷中的月亮、星图与光迹属于艺术表现。点击“进入星空观测”，即可查看按所示时刻计算的星体、月相、日照与天象演示。日夜流转会加快时间，此刻天空使用当前时间。微风、云、水光、白鹤与萤火为场景模拟。银河使用 NASA 深空星图，与恒星共享 J2000 方位；月面使用 NASA LRO 纹理，月相与天平动随时间变化。日月光晕、曝光与星水回应为艺术增强。太阳表面与日冕为程序模拟；地球夜侧加入月相相关的月光，山体与植被使用浅层明暗模拟，水光跟随日月方向，并非实时实拍或完整三维地形。山河取景与移步并非可自由行走的三维地形，也不是实时实拍。山风、水声、鸟鸣与磬音由浏览器合成；不读取麦克风，不调用付费声音接口。</p><p>地球开场选取邻近日期中月落先于日出的夜晚，具体日期见时光面板；随后继续日夜流转。底部地球为艺术构图，镜头缓慢环绕，日照与月光随所示时刻变化。地球使用 NASA 昼间影像与 2016 年夜间灯光合成图。云图为公开静态纹理的流动模拟，不代表实时天气。四季取春分、夏至、秋分、冬至当日；减少动态效果时不播放开场。</p><a href="./sky/LICENSE.txt" target="_blank" rel="noopener">HYG 星表 / CC BY-SA 4.0 ↗</a><a href="./sky/LIVING-WORLD-SOURCES.txt" target="_blank" rel="noopener">日月银河、地球与地景来源 ↗</a><p id="sky-render-note" role="status"></p><a href="https://github.com/cosinekitty/astronomy" target="_blank" rel="noopener noreferrer">日月计算依据 ↗</a></details></section><div class="sky-tools"><span id="sky-motion-note">巡天中</span><button id="sky-pause" type="button" aria-pressed="false">暂停</button><button id="sky-zoom-out" type="button" aria-label="缩小星空">−</button><button id="sky-zoom-in" type="button" aria-label="放大星空">＋</button></div>
+        </div>
+        <section class="cycle-dock chart-time-console" id="cycle-dock" aria-label="命盘运限控制">
+          <div class="cycle-toolbar"><div class="cycle-scope" role="group" aria-label="运限层级"><button type="button" data-cycle-scope="natal" aria-pressed="true">本命</button><button type="button" data-cycle-scope="decadal" aria-pressed="false">大限</button><button type="button" data-cycle-scope="yearly" aria-pressed="false">流年</button><button type="button" data-cycle-scope="monthly" aria-pressed="false">流月</button><button type="button" data-cycle-scope="daily" aria-pressed="false">流日</button><button type="button" data-cycle-scope="hourly" aria-pressed="false">流时</button></div><button type="button" id="cycle-now">今时今日 <span aria-hidden="true">↗</span></button></div>
+          <div id="cycle-position"><div class="cycle-stepper"><button type="button" id="cycle-prev" aria-label="上一大限">‹</button><button type="button" id="cycle-picker-toggle" aria-expanded="true" aria-controls="cycle-pickers" aria-label="收起时间选择"><strong id="cycle-step-label">本命为底盘</strong><span aria-hidden="true">⌄</span></button><button type="button" id="cycle-next" aria-label="下一大限">›</button></div><div class="cycle-pickers" id="cycle-pickers"><label>大限<select id="cycle-decadal" aria-label="选择大限"></select></label><label>流年 · 农历<select id="cycle-yearly" aria-label="选择流年"></select></label><label>流月 · 农历<select id="cycle-monthly" aria-label="选择流月"></select></label><label>流日 · 农历<select id="cycle-daily" aria-label="选择流日"></select></label><label>流时<select id="cycle-hourly" aria-label="选择流时"></select></label></div></div>
+          <div class="cycle-heading"><p id="cycle-summary">点击宫内年龄段，进入对应大限。</p><p id="cycle-time-note"></p></div>
+          <div class="cycle-utility"><label class="cycle-follow"><input id="cycle-follow" type="checkbox" />跟随此刻</label><details class="cycle-manual"><summary>指定日期与时间</summary><div class="cycle-manual-body"><label>观察日期 · 公历<input type="date" id="cycle-date" min="1901-01-01" max="2099-12-31" /></label><label>观察时间<input type="time" id="cycle-time" value="12:00" /></label><button type="button" id="cycle-date-apply">应用时间</button><p id="cycle-clock-note"></p></div></details><button id="chart-export" type="button">导出命盘 ↓</button></div>
+          <p id="cycle-status" role="status"></p><p id="cycle-lunar-note">农历正月初一换年 · 闰月按十五日分段 · 年龄为虚岁</p>
+        </section>
+        <div id="cosmic-rules" hidden><div class="model-heading"><div><h2>用规则核对条件</h2><p id="model-status" role="status">正在读取可使用的规则…</p></div><label for="model-picker">选择规则<select id="model-picker"><option>正在载入…</option></select></label></div><div id="model-pagination" class="page-controls"></div><div id="model-use" class="model-layout"></div><p class="model-footnote">使用已审核规则逐项判断。本版规则条件需手动填写，现实条件需另行核实；规则命中不等于事件概率。</p></div>
+        <details class="cosmic-method"><summary>这张星图与命盘依据什么？<span>数据、口径与研究边界 ↗</span></summary><div class="method-grid"><div><h3>星空有据</h3><p>20,000 颗恒星来自 HYG 4.1，坐标历元 J2000.0。距离为星表估计；缺少可靠距离时明确留空。地球使用 NASA Blue Marble 贴图，球体大小与照明为观看示意，不是恒星距离的统一比例或实时昼夜。星点大小用于辨认，不是天体直径。</p><a href="https://github.com/astronexus/HYG-Database/blob/main/hyg/README.md" target="_blank" rel="noopener noreferrer">HYG 星表说明 ↗</a><a href="https://github.com/Stellarium/stellarium-skycultures/blob/master/chinese/index.json" target="_blank" rel="noopener noreferrer">南北斗星官参考 ↗</a><a href="./sky/EARTH-SOURCE.txt" target="_blank">地球影像来源 ↗</a><a href="./sky/LICENSE.txt" target="_blank">星表衍生数据 · CC BY-SA 4.0 ↗</a></div><div><h3>排盘可核</h3><p>默认采用服务器端若木安星，以主人提供的安星资料为优先；未载明部分由 iztro 2.6.1 通行规则补充。也可手动选择公开算法，在本页计算。原始安星 PDF 不在网站提供访问。输入公历，自动转农历。方盘的十二地支固定；宫干、主星、辅曜、杂曜、神煞、大限与小限依出生资料计算。命盘内可切换本命、大限、流年、流月、流日、流时；点击宫内年龄段直接进入该大限，小限仅保留为宫内参考资料。流月、流日、流时按所选标准时计算，流分、流秒暂不支持。四化的传统象义与星曜落宫计算分开，不直接作为事件概率。</p><a href="https://docs.iztro.com/posts/config-n-plugin" target="_blank" rel="noopener noreferrer">排盘引擎与口径 ↗</a><a href="https://docs.iztro.com/learn/major-star" target="_blank" rel="noopener noreferrer">星曜基础介绍参考 ↗</a></div><div><h3>从基础开始</h3><p>当前具备排盘、材料检索与已审核规则判断。现实知识的持续更新、跨领域推演与概率校准尚未建立，不能声称知道一切或已验证命运预测。</p><a href="#library">查阅可访问的原典 ↗</a></div></div></details>
+      </section>
+      <section class="workspace-panel" id="account" data-view="account" hidden><p class="workspace-kicker">账户与访问</p><h1>进入你的工作空间</h1><p class="muted">登录后按当前权限显示可用功能。选择对应的登录入口；公开功能无需登录。</p><div class="account-flow"><div class="personal-account-card"><p class="panel-overline">PERSONAL ACCOUNT</p><h2>个人账户</h2><p>登录后收藏自己的命例，随时回来继续观盘。</p>
+<div id="personal-auth-entry"><div class="personal-auth-tabs" role="group" aria-label="登录或注册"><button type="button" data-account-mode="login" aria-pressed="true">登录</button><button type="button" data-account-mode="register" aria-pressed="false">注册新账户</button></div>
+<form id="personal-account-form"><label>用户名<input id="personal-username" name="username" autocomplete="username" minlength="3" maxlength="32" required placeholder="3–32 位中英文或数字"></label><label>密码<input id="personal-password" name="password" type="password" autocomplete="current-password" maxlength="128" required placeholder="注册时至少 12 位"></label><label id="personal-confirm-label" hidden>确认密码<input id="personal-password-confirm" type="password" autocomplete="new-password" maxlength="128"></label><label class="personal-remember"><input id="personal-remember" type="checkbox">在此设备保持登录 30 天</label><button class="book-primary" id="personal-account-submit" type="submit">登录</button></form><small>可使用浏览器的密码管理器保存登录信息。请妥善保管密码，当前暂未提供邮件找回。</small></div>
+<div id="personal-profile" hidden><h3 id="personal-profile-name"></h3><p id="personal-profile-role"></p><small>账户识别码</small><p id="personal-profile-code"></p><button type="button" class="book-primary" data-cases-open>我的命例 ↗</button><a class="book-secondary" href="#model">返回观星台</a></div><p id="personal-account-status" role="status" aria-live="polite"></p><a id="personal-signin" href="/signin-with-chatgpt?return_to=%2F%23account" target="_top">使用 ChatGPT 账号登录 ↗</a><small>登录只确认身份。核心权限由创建者本人授予；未获授权时仍使用公开功能。</small></div><div id="account-access"></div></div><div class="account-role-guide"><div><strong>公开访客</strong>排盘、规则推演与公开材料</div><div><strong>特殊用户</strong>授权材料、技法卡片与审核提交</div><div><strong>核心管理人</strong>全部业务功能与审核发布</div></div><section class="sky-account-preferences"><p class="panel-overline">PERSONAL PREFERENCES</p><h2>个人设置 · 观星偏好</h2><label class="sky-pref-check"><input type="checkbox" data-sky-pref="opening" checked />进入首页时播放巡天开场</label><label>光阴流转<select data-sky-pref="speed"><option value="1">舒缓 · 4 分钟 / 日</option><option value="2" selected>流转 · 100 秒 / 日</option><option value="4">疾行 · 45 秒 / 日</option></select></label><p class="muted">保存在当前浏览器。系统启用“减少动态效果”时自动跳过开场。</p><button class="book-secondary" type="button" data-sky-replay>返回观星，重播开场 ↗</button></section><button id="account-signout" class="book-secondary" type="button" hidden>退出当前全部登录</button><p id="logout-status" role="status"></p></section>
+      <section class="workspace-panel" id="private" data-view="private" hidden><p class="workspace-kicker">个人本机</p><h1>私密工作空间</h1><p class="muted">网站中的核心权限不会自动解锁他人电脑上的私密资料。</p><div id="private-access"></div></section>
+      <section class="workspace-panel" id="submissions" data-view="submissions" hidden><div class="workspace-title-row"><div><p class="workspace-kicker">整理 · 提交 · 等待审核</p><h1>我的提交</h1></div><a class="book-primary" href="#cards">去卡片库整理</a></div><p id="submission-account-note" class="muted"></p><div id="submission-editor"></div><div class="submission-toolbar"><label>审核状态<select id="submission-filter"><option value="all">全部提交</option><option value="pending">待审核</option><option value="approved">已发布</option><option value="rejected">已退回</option></select></label><button id="submission-refresh" class="book-secondary" type="button">刷新记录</button><p id="submission-status" role="status"></p></div><div id="submission-list"></div></section>
+      <section class="workspace-panel" id="review" data-view="review" hidden><div class="workspace-title-row"><div><p class="workspace-kicker">核心管理</p><h1>审核中心</h1></div><span class="workspace-tag">发布前的最后一次核对</span></div><p class="muted">核对原文和条件，确认计算规则。批准后，卡片库与模型同步更新。</p><div id="review-editor"></div><div class="submission-toolbar"><label>审核状态<select id="review-filter"><option value="pending">待审核</option><option value="all">全部提交</option><option value="approved">已发布</option><option value="rejected">已退回</option></select></label><button id="review-refresh" class="book-secondary" type="button">刷新队列</button><p id="review-status" role="status"></p></div><div id="review-list"></div></section>
+      <section class="workspace-panel" id="members" data-view="members" hidden><p class="workspace-kicker">仅创建者本人</p><h1>账户级别管理</h1><p class="muted">核心管理人可使用全部业务功能并审核发布。授予或撤销核心权限始终由你本人操作。</p><form id="members-form" class="member-form"><label>对方的账号识别码<input name="userId" maxlength="200" required autocomplete="off" placeholder="请对方登录后，在账户页复制" /></label><label>账户备注<input name="label" maxlength="80" required placeholder="便于你辨认的名称" /></label><label class="review-check"><input name="confirmed" type="checkbox" required />我已核对账号，同意应用所选级别。</label><label>授权级别<select name="role"><option value="public">公开</option><option value="special">特殊</option><option value="core">核心</option></select></label><button class="book-primary">保存账户级别</button></form><p id="members-status" role="status"></p><div id="members-list"></div></section>
+      <section class="book-library" id="library" data-view="library" hidden aria-labelledby="library-title">
+        <div class="library-heading">
+          <div><p class="eyebrow">PUBLIC BOOK LIBRARY</p><h1 id="library-title">从一句话，查回原书</h1></div>
+          <p class="library-scope" id="library-count">正在读取书库…</p>
+        </div>
+        <div class="library-tabs" aria-label="材料级别">
+          <button type="button" data-level="public" aria-pressed="true">公开 <small>自由查阅</small></button>
+          <button type="button" data-level="special" aria-pressed="false">特殊 <small>授权查阅</small></button>
+        </div>
+        <div id="public-contribute" hidden></div>
+        <div id="special-access" class="access-panel" hidden>
+          <h2>特殊级访问</h2><p id="special-access-note">输入获授权的特殊级账号，进入阅读与整理工作区。</p>
+          <form id="special-account-form">
+            <label for="special-username">特殊级账号<input id="special-username" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="64" required /></label>
+            <label for="special-password">密码<input id="special-password" name="password" type="password" autocomplete="current-password" maxlength="256" required /></label>
+            <button id="special-submit" class="book-primary">登录特殊工作区</button>
+          </form>
+          <button id="special-logout" type="button" class="book-secondary" hidden>退出特殊账号</button>
+          <a id="special-login" href="/signin-with-chatgpt?return_to=%2F%23account" target="_top" class="book-secondary">使用个人账号登录</a>
+          <a id="special-owner-manage" class="book-secondary" href="#materials" hidden>添加与管理特殊材料</a>
+          <details id="special-key-options"><summary>使用单本材料的访问密钥</summary>
+            <form id="unlock-form"><label for="access-key">访问密钥</label><input id="access-key" type="password" autocomplete="off" required /><button class="book-primary">验证并进入</button></form>
+            <button id="lock-key" type="button" class="book-secondary">清除本次密钥授权</button>
+          </details>
+          <p id="account-code"></p><p id="access-status" role="status"></p>
+        </div>
+        <div id="private-entry" class="access-panel private-entry" hidden>
+          <h2>个人私密书库</h2><p>私密材料在你的电脑上处理和加密保存。</p>
+          <div id="private-owner-entry" hidden><a class="book-primary" href="http://127.0.0.1:8768/" target="_blank" rel="noopener noreferrer">进入本机私密书库</a><p>请先在这台电脑启动私密书库，再在本机页面输入密码解锁。</p></div>
+          <div id="private-login-entry"><a class="book-secondary" href="/signin-with-chatgpt?return_to=%2F%23private" target="_top">主人登录进入</a><p>此入口供书库主人使用。</p></div>
+        </div>
+        <form id="book-search-form" role="search" aria-label="查找公开书籍">
+          <label for="book-query">输入原句、星名或关键词</label>
+          <div class="book-search-row">
+            <input type="search" id="book-query" autocomplete="off" maxlength="160" placeholder="例如：紫微、天同、夫妻宫" aria-describedby="book-search-help" />
+            <button type="submit" class="book-primary">查找原文 <span aria-hidden="true">↗</span></button>
+          </div>
+          <div class="book-search-tools">
+            <div class="book-examples" aria-label="试试这些词句">
+              <span>试试</span><button type="button" data-book-query="紫微">紫微</button><button type="button" data-book-query="天同">天同</button><button type="button" data-book-query="夫妻宫">夫妻宫</button>
+            </div>
+            <label class="book-filter-label" for="book-match-mode">匹配 <select id="book-match-mode"><option value="similar">包含近似文字</option><option value="exact">仅完整词句</option></select></label><label class="book-filter-label" for="book-filter">材料 <select id="book-filter"><option value="all">全部书籍与文章</option></select></label>
+          </div>
+          <p id="book-search-help">搜索书名与全文，简繁通查。完整命中优先，近似文字按相关度排列；相关度不代表原文已校对或含义相同。</p>
+        </form>
+        <div class="book-workspace">
+          <aside class="book-results-panel" aria-label="引文检索结果">
+            <div class="book-results-heading"><p id="book-search-status" role="status" aria-live="polite">正在载入材料…</p><button type="button" id="book-clear">浏览全文</button></div>
+            <div id="book-results"></div>
+            <div id="result-pagination" class="page-controls"></div>
+          </aside>
+          <article id="book-detail" class="book-detail" aria-label="原文与出处"><p class="book-loading">正在载入书库…</p></article>
+        </div>
+        <p class="book-coverage" id="book-coverage">机器识别可能存在错字、漏字或夹注顺序问题；没有搜到不代表原书没有。页码使用 PDF 页序，已核对选段单独标示。</p>
+        <noscript>全文检索和上传需要启用 JavaScript。</noscript>
+      </section>
+
+      <section id="cards" data-view="cards" hidden class="book-library cards-section" aria-labelledby="cards-title">
+        <div class="library-heading"><div><p class="eyebrow">技法整理</p><h2 id="cards-title">技法卡片库</h2></div><a class="book-secondary" href="#library">回到原文书库</a></div>
+        <p class="cards-access-note" id="cards-access-note">按主题查找卡片，再回到原书核对依据。</p>
+        <form id="cards-form" role="search" aria-label="查找技法卡片">
+          <label for="cards-query">查找标题、原文、条件或术语</label>
+          <div class="cards-query-row"><input id="cards-query" type="search" maxlength="160" placeholder="输入关键词，支持简体和繁体" /><button class="book-primary" type="submit">查找卡片</button><button id="cards-reset" class="book-secondary" type="button">清除筛选</button></div>
+          <div class="cards-filters">
+            <label>卡片级别<select id="cards-level"><option value="all">全部有权访问的级别</option><option value="public">公开</option><option value="special">特殊</option></select></label>
+            <label>出处书籍<select id="cards-book"><option value="all">全部书籍与文章</option></select></label>
+            <label>卡片主题<select id="cards-topic"><option value="all">全部主题</option></select></label>
+            <label id="cards-owner-filter" hidden>审核状态<select id="cards-state"><option value="all">全部状态</option><option value="approved">已确认</option><option value="draft">草稿</option><option value="stale">出处待复核</option></select></label>
+          </div>
+        </form>
+        <div class="cards-toolbar"><p id="cards-status" role="status" aria-live="polite">正在载入卡片…</p><div id="cards-counts" aria-label="当前筛选范围的卡片状态"></div></div>
+        <div id="cards-results" class="cards-results" aria-busy="false"></div><div id="cards-pagination" class="page-controls"></div>
+      </section>
+
+      <section id="rules" data-view="rules" hidden class="book-library rules-section" aria-labelledby="rules-title">
+        <div class="library-heading"><div><p class="eyebrow">从文字到条件</p><h2 id="rules-title">规则编辑与测试</h2></div><a class="book-secondary" href="#cards">从卡片库选择技法</a></div>
+        <p class="rule-help">用中文定义条件，再用案例逐项检查。这里只整理公开或特殊级材料；私密技法请在本机入口处理。</p>
+        <div class="rule-top-actions"><button type="button" id="rule-demo" class="book-secondary">体验虚构示例</button><span class="rule-help">本版由你填写和确认规则，无需付费 AI API。</span></div>
+        <p id="rule-status" role="status" aria-live="polite"></p><div id="rule-workbench"></div>
+      </section>
+
+      <section id="materials" data-view="materials" hidden class="book-library materials-section" aria-labelledby="materials-title">
+        <div class="library-heading"><h2 id="materials-title">添加书籍与文章</h2><span>核心管理人专用</span></div>
+        <div class="material-routes"><p><strong>从对话导入</strong><br />提供文件并注明“公开”或“特殊”。真实私密材料请直接在本机添加。</p><p><strong>直接上传</strong><br />支持 PDF、UTF-8 文字文件，也可以粘贴文章。扫描 PDF 会逐页识别。</p></div>
+        <div id="owner-login"><a class="book-secondary" href="/signin-with-chatgpt?return_to=%2F%23materials" target="_top">主人登录后管理材料</a></div>
+        <div id="owner-tools">
+          <form id="upload-form">
+            <div class="upload-fields"><label>级别<select id="upload-level" required><option value="public">公开 · 任何人可查看</option></select></label><label>材料名称<input id="upload-title" maxlength="160" required /></label></div>
+            <p id="upload-level-note">请选择资料级别。</p>
+            <div id="online-file-fields" hidden>
+              <label>文件<input id="upload-file" type="file" accept=".pdf,.txt,.md" /></label>
+              <label>或粘贴文章<textarea id="upload-article" rows="5" maxlength="1200000" placeholder="在这里粘贴已确定级别的文章"></textarea></label>
+              <label>扫描文字<select id="upload-script"><option value="mixed">简繁混排 / 不确定</option><option value="traditional">繁体为主</option><option value="simplified">简体为主</option></select></label>
+              <label>扫描书排版<select id="upload-layout"><option value="auto">逐页自动判断横排 / 竖排</option><option value="vertical">竖排（从右往左）</option><option value="horizontal">横排</option></select></label>
+              <label>PDF 识别方式<select id="upload-recognition"><option value="auto">优先文字层，缺失或异常时扫描识别</option><option value="scan">扫描图像识别（适合乱码文字层）</option></select></label><label>TXT / Markdown 编码<select id="upload-encoding"><option value="utf-8">UTF-8（默认）</option><option value="gb18030">GB18030 / GBK 简体</option><option value="big5">Big5 繁体</option><option value="utf-16le">UTF-16 LE</option><option value="utf-16be">UTF-16 BE</option></select></label><p class="book-quote-note">在当前设备识别：自动模式比较横竖排结果，低质量页面增强后重试。竖排按右列至左列、列内从上往下读取。原文件与识别结果分别保留，不自动转换简繁；混排字形、复杂夹注、表格和模糊字仍需校对。已保存页面不会被覆盖；再次导入同一文件会继续未完成的页面。</p>
+              <button class="book-primary" id="upload-start">保存并建立全文检索</button><button type="button" id="upload-stop" class="book-secondary" hidden>在本页完成后暂停</button>
+            </div>
+            <progress id="upload-progress" max="100" value="0" hidden></progress><p id="upload-status" role="status" aria-live="polite"></p>
+          </form>
+          <div id="my-uploads" class="manage-books"></div>
+          <div id="manage-books" class="manage-books"></div>
+        </div>
+      </section>
+
+      <section id="history" data-view="history" class="workspace-panel" hidden><p class="workspace-kicker">核心管理 · 版本留存</p><h1>历史记录</h1><p class="muted">保存技法的创建、修改、送审、退回与发布快照。修订通过审核后才更新线上版本。启用前的内容仅保留当前存档。</p></section><section id="lab" data-view="lab" hidden>
+      <section class="hero" id="demo" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span>RESEARCH PROTOTYPE · 01</span> 传统知识 × 可解释推演</p>
+          <h1 id="hero-title">让传统规则成为<br /><em>可检验的推演内核</em></h1>
+          <p class="hero-lead">
+            输入一个假设情境，观察规则如何构造世界状态，再由 AI 把结果整理成可追问、可反驳的情景说明。
+          </p>
+          <div class="hero-meta" aria-label="系统特性">
+            <div><span>01</span><p><strong>规则可追溯</strong><small>每条结论保留触发路径</small></p></div>
+            <div><span>02</span><p><strong>状态可更新</strong><small>用新事件修正情景</small></p></div>
+            <div><span>03</span><p><strong>AI 不越权</strong><small>只解释，不篡改规则</small></p></div>
+          </div>
+        </div>
+        <aside class="hero-orbit" aria-label="世界模型分层示意">
+          <div class="orbit-ring ring-a"></div>
+          <div class="orbit-ring ring-b"></div>
+          <div class="orbit-center">
+            <span>WORLD STATE</span>
+            <strong id="hero-state">待推演</strong>
+            <small>规则层唯一事实源</small>
+          </div>
+          <span class="orbit-label label-input">输入</span>
+          <span class="orbit-label label-rule">规则</span>
+          <span class="orbit-label label-ai">AI</span>
+          <span class="orbit-dot dot-a"></span>
+          <span class="orbit-dot dot-b"></span>
+        </aside>
+      </section>
+
+      <section class="lab-section" aria-labelledby="lab-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">INTERACTIVE SANDBOX</p>
+            <h2 id="lab-title">运行一次可解释推演</h2>
+          </div>
+          <p>当前使用 <strong>演示规则集 v0.1</strong>。它用于验证系统架构，不是完整排盘算法，也不是科学预测。</p>
+        </div>
+
+        <div class="lab-shell">
+          <aside class="input-panel">
+            <div class="panel-kicker"><span>INPUT</span><small>01 / 情境输入</small></div>
+            <div class="preset-row" aria-label="示例情境">
+              <button type="button" class="preset active" data-preset="study">学习选择</button>
+              <button type="button" class="preset" data-preset="project">项目变化</button>
+              <button type="button" class="preset" data-preset="team">团队协作</button>
+            </div>
+
+            <form id="simulation-form">
+              <div class="field-row">
+                <label>
+                  <span>示例日期</span>
+                  <input id="birth-date" type="date" value="2000-08-18" required />
+                </label>
+                <label>
+                  <span>示例时刻</span>
+                  <input id="birth-time" type="time" value="09:30" required />
+                </label>
+              </div>
+              <label>
+                <span>地点（仅作情境标签）</span>
+                <input id="location" type="text" value="墨尔本" maxlength="30" required />
+              </label>
+              <div class="field-row">
+                <label>
+                  <span>关注主题</span>
+                  <select id="focus">
+                    <option value="study">学习与研究</option>
+                    <option value="project">项目与创造</option>
+                    <option value="team">团队与协作</option>
+                  </select>
+                </label>
+                <label>
+                  <span>推演窗口</span>
+                  <select id="horizon">
+                    <option value="30">未来 30 天</option>
+                    <option value="90" selected>未来 90 天</option>
+                    <option value="180">未来 180 天</option>
+                  </select>
+                </label>
+              </div>
+              <label>
+                <span>已知事件 / 当前问题</span>
+                <textarea id="event" rows="4" maxlength="160">正在两种学习路径之间选择，希望兼顾基础能力与一个可展示的 AI 项目。</textarea>
+                <small class="char-count"><b id="char-count">37</b> / 160</small>
+              </label>
+              <button class="run-button" id="run-button" type="submit">
+                <span>运行规则推演</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 7l5 5-5 5" /></svg>
+              </button>
+              <p class="form-note">请勿输入身份证件、联系方式等敏感信息。</p>
+            </form>
+          </aside>
+
+          <div class="result-panel" aria-live="polite" aria-busy="false">
+            <div class="result-topbar">
+              <div>
+                <span class="status-dot"></span>
+                <span id="run-status">示例推演已就绪</span>
+              </div>
+              <button type="button" class="copy-button" id="copy-json">复制 JSON</button>
+            </div>
+
+            <div class="layer-tabs" role="tablist" aria-label="结果层级">
+              <button id="rule-tab" class="layer-tab active" type="button" role="tab" aria-selected="true" data-layer="rule">
+                <span>RULE LAYER</span>规则层
+              </button>
+              <button id="ai-tab" class="layer-tab" type="button" role="tab" aria-selected="false" data-layer="ai">
+                <span>AI LAYER</span>AI 说明层
+              </button>
+            </div>
+
+            <div class="layer-view active" id="rule-layer" role="tabpanel" aria-labelledby="rule-tab">
+              <div class="state-strip">
+                <div><small>命宫演示索引</small><strong id="palace-index">巳 · 06</strong></div>
+                <div><small>局势节律</small><strong id="rhythm-state">先收敛，后展开</strong></div>
+                <div><small>规则覆盖</small><strong id="rule-coverage">4 / 6</strong></div>
+              </div>
+
+              <div class="result-grid">
+                <article class="trace-card">
+                  <div class="card-heading"><h3>规则推演轨迹</h3><span>TRACE</span></div>
+                  <ol class="rule-trace" id="rule-trace"></ol>
+                </article>
+
+                <article class="world-card">
+                  <div class="card-heading"><h3>世界状态</h3><span id="state-version">STATE · T0</span></div>
+                  <div class="state-bars" id="state-bars"></div>
+                  <div class="state-change"><span>最新变化</span><p id="state-change">等待输入事件</p></div>
+                </article>
+              </div>
+            </div>
+
+            <div class="layer-view" id="ai-layer" role="tabpanel" aria-labelledby="ai-tab" hidden>
+              <div class="ai-boundary">
+                <span>AI 权限边界</span>
+                <p>此处使用预设说明模板演示，未接入 AI API。未来接入后，说明须依据规则输出，不能新增星曜事实或修改规则分数。</p>
+              </div>
+              <div class="scenario-grid" id="scenario-grid"></div>
+              <article class="next-observation">
+                <span>下一条值得观察的真实信号</span>
+                <p id="next-observation"></p>
+              </article>
+            </div>
+
+            <div class="disclaimer">
+              <span>!</span>
+              <p><strong>认识边界</strong>：本页将紫微斗数作为文化规则系统来建模。输出是情景假设，不代表因果关系、事实判断或经验证的科学预测；不应用于医疗、法律、财务等高风险决定。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="architecture-section" id="architecture" aria-labelledby="architecture-title">
+        <div class="section-heading architecture-heading">
+          <div>
+            <p class="eyebrow">SYSTEM BLUEPRINT</p>
+            <h2 id="architecture-title">从输入到可追问输出</h2>
+          </div>
+          <p>规则层提供确定、可复算的状态；AI 层围绕状态生成多种可能情景，并把不确定性留在输出里。</p>
+        </div>
+
+        <div class="architecture-flow" id="architecture-flow">
+          <article class="flow-node" data-step="input">
+            <div class="node-index">01</div>
+            <span>INPUT</span><h3>情境输入</h3>
+            <p>时间、地点标签、主题与已知事件</p>
+          </article>
+          <i class="flow-arrow" aria-hidden="true">→</i>
+          <article class="flow-node rule-node" data-step="rules">
+            <div class="node-index">02</div>
+            <span>DETERMINISTIC</span><h3>规则引擎</h3>
+            <p>索引映射、条件触发、冲突合并</p>
+          </article>
+          <i class="flow-arrow" aria-hidden="true">→</i>
+          <article class="flow-node state-node" data-step="state">
+            <div class="node-index">03</div>
+            <span>MEMORY</span><h3>世界状态</h3>
+            <p>机会、阻力、资源、节律与证据链</p>
+          </article>
+          <i class="flow-arrow" aria-hidden="true">→</i>
+          <article class="flow-node" data-step="simulate">
+            <div class="node-index">04</div>
+            <span>BRANCHING</span><h3>情景推演</h3>
+            <p>基准、上行情景与风险情景</p>
+          </article>
+          <i class="flow-arrow" aria-hidden="true">→</i>
+          <article class="flow-node output-node" data-step="output">
+            <div class="node-index">05</div>
+            <span>STRUCTURED</span><h3>结构化输出</h3>
+            <p>摘要、依据、反例与下一观察点</p>
+          </article>
+        </div>
+
+        <div class="architecture-notes">
+          <article>
+            <span class="note-rule">规则层</span>
+            <h3>稳定、显式、可复算</h3>
+            <p>同一输入得到同一状态；每条变化都记录 rule_id、输入字段与增量。</p>
+          </article>
+          <article>
+            <span class="note-ai">AI 层</span>
+            <h3>主动、开放、受约束</h3>
+            <p>可以追问信息、比较情景、建议观察，但输出必须引用已有状态与证据。</p>
+          </article>
+          <article>
+            <span class="note-next">下一版接口</span>
+            <h3>真实排盘模块可插拔</h3>
+            <p>将演示索引替换为经核对的历法与星曜模块，保持状态协议和解释边界不变。</p>
+          </article>
+        </div>
+      </section>
+      </section>
+    </main>
+
+    <footer>
+      <p>观星台 <span>原文有据 · 规则可核</span></p>
+      <p>文化计算研究原型 · 非科学预测工具</p>
+    </footer>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="./app.js"></script>
+    <script src="./vendor/opencc.js"></script>
+    <script src="./library-search.js"></script>
+    <script src="./vendor/tesseract/tesseract.min.js"></script>
+    <script type="module" src="./library.js"></script>
+    <script type="module" src="./cosmos.js"></script>
+  </body>
+</html>

@@ -1,0 +1,7 @@
+Earth reference globe texture: NASA Earth Observatory, Blue Marble Next Generation, January 2004.
+Reto Stöckli / NASA Earth Observatory. Global land surface and ocean composite, not live imagery.
+https://science.nasa.gov/earth/earth-observatory/blue-marble-next-generation/base-map/
+Original JPEG: https://assets.science.nasa.gov/content/dam/science/esd/eo/images/bmng/bmng-base/january/world.200401.3x5400x2700.jpg
+The browser downsamples the texture for GPU limits and maps it onto a spherical Earth.
+Illumination now uses the solar ephemeris at the displayed simulation time.
+See LIVING-WORLD-SOURCES.txt for historical night lights, cloud texture attribution and simulation limits.

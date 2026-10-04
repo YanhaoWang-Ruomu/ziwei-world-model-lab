@@ -1,0 +1,161 @@
+Living world visual sources
+
+Earth daytime: NASA Visible Earth / Blue Marble.
+See EARTH-SOURCE.txt for the original asset and attribution.
+
+Earth at Night 2016, NASA Earth Observatory / Black Marble.
+https://science.nasa.gov/earth/earth-observatory/earth-at-night/maps/
+https://assets.science.nasa.gov/content/dam/science/esd/eo/images/imagerecords/144000/144898/BlackMarble_2016_01deg.jpg
+This is a processed historical composite, not a live view of city lights.
+
+Earth clouds: Solar System Scope, Earth Clouds (2K).
+https://www.solarsystemscope.com/textures/
+https://www.solarsystemscope.com/textures/download/2k_earth_clouds.jpg
+Creative Commons Attribution 4.0 International (CC BY 4.0).
+https://creativecommons.org/licenses/by/4.0/
+Rendered on a rotating globe, with simulated drift and shading.
+The cloud texture is not live meteorological data.
+
+Guilin-inspired riverside terrain (guilin-terrain.png), transparent cloud bank,
+and four-frame crane atlas:
+Original generated illustrations, produced for this project with built-in image generation.
+The terrain's transparent skyline is shared by the landscape, star and cloud renderers.
+Runtime relighting, subtle water highlights, foliage breeze, fog, bird flights
+and fireflies are artistic simulations. Houses, cliffs and riverbanks stay fixed.
+The Guilin-inspired valley is not a surveyed geographic landscape.
+
+Sun, Moon, sidereal rotation and seasonal solar declination:
+Astronomy Engine 2.1.19, MIT license.
+https://github.com/cosinekitty/astronomy
+Both scenic skies use a reference observer at 28 degrees north, 112 degrees east,
+with a displayed clock in UTC+8. The bottom-cropped Earth is a scenic composition,
+not a spacecraft observation. Celestial discs are enlarged for legibility.
+Accelerated time is the default; the current-time mode does not acquire user location.
+
+Immersive river observatory update:
+observatory-foreground.png: original generated RGBA foreground, bamboo, limestone
+terrace, bronze armillary instrument and reeds; generated for this project.
+Guilin terrain, foreground, fog and celestial background use separate parallax
+layers. This is a 2.5D scenic composition, not freely navigable surveyed terrain.
+The shared Milky Way background uses NASA SVS Deep Star Maps 2020 (see below).
+Star positions retain the HYG catalogue; exposure is an artistic enhancement,
+not a calibrated photometric sky-brightness model.
+Water reflections reuse the rendered stars. The selected-star light response,
+ripples and near-camera dust are interactive artistic effects.
+
+Epic mountain-and-river journey (September 2026):
+dawn-cloudsea.png, river-gorge.png and celestial-terrain.png are original
+AI-generated photographic-style artwork made with the built-in image tool.
+They are not frames extracted from a film, real-location photographs or live footage.
+The first two images use camera pans, zooms and dissolves; the third uses a
+shared transparent terrain mask under an interactive computed celestial sky.
+The former armillary foreground is no longer rendered. Cliff and tree detail
+is kept stable; simulated light and gentle atmosphere provide motion.
+User-provided visual direction: the scale and changing scenery of
+《【超燃4K】这山，这河，这中国！用山河打开〈山河图〉》
+https://www.bilibili.com/video/BV1vr4y1k7XM/
+The reference player was unavailable during development; no video frames or
+audio were extracted, copied or bundled. No affiliation or endorsement is implied.
+
+Living three-scene update (September 2026):
+The first two plates now add independently advected cloud planes, animated crane
+sprites, bounded water refraction following the painted river and changing light.
+The final gorge shares a sampled ridge contour across mountain haze and star
+extinction. These are browser-rendered artistic animations, not recorded footage.
+Ambient wind, water, birds, insects and chimes are procedurally synthesized with
+Web Audio. No audio recording is sampled or downloaded, and no paid API is used.
+Sound starts only after an explicit click, has independent volume/mute controls,
+and fades out when the viewer leaves the scene or hides the page.
+https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Best_practices
+
+Ridge integration refinement:
+The alpha-derived crest and a separately smoothed horizon drive the same air
+layer above and below the distant peaks. Near ridges retain their photographic
+detail; the far horizon loses contrast and stellar visibility through simulated
+air haze. Fog is an artistic depth cue, not a meteorological measurement.
+
+Celestial lighting refinement (September 2026):
+moon-lro-2025.jpg: NASA Scientific Visualization Studio, CGI Moon Kit, Ernie Wright.
+https://svs.gsfc.nasa.gov/4720/
+https://svs.gsfc.nasa.gov/vis/a000000/a004700/a004720/lroc_color_2k.jpg
+2025 LROC color mosaic, 2048 x 1024, centred on lunar longitude zero.
+Runtime spherical projection includes calculated lunar phase, north-pole
+orientation and geocentric optical libration from Astronomy Engine. Surface
+relief is represented by albedo detail, not a terrain displacement simulation.
+
+milkyway-gaia.jpg: NASA/Goddard Space Flight Center Scientific Visualization Studio,
+Deep Star Maps 2020, Ernie Wright. J2000 celestial plate carree projection.
+https://svs.gsfc.nasa.gov/4851/
+https://svs.gsfc.nasa.gov/vis/a000000/a004800/a004851/milkyway_2020_4k.exr
+4096 x 2048 linear EXR converted to standard sRGB JPEG for browser delivery.
+This background is rendered from star catalogues, not a camera photograph.
+It omits the bright Hipparcos and Tycho stars; selectable foreground stars
+remain sourced from HYG. RA zero is at the centre and increases to the left.
+Both scenic skies transform the map with the same reference frame as the stars.
+NASA imagery use guidance: https://www.nasa.gov/nasa-brand-center/images-and-media/
+
+Solar limb darkening, fine surface granulation, optical bloom, faint rays,
+lunar earthshine and Earth's atmospheric edge are aesthetic simulations.
+Bodies remain enlarged for legibility. Exposure is composed for simultaneous
+readability of stars, terrain and Earth, not a single calibrated camera exposure.
+Stellar scintillation is used in the mountain scene and suppressed in the Earth
+composition. Reduced-motion and pause settings also stop the stellar shimmer.
+No affiliation with or endorsement by NASA is implied.
+
+Solar and lunar ground illumination share the ephemeris directions. The globe
+uses geocentric Moon direction and its illuminated fraction, with artistic night
+exposure, ocean glints and directional cloud-shadow offsets. Landscape relief
+is inferred only for subtle image relighting; it is not reconstructed 3D terrain.
+Solar surface and coronal streamers are procedural artwork, not current solar
+observations. Water highlights and cloud tint use the same projected light sources.
+
+Celestial encounters (2026-09 update):
+Fireballs use a fragmented luminous head and a slowly fading atmospheric train.
+Meteor-shower tracks share a radiant. Comets have a curved dust tail and a
+straighter blue ion tail. These are amplified process illustrations, not
+current observations or forecasts. Meteor/fireball/shower effects belong to
+the atmospheric sky; the Earth composition is an artistic composite view.
+The lunar halo is projected from a 22-degree cone around the Moon, with a
+reddish inner edge and diffuse outer edge (ice-crystal refraction).
+https://www.weather.gov/lub/events-2008-20080122_halo
+https://science.nasa.gov/learn/basics-of-space-flight/chapter1-3/
+
+Planet parade uses ephemeris coordinates at 2022-06-24 21:00 UTC, corresponding
+to 2022-06-25 05:00 UTC+8 at the scene's reference location. Connecting guides
+show apparent positions, not planets lined up in three-dimensional space.
+https://science.nasa.gov/solar-system/skywatching/planetary-alignments-and-planet-parades/
+
+Solar and lunar eclipses are explicit 38-second process demonstrations, with
+enlarged disks. Their occultation geometry is illustrative, not a date/location
+eclipse solver. The Earth shadow path is illustrative. The rest of the sky uses
+the displayed ephemeris; return-to-now exits the demonstration.
+https://science.nasa.gov/eclipses/geometry/
+https://science.nasa.gov/moon/eclipses/
+
+Audio attempts playback on entry when enabled. Audible playback remains subject
+to browser permission and user-activation policies; blocked playback presents a
+single-tap start control. Muting is remembered, and background scenes are quiet.
+https://developer.chrome.com/blog/autoplay
+https://webkit.org/blog/6784/new-video-policies-for-ios/
+
+Gilded silk mountain-and-river update (2026-09-24):
+shanhe-silk.png is original AI-generated artwork made for this project using
+built-in image generation and approved by the user. Blue-green mineral pigments,
+antique silk, fine gold-leaf ridges and violet cloud veils inform the composition.
+The live observation landscape uses this painting. A procedural
+silhouette controls stellar occlusion, haze and solar/lunar lighting; a shared
+painted-river path confines refraction and reflections. These are artistic effects.
+Painted sky flecks, clouds and gold ornament are decorative, not a star catalogue.
+The selectable stars, planets, Sun and Moon retain their calculated positions.
+The decorative night wash fades with daylight; the computational sky remains active.
+
+Approved three-chapter Western / Eastern fusion update (2026-09-24):
+cloudsea-hermetic.png, river-hermetic.png, night-hermetic.png and
+crane-silk-right-atlas.png are original AI-generated artwork approved by the user.
+The independent cloud, river and night paintings combine gold-leaf silk and
+Chinese mineral-pigment landscapes with classical vaults, ruins and celestial
+ornament. Flowing cloud veils, water refraction and star shimmer are artistic
+animation. The cranes fly left to right using four painted poses. Painted moons,
+star patterns and occasional light trails do not claim astronomical accuracy.
+Enter live observation for the existing calculated positions, lunar phases and
+astronomical demonstrations. Those computations and their sources are unchanged.

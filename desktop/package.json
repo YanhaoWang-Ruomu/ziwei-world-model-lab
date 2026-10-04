@@ -1,0 +1,45 @@
+{
+  "name": "guanxingtai-desktop",
+  "version": "1.0.1",
+  "description": "观星台 Windows 桌面版",
+  "author": "观星台",
+  "private": true,
+  "main": "app/main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test tests/policy.test.cjs",
+    "test:desktop": "electron tests/smoke.cjs",
+    "dist": "node scripts/build.cjs"
+  },
+  "devDependencies": {
+    "electron": "44.4.4",
+    "electron-builder": "26.15.3"
+  },
+  "build": {
+    "appId": "site.guanxingtai.desktop",
+    "productName": "观星台",
+    "executableName": "GuanXingTai",
+    "asar": true,
+    "electronDist": "node_modules/electron/dist",
+    "directories": { "output": "release", "buildResources": "build" },
+    "files": ["app/**/*", "package.json"],
+    "extraResources": [{ "from": "build/icon.ico", "to": "app-icon.ico" }],
+    "win": {
+      "icon": "build/icon.ico",
+      "target": [{ "target": "nsis", "arch": ["x64"] }],
+      "artifactName": "GuanXingTai-Setup-${version}-${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "观星台",
+      "deleteAppDataOnUninstall": false,
+      "runAfterFinish": true,
+      "installerLanguages": ["zh_CN", "en_US"]
+    }
+  }
+}

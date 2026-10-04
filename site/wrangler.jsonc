@@ -1,0 +1,9 @@
+{
+  "name": "ziwei-library-local-preview",
+  "main": "server/dev-worker.js",
+  "compatibility_date": "2026-09-01",
+  "assets": { "directory": "dist/client", "binding": "ASSETS", "run_worker_first": true },
+  "d1_databases": [{ "binding": "DB", "database_name": "ziwei-preview", "database_id": "local-preview-only", "migrations_dir": "drizzle" }],
+  "r2_buckets": [{ "binding": "BUCKET", "bucket_name": "ziwei-preview" }],
+  "vars": { "OWNER_EMAIL": "owner@local.test" }
+}

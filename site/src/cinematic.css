@@ -1,0 +1,208 @@
+/* Quiet chrome frames the astronomical canvas; the landscape is an original image. */
+#sky-landscape,.sky-atmosphere,#earth-globe,.sky-menu-toggle,.sky-edge-dock,.sky-whisper,.sky-settings-panel,.sky-intro-controls,.sky-library-link{display:none}
+body.immersive-sky{background:#030912}
+.immersive-sky main#top{margin:0;min-height:100svh}.immersive-sky #model{padding:0;background:none}
+.immersive-sky .cosmic-observatory{height:100svh;min-height:580px;border:0;border-radius:0;background:#030912;isolation:isolate}
+.immersive-sky #sky-landscape{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;z-index:0;filter:brightness(.8) saturate(.85)}
+.immersive-sky #starfield{z-index:1;touch-action:none;height:100%;outline-offset:-5px}
+.immersive-sky #earth-globe{display:block;position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.immersive-sky [data-landscape=mountains] #earth-globe{display:none}.immersive-sky [data-landscape=earth] #sky-landscape{display:none}
+.immersive-sky .sky-atmosphere{display:block;position:absolute;inset:0;z-index:2;pointer-events:none;opacity:var(--day-glow,0);background:radial-gradient(ellipse at 50% 67%,#ecc99455,transparent 65%);mix-blend-mode:screen}
+.immersive-sky [data-landscape=earth] .sky-atmosphere{display:none}
+.immersive-sky .observatory-vignette{z-index:3;background:linear-gradient(0deg,#010712c9,transparent 25%,transparent 76%,#01071377);pointer-events:none}.immersive-sky .observatory-topline{display:none}
+.immersive-sky .workspace-sidebar{position:absolute;z-index:12;top:0;left:0;width:auto;height:90px;padding:25px 34px;background:transparent;border:0;display:flex;flex-direction:row;align-items:center;gap:25px;overflow:visible}
+.immersive-sky .workspace-brand{margin:0;font-size:23px;flex-shrink:0}.immersive-sky .workspace-brand small{display:none}.immersive-sky .workspace-star{font-size:25px;color:#ccb68d}.immersive-sky .sidebar-caption,.immersive-sky .sidebar-account{display:none}
+.immersive-sky .sky-menu-toggle{display:flex;gap:16px;align-items:center;background:transparent;border:0;color:#acb9ca;padding:10px 0;font-size:14px;cursor:pointer}
+.immersive-sky .workspace-nav{position:absolute;left:32px;top:78px;display:none;width:255px;max-height:calc(100svh - 120px);overflow:auto;background:#07101eef;border:1px solid #a7b8cf33;border-radius:12px;padding:12px;backdrop-filter:blur(20px);box-shadow:0 20px 80px #0008}
+.immersive-sky.sky-menu-open .workspace-nav{display:flex;flex-direction:column}.immersive-sky .workspace-nav a{font-size:14px;padding:11px 14px}.immersive-sky .workspace-nav a span{display:none}
+.immersive-sky .site-header{position:absolute;z-index:11;right:0;top:0;margin:0;height:90px;width:auto;background:transparent;border:0;padding:0 35px}.immersive-sky .workspace-breadcrumb{display:none}.immersive-sky #viewer-status{font-size:12px;background:#09132166;border-color:#bbcee52b}.immersive-sky .header-actions{gap:19px}
+.immersive-sky .cosmic-heading{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);margin:0;z-index:8}.immersive-sky .cosmic-heading>div:first-child{display:none}
+.immersive-sky .cosmic-tabs{background:#08101bd1;backdrop-filter:blur(18px);border:1px solid #d1be8b45;border-radius:40px;padding:5px;box-shadow:0 8px 45px #0004;gap:2px;flex-wrap:nowrap}
+.immersive-sky .cosmic-tabs button{border-radius:25px;padding:12px 21px;font-size:14px;white-space:nowrap}.immersive-sky .cosmic-tabs button[aria-pressed=true]{background:#baa16c21;border-color:#cbb68e55;color:#ecd7ae}
+.immersive-sky .sky-library-link{display:flex;align-items:center;justify-content:center;color:#b6c3d5;font-size:14px;text-decoration:none;padding:9px 19px;white-space:nowrap}
+.immersive-sky .sky-stage{position:absolute;inset:0;min-height:0;padding:0;pointer-events:none;display:block;z-index:7}
+.immersive-sky .sky-explore{position:absolute;left:34px;top:50%;transform:translateY(-50%);padding:0;background:transparent;border:0;width:auto;pointer-events:auto;min-height:0}
+.sky-explore>summary{list-style:none;cursor:pointer;color:#c6cfdc;font-size:14px;padding:14px 15px;border:1px solid #b5c9e027;background:#0a142366;backdrop-filter:blur(10px);border-radius:9px;display:flex;align-items:center;gap:9px}.sky-explore>summary::-webkit-details-marker{display:none}.sky-explore>summary>span{font:23px Georgia,serif;line-height:16px;color:#e0cda4}
+.immersive-sky .sky-explore[open]{width:290px;background:#091322eb;border:1px solid #b4c6da35;border-radius:13px;backdrop-filter:blur(22px);box-shadow:0 20px 80px #0006}.sky-explore[open]>summary{border:0;border-bottom:1px solid #b3c4db22;border-radius:12px 12px 0 0;background:none}
+.sky-search-body{padding:14px 20px 18px;max-height:calc(100svh - 235px);overflow:auto}.sky-search-body>.panel-overline,.sky-search-body>h2,.sky-search-body>p:first-of-type{display:none}.sky-search-body>label{font-size:14px}.sky-search-body .sky-note{font-size:13px}
+.immersive-sky .star-sheet{position:absolute;right:34px;top:50%;transform:translateY(-50%);width:310px;max-height:calc(100svh - 215px);overflow:auto;pointer-events:auto;padding:26px 24px;background:#091221eb;border:1px solid #9db3cf3b;border-radius:13px;backdrop-filter:blur(24px);box-shadow:0 20px 80px #0007}
+.immersive-sky .star-inspector{min-height:0;padding:0;border:0;background:none}.star-inspector{scrollbar-width:thin;scrollbar-color:#526782 #0b1320}.immersive-sky .star-inspector h2{font-size:30px;margin-top:9px}.immersive-sky .star-inspector .star-culture{font-size:16px;line-height:1.8}.immersive-sky .star-inspector .star-limit{font-size:13px;line-height:1.65}.immersive-sky .star-inspector dl{font-size:13px}.star-inspector a{font-size:14px}
+.sky-sheet-close{position:absolute;right:13px;top:12px;padding:2px 7px;border:0;background:transparent;color:#adbdcf;font-size:25px;cursor:pointer;line-height:28px;width:36px;height:36px}
+.star-tooltip{position:absolute;z-index:5;pointer-events:none;background:#08111ade;border:1px solid #b2c8e344;border-radius:6px;padding:9px 13px;color:#efe2c2;max-width:220px;font-size:14px;box-shadow:0 5px 30px #0006}.star-tooltip small{display:block;color:#a7b8cc;font-size:12px;margin-top:3px}
+.immersive-sky .sky-edge-dock{display:flex;position:absolute;z-index:8;right:34px;top:50%;transform:translateY(-50%)}.sky-edge-dock>button{display:flex;align-items:center;gap:9px;background:#0a142366;backdrop-filter:blur(10px);border:1px solid #b5c9e027;border-radius:9px;padding:14px 15px;color:#c6cfdc;font-size:14px;cursor:pointer}.sky-edge-dock>button span{color:#dcc797;font-size:18px;line-height:16px}
+.immersive-sky .sky-settings-panel{display:block;position:absolute;right:34px;top:50%;transform:translateY(-50%);z-index:10;width:330px;max-height:calc(100svh - 150px);overflow:auto;padding:27px 24px;background:#091321f2;backdrop-filter:blur(22px);border:1px solid #a5bcd63b;border-radius:13px;box-shadow:0 20px 80px #0008}
+.sky-settings-panel h2{font:400 23px/1.5 'Songti SC',SimSun,serif;color:#e9d8b6;margin:13px 0 24px}.sky-settings-panel>label{display:block;font-size:14px;color:#b9c8d9;margin:17px 0 8px}.sky-settings-panel select,.sky-account-preferences select{display:block;width:100%;margin-top:9px;background:#101e30;color:#d9e2ed;border:1px solid #677e9a66;border-radius:6px;padding:10px;font:inherit;min-height:42px}
+.sky-pref-check{display:flex!important;align-items:center;gap:10px;font-size:14px}.sky-pref-check input{accent-color:#c7ae7c;width:17px;height:17px;flex-shrink:0}.sky-setting-hint{font-size:13px;line-height:1.7;color:#8299b4;margin:8px 0 17px}.sky-replay{border:1px solid #bca57a66;background:#baa77511;color:#e4c997;border-radius:6px;padding:11px 15px;font-size:14px;cursor:pointer;width:100%;margin-top:12px}
+.sky-data-notes{border-top:1px solid #9badc52a;padding-top:16px;font-size:13px;color:#93a6bd;line-height:1.7}.sky-data-notes summary{cursor:pointer;font-size:14px;color:#bcc8d7}.sky-data-notes a{display:block;color:#b6c8e1;margin:8px 0}
+.sky-account-preferences{max-width:620px;border-top:1px solid #92a4b93d;margin:35px 0;padding:25px 0}.sky-account-preferences h2{margin:14px 0 22px}.sky-account-preferences>label{margin:20px 0;display:block}.sky-account-preferences select{max-width:250px}
+.immersive-sky .sky-whisper{display:block;position:absolute;left:34px;bottom:37px;z-index:6;pointer-events:none}.sky-whisper>span{font:15px/1.5 'Songti SC',SimSun,serif;letter-spacing:.32em;color:#d7c8a9}.sky-whisper p{font-size:12px;color:#98aac0;letter-spacing:.05em;margin:7px 0 0}
+.immersive-sky .sky-tools{z-index:8;right:34px;bottom:32px;gap:7px;background:none;border:0}.sky-tools #sky-motion-note{font-size:12px;color:#a5b4c8;margin-right:7px}.immersive-sky .sky-tools button{border:1px solid #b6c9e029;border-radius:7px;background:#0b162378;color:#c5d0df;font-size:14px;min-height:38px;min-width:38px}
+.immersive-sky .sky-intro-controls{display:block;position:absolute;right:35px;bottom:35px;z-index:20;width:124px}.sky-intro-controls button{display:flex;justify-content:space-between;align-items:center;gap:16px;width:100%;border:0;background:transparent;font-size:13px;letter-spacing:.1em;color:#bac7d9;padding:8px 0;cursor:pointer}.sky-tour-track{height:1px;background:#b4c8e130;margin-top:7px}.sky-tour-track i{display:block;height:1px;width:0;background:#dac491;box-shadow:0 0 8px #dfd2a8}
+.immersive-sky .cosmic-method,.immersive-sky footer{display:none}
+.immersive-sky .workspace-sidebar,.immersive-sky .site-header,.immersive-sky .cosmic-heading,.immersive-sky .sky-stage,.immersive-sky .sky-tools,.immersive-sky .sky-edge-dock,.immersive-sky .sky-whisper{transition:opacity 1.8s ease,filter 1.8s ease;opacity:1}
+.immersive-sky.sky-pending .workspace-sidebar,.immersive-sky.sky-opening .workspace-sidebar,.immersive-sky.sky-pending .site-header,.immersive-sky.sky-opening .site-header,.immersive-sky.sky-pending .cosmic-heading,.immersive-sky.sky-opening .cosmic-heading,.immersive-sky.sky-pending .sky-stage,.immersive-sky.sky-opening .sky-stage,.immersive-sky.sky-pending .sky-tools,.immersive-sky.sky-opening .sky-tools,.immersive-sky.sky-pending .sky-edge-dock,.immersive-sky.sky-opening .sky-edge-dock,.immersive-sky.sky-pending .sky-whisper,.immersive-sky.sky-opening .sky-whisper{opacity:0;filter:blur(4px);pointer-events:none}
+.sky-opening .star-tooltip,.sky-pending .star-tooltip{display:none}.immersive-sky [hidden]{display:none!important}
+.immersive-sky.sky-opening .workspace-sidebar,.immersive-sky.sky-opening .site-header,.immersive-sky.sky-opening .cosmic-heading,.immersive-sky.sky-opening .sky-stage,.immersive-sky.sky-opening .sky-tools,.immersive-sky.sky-opening .sky-edge-dock,.immersive-sky.sky-opening .sky-whisper{transition:none}
+.immersive-sky .star-inspector{width:100%;min-width:0;overflow-wrap:anywhere}
+.immersive-sky:has(#star-sheet:not([hidden])) .sky-edge-dock{visibility:hidden}
+.immersive-sky .star-inspector a{font-size:14px}
+.southern-star-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:18px 0}
+.southern-star-nav button{padding:9px 6px;font-size:14px;min-width:0}
+.southern-star-nav button[aria-pressed=true]{background:#d3bd8424;border-color:#d3bd8488;color:#f1dca9}
+.immersive-sky .sky-explore:focus-within{position:absolute}
+.immersive-sky .sky-search-body .sky-note{font-size:13px!important}
+@media(max-width:1100px){.immersive-sky .sky-whisper{bottom:102px}.immersive-sky .sky-tools{bottom:100px}.immersive-sky #sky-motion-note{display:none}}
+@media(max-width:640px){
+ .immersive-sky .cosmic-observatory{min-height:560px}.immersive-sky .workspace-sidebar{padding:16px 18px;height:72px;gap:16px}.immersive-sky .workspace-brand{font-size:20px}.immersive-sky .workspace-star{font-size:21px}.immersive-sky .sky-menu-toggle{font-size:13px;gap:7px}.immersive-sky .site-header{height:72px;padding:0 18px}.immersive-sky .header-actions{gap:12px}.immersive-sky .header-actions .privacy-pill,.immersive-sky .header-actions>a[href='#account']:not(#header-owner-login){display:none}.immersive-sky .header-actions .text-link{font-size:14px}.immersive-sky .workspace-nav{left:17px;top:65px}
+ .immersive-sky .sky-explore{left:18px;top:39%}.immersive-sky .sky-edge-dock{right:18px;top:39%}.sky-edge-dock>button,.sky-explore>summary{padding:12px;font-size:13px}.sky-explore>summary>span{font-size:21px}
+ .immersive-sky .sky-explore[open]{width:min(310px,calc(100vw - 36px));top:86px;transform:none;z-index:4}.sky-search-body{max-height:calc(100svh - 260px)}
+ .immersive-sky .star-sheet,.immersive-sky .sky-settings-panel{left:18px;right:18px;width:auto;top:auto;bottom:162px;transform:none;max-height:calc(100svh - 245px);padding:24px 21px}.immersive-sky .sky-settings-panel{bottom:92px;max-height:calc(100svh - 180px)}
+ .immersive-sky .sky-whisper{left:20px;bottom:112px}.sky-whisper>span{font-size:13px;letter-spacing:.18em}.sky-whisper p{font-size:12px;max-width:160px;line-height:1.6}.immersive-sky .sky-tools{right:18px;bottom:105px;gap:5px}.immersive-sky .sky-tools button{min-width:34px;padding:8px}.immersive-sky .cosmic-heading{bottom:23px;width:calc(100% - 32px)}.immersive-sky .cosmic-tabs{width:100%}.immersive-sky .cosmic-tabs button,.immersive-sky .sky-library-link{font-size:14px;padding:11px 8px;flex:1}.immersive-sky .sky-intro-controls{right:22px;bottom:28px}
+}
+@media(prefers-reduced-motion:reduce){.immersive-sky *{transition:none!important;animation:none!important}}
+@media(max-width:640px){.immersive-sky .sky-menu-toggle,.sky-edge-dock>button,.sky-explore>summary{font-size:14px}}
+
+/* The sky, terrain and atmosphere share the same simulated observation time. */
+#living-landscape,#living-weather{display:none;pointer-events:none}
+.immersive-sky #living-landscape,.immersive-sky #living-weather{display:block;position:absolute;inset:0;width:100%;height:100%}
+.immersive-sky #living-landscape{z-index:0;opacity:0;transition:opacity 1.4s ease}
+.immersive-sky #living-landscape[data-ready=true]{opacity:1}
+.immersive-sky #living-weather{z-index:2}
+.immersive-sky [data-landscape=earth] #living-landscape,.immersive-sky [data-landscape=earth] #living-weather{display:none}
+.immersive-sky .sky-atmosphere{display:none}
+.world-controls{border-block:1px solid #8195b32b;padding:18px 0;margin-top:20px}
+.world-controls>label{font-size:14px;color:#b9c8d9}
+.world-clock-readout{display:flex;flex-direction:column;gap:6px;margin:19px 0 15px}
+.world-clock-readout strong{font:400 24px/1.4 'Songti SC',SimSun,serif;color:#e8d2a8;letter-spacing:.1em}
+.world-clock-readout small{font-size:12px;color:#8ea4bf;font-variant-numeric:tabular-nums}
+#world-hour{width:100%;accent-color:#c5a575;margin:8px 0;cursor:pointer}
+.world-hour-marks{display:flex;justify-content:space-between;font-size:11px;color:#8d9fb7}
+.world-seasons{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.world-seasons button{padding:9px 3px;min-height:42px;background:#b2c5e009;color:#b8c8dc;border:1px solid #9bb4d22b;border-radius:6px;font-size:13px;cursor:pointer}
+.world-seasons button[aria-pressed=true]{background:#bfa16a22;border-color:#bfa16a88;color:#e6d0a7}
+#sky-render-note:empty{display:none}
+
+#scenic-depth,.mountain-journey{display:none}
+#landscape-journey,.journey-caption,.journey-chapters{display:none}
+.immersive-sky [data-landscape=mountains] #landscape-journey{display:block;position:absolute;inset:0;z-index:4;overflow:clip;cursor:grab;touch-action:none;outline-offset:-7px}
+.landscape-journey.dragging{cursor:grabbing}
+.landscape-journey img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;will-change:transform,opacity;pointer-events:none}
+#journey-motion{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:0}
+#journey-motion[data-ready=true]{opacity:1}
+#journey-creatures{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.sky-opening #landscape-journey,.sky-opening .landscape-journey img{transition:none}
+.landscape-journey:after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,#02070dbb,transparent 38%,transparent 80%,#03091088)}
+.immersive-sky .journey-caption{display:block;position:absolute;z-index:6;left:7.5%;bottom:25%;width:max-content;max-width:calc(100% - 48px);isolation:isolate;pointer-events:none;color:#fff0c9;text-shadow:0 2px 6px #020710}
+.journey-caption:before{content:'';position:absolute;inset:-38px -65px;z-index:-1;background:radial-gradient(ellipse at 38% 50%,#06111ac9,#06111a80 48%,transparent 74%);filter:blur(16px);pointer-events:none}
+.journey-caption>span{font:12px/1.6 system-ui,sans-serif;letter-spacing:.35em;color:#eed7a8}
+.journey-caption h2{font:400 clamp(27px,3.5vw,63px)/1.4 'Songti SC',SimSun,serif;letter-spacing:.17em;margin:18px 0 12px}
+.journey-caption p{font:14px/1.9 'Songti SC',SimSun,serif;letter-spacing:.19em;color:#e7dfcb}
+.journey-caption button{pointer-events:auto;margin-top:22px;padding:10px 0;background:none;border:0;border-bottom:1px solid #d9cbaa66;color:#ede0c5;font-size:14px;letter-spacing:.15em;cursor:pointer}
+.journey-caption button span{margin-left:36px}
+.immersive-sky [data-landscape=mountains] .journey-chapters{display:flex;gap:24px;width:max-content;max-width:100%;margin:0 0 16px;padding:3px 13px;background:#081320bc;border:1px solid #dbc58a42;backdrop-filter:blur(10px);pointer-events:auto}
+.journey-chapters button{border:0;border-bottom:1px solid transparent;background:none;color:#9caeb9;cursor:pointer;font:15px/1.8 'Songti SC',SimSun,serif;letter-spacing:.14em;padding:7px 0}
+.journey-chapters button small{font:10px/1 system-ui,sans-serif;letter-spacing:.06em;margin-right:6px;opacity:.66}
+.journey-chapters button[aria-pressed=true]{border-bottom-color:#d5bd8a;color:#efe0bb}
+.journey-chapters button:disabled{opacity:.35;cursor:default}
+.immersive-sky [data-journey=landscape] .sky-explore:not([open]),.immersive-sky [data-journey=landscape] #sky-whisper .mountain-journey,.immersive-sky [data-journey=landscape] #sky-whisper>span,.immersive-sky [data-journey=landscape] .star-tooltip,.immersive-sky [data-journey=landscape] .sky-event-status{display:none}
+.immersive-sky [data-journey=landscape] .world-controls,.immersive-sky [data-journey=landscape] #sky-settings-panel>label:has([data-sky-pref=speed]),.immersive-sky [data-journey=landscape] #sky-settings-panel>label:has([data-sky-pref=guides]){display:none!important}
+.journey-drag-hint{display:none}
+.immersive-sky [data-journey=landscape] .journey-drag-hint{display:block;color:#c4cacc;font-size:13px;letter-spacing:.13em;line-height:1.8}
+.sky-opening .journey-caption{bottom:16%}
+.immersive-sky [data-journey=landscape] .sky-whisper{bottom:38px}
+@media(max-width:640px){.immersive-sky .journey-caption{left:24px;right:24px;bottom:32%}.journey-caption h2{font-size:29px;letter-spacing:.12em}.journey-caption p{font-size:13px;letter-spacing:.08em}.journey-chapters{gap:19px!important}.sky-opening .journey-caption{bottom:19%}.journey-chapters button{font-size:14px}}
+.immersive-sky [data-landscape=mountains] #scenic-depth{display:block;position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none}
+.immersive-sky [data-landscape=mountains] .observatory-vignette{background:linear-gradient(0deg,#010710aa,transparent 22%,transparent 80%,#01071355),radial-gradient(ellipse at 50% 45%,transparent 45%,#01081166)}
+.immersive-sky [data-landscape=mountains] .mountain-journey{display:grid;grid-template-columns:auto 105px auto;align-items:center;gap:8px 12px;pointer-events:auto}
+.mountain-journey p{grid-column:1/-1;color:#a9c0c5!important;font-size:13px!important;letter-spacing:.07em}
+.mountain-journey label{font-size:13px;color:#c7d5d3}
+.mountain-journey input{width:105px;accent-color:#d3be8a;cursor:ew-resize}
+.mountain-journey button{border:0;border-left:1px solid #b2c7c43b;background:transparent;color:#d4c39b;padding:5px 0 5px 12px;font-size:13px;cursor:pointer}
+.immersive-sky [data-landscape=mountains] .earth-hint{display:none}
+@media(max-width:640px){.immersive-sky [data-landscape=mountains] .mountain-journey{grid-template-columns:auto 70px;gap:5px 9px}.mountain-journey input{width:70px}.mountain-journey button{grid-column:1/-1;border:0;padding:3px 0;text-align:left}.mountain-journey p{max-width:240px!important}.immersive-sky [data-landscape=mountains] .sky-whisper{bottom:108px}}
+
+#scene-sound-dock{display:none}
+.immersive-sky #scene-sound-dock{display:block;position:absolute;right:34px;bottom:89px;z-index:21}
+#scene-sound-toggle{display:flex;gap:9px;align-items:center;border:1px solid #d2c19728;border-radius:24px;padding:9px 14px;background:#07101b80;backdrop-filter:blur(10px);color:#c6c7be;font-size:14px;line-height:1.4;cursor:pointer}
+#scene-sound-toggle[aria-pressed=true]{color:#e6d4af;border-color:#cbb58165}
+.sound-waves{display:flex;gap:3px;align-items:center;width:18px;height:16px}
+.sound-waves i{width:2px;height:3px;background:currentColor;transition:height .25s ease}
+[data-state=playing] .sound-waves i{height:calc(3px + var(--sound-level,0)*11px)}
+[data-state=playing] .sound-waves i:nth-child(2){height:calc(5px + var(--sound-level,0)*13px)}
+[data-state=playing] .sound-waves i:nth-child(4){height:calc(4px + var(--sound-level,0)*8px)}
+.sound-settings{border-top:1px solid #8195b32b;padding-top:18px;margin-top:20px}
+.sound-settings label{display:flex;justify-content:space-between;font-size:14px;color:#b9c8d9}
+.sound-settings output{color:#d9c7a1;font-variant-numeric:tabular-nums}
+#scene-sound-volume{width:100%;accent-color:#c7ae7c;cursor:pointer;margin-top:14px}
+.sky-opening #scene-sound-dock{bottom:94px}
+@media(max-width:1100px){.immersive-sky #scene-sound-dock{bottom:153px}}
+@media(max-width:640px){.immersive-sky #scene-sound-dock{right:18px;bottom:153px}.sky-opening #scene-sound-dock{bottom:86px}#scene-sound-toggle{padding:9px 11px;font-size:14px}}
+
+/* Compact touch controls: the scene remains clear until the user opens the tray. */
+#sky-mobile-launcher,#sky-mobile-panel,#sky-search-close{display:none}
+.immersive-sky .cosmic-observatory[data-mode=sky] #starfield{touch-action:none}
+@media(max-width:1024px),(max-height:600px),(hover:none) and (pointer:coarse){
+ .immersive-sky .workspace-sidebar{top:env(safe-area-inset-top,0px);left:env(safe-area-inset-left,0px)}
+ .immersive-sky .site-header{top:env(safe-area-inset-top,0px);right:env(safe-area-inset-right,0px)}
+ .immersive-sky .cosmic-observatory{height:100svh;height:100dvh;min-height:0}
+ .immersive-sky .cosmic-heading{bottom:calc(12px + env(safe-area-inset-bottom,0px));width:min(410px,calc(100% - 24px))}
+ .immersive-sky .cosmic-tabs{width:100%;padding:3px;gap:0}
+ .immersive-sky .cosmic-tabs button,.immersive-sky .sky-library-link{flex:1;min-width:0;min-height:44px;padding:9px 5px;font-size:13px}
+ .immersive-sky #sky-mobile-launcher{display:flex;align-items:center;gap:8px;position:absolute;right:max(14px,env(safe-area-inset-right));bottom:calc(78px + env(safe-area-inset-bottom,0px));z-index:9;min-height:44px;padding:8px 14px;border:1px solid #b4c6d340;border-radius:25px;background:#081320c9;backdrop-filter:blur(16px);color:#e4d5b6;font-size:13px;cursor:pointer}
+ #sky-mobile-launcher>span{font-size:19px;color:#cbb884}
+ .immersive-sky .sky-explore:not([open]){display:none}
+ .immersive-sky #sky-mobile-panel{display:flex;flex-direction:column;gap:12px;position:absolute;z-index:22;right:12px;bottom:calc(78px + env(safe-area-inset-bottom,0px));width:min(390px,calc(100% - 24px));max-height:calc(100dvh - 158px - env(safe-area-inset-bottom,0px) - env(safe-area-inset-top,0px));overflow:auto;overscroll-behavior:contain;padding:16px 18px 20px;background:#081423f5;border:1px solid #93adc24d;border-radius:20px;box-shadow:0 12px 65px #0009;backdrop-filter:blur(22px)}
+ .sky-mobile-heading{display:flex;align-items:center;justify-content:space-between;gap:10px}
+ .sky-mobile-heading h2{font:400 20px/1.5 'Songti SC',SimSun,serif;color:#e8d6b1;margin:0}
+ #sky-mobile-close{border:0;background:none;color:#bdcbd9;font-size:26px;width:44px;height:44px;cursor:pointer}
+ #sky-mobile-search{display:flex;align-items:center;justify-content:center;gap:10px;min-height:46px;border:1px solid #9cb2c338;background:#182536;border-radius:9px;color:#dce4e8;font-size:14px;cursor:pointer}
+ #sky-mobile-search>span{font:26px/1 Georgia,serif;color:#dbca9e}
+ .immersive-sky #sky-mobile-panel #sky-edge-dock,.immersive-sky #sky-mobile-panel #sky-whisper,.immersive-sky #sky-mobile-panel .sky-tools,.immersive-sky #sky-mobile-panel #scene-sound-dock{position:static;inset:auto;transform:none;width:100%;margin:0;padding:0;pointer-events:auto;opacity:1;filter:none}
+ .immersive-sky #sky-mobile-panel #sky-edge-dock{display:block}
+ #sky-mobile-panel #sky-settings-toggle{width:100%;justify-content:center;min-height:46px;background:#111f31;font-size:14px}
+ #sky-mobile-panel .sky-whisper>span,#sky-mobile-panel .earth-hint,#sky-mobile-panel .journey-drag-hint,#sky-mobile-panel .mountain-journey>p{display:none!important}
+ .immersive-sky #sky-mobile-panel .journey-chapters{justify-content:space-between;gap:8px!important;margin:3px 0 15px;width:100%}
+ #sky-mobile-panel .journey-chapters button{flex:1;min-height:44px;font-size:14px}
+ .immersive-sky #sky-mobile-panel .mountain-journey{grid-template-columns:auto minmax(70px,1fr) auto;gap:12px}
+ #sky-mobile-panel .mountain-journey input{width:100%;min-height:44px}
+ #sky-mobile-panel .mountain-journey button{grid-column:auto;min-height:44px;padding:4px 6px;font-size:13px}
+ .immersive-sky #sky-mobile-panel .sky-tools{display:flex;justify-content:space-between;gap:8px}
+ #sky-mobile-panel .sky-tools button{flex:1;min-height:44px;font-size:15px}
+ #sky-mobile-panel #sky-motion-note{display:none}
+ #sky-mobile-panel #scene-sound-toggle{width:100%;justify-content:center;min-height:44px;font-size:14px;border-radius:9px}
+ .immersive-sky .sky-explore[open],.immersive-sky .sky-explore[open]:focus-within,.immersive-sky .star-sheet,.immersive-sky .sky-settings-panel{position:absolute;left:auto;right:12px;top:auto;bottom:calc(78px + env(safe-area-inset-bottom,0px));transform:none;width:min(390px,calc(100% - 24px));max-height:calc(100dvh - 160px - env(safe-area-inset-bottom,0px) - env(safe-area-inset-top,0px));border-radius:18px;background:#081423f5;overscroll-behavior:contain}
+ .immersive-sky .sky-explore[open]{overflow:auto;z-index:23}
+ .immersive-sky .sky-explore[open]>summary{padding:15px 22px;min-height:50px;pointer-events:none}
+ .immersive-sky #sky-search-close{display:block}
+ .immersive-sky .sky-search-body{max-height:none;padding:14px 22px 22px}
+ .immersive-sky .sky-sheet-close{width:44px;height:44px;top:6px;right:7px;line-height:32px}
+ .immersive-sky :is(.sky-settings-panel,.sky-search-body) :is(select,input[type=search]){font-size:16px;min-height:44px}
+ .immersive-sky .star-sheet{padding:23px}
+ .immersive-sky:has(#star-sheet:not([hidden])) #sky-mobile-launcher,.immersive-sky:has(#sky-settings-panel:not([hidden])) #sky-mobile-launcher,.immersive-sky:has(#sky-search-panel[open]) #sky-mobile-launcher{visibility:hidden}
+ .immersive-sky .star-inspector h2{font-size:26px}
+ .immersive-sky .journey-caption{bottom:29%;left:24px;right:24px}
+ .immersive-sky.sky-opening #sky-mobile-launcher,.immersive-sky.sky-pending #sky-mobile-launcher{opacity:0;pointer-events:none}
+ .immersive-sky .sky-intro-controls{bottom:calc(25px + env(safe-area-inset-bottom,0px))}
+}
+@media(max-height:600px) and (orientation:landscape){
+ .immersive-sky .journey-caption{left:24px;bottom:96px}.journey-caption h2{font-size:28px;margin:6px 0}.journey-caption p{margin:5px 0}.journey-caption button{margin-top:10px;min-height:40px}
+ .immersive-sky .workspace-sidebar,.immersive-sky .site-header{height:60px;padding-top:10px;padding-bottom:10px}
+ .immersive-sky #sky-mobile-panel,.immersive-sky .sky-settings-panel,.immersive-sky .star-sheet,.immersive-sky .sky-explore[open]{top:65px;bottom:12px;max-height:calc(100dvh - 77px);width:350px;max-width:calc(100% - 24px)}
+ .immersive-sky .cosmic-heading{left:14px;transform:none;width:min(350px,calc(100% - 135px))}
+ .immersive-sky #sky-mobile-launcher{bottom:12px}
+}
+/* The ephemeris remains distinct from rare artistic encounters. */
+.moon-phase-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:12px}
+.moon-phase-steps button,.sky-event-demo button{min-height:40px;font-size:13px;color:#ddc38c;background:#c6a66a12;border:1px solid #c3a66a40;border-radius:5px;padding:6px}
+.sky-phenomena-settings{margin-top:16px;border-top:1px solid #7c94ae35;padding-top:12px}
+.sky-event-demo{display:flex;gap:7px;align-items:center}.sky-event-demo select{flex:1;min-width:0;margin:0!important}.sky-event-demo button{white-space:nowrap}
+#world-lunar-phase{color:#d1bd93}
+.sky-event-status{position:absolute;left:50%;top:94px;transform:translateX(-50%);width:max-content;max-width:calc(100% - 32px);z-index:9;pointer-events:none;padding:6px 13px;border:1px solid #c5b08226;border-radius:20px;background:#06101c66;backdrop-filter:blur(8px);color:#d5c8a7;letter-spacing:.08em;font-size:12px;text-align:center;white-space:nowrap}
+@media(max-width:700px){.sky-event-status{top:65px;font-size:11px;max-width:90vw;white-space:normal}.moon-phase-steps button{font-size:14px}}
+#scene-audio-entry{display:none}
+.immersive-sky #scene-audio-entry:not([hidden]){position:absolute;z-index:30;display:flex;align-items:center;gap:2px;left:50%;bottom:calc(94px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:max-content;max-width:calc(100% - 28px);padding:4px;border:1px solid #c5ad7955;border-radius:30px;background:#08111ee8;box-shadow:0 8px 40px #0006;backdrop-filter:blur(16px)}
+#scene-audio-entry button{min-height:44px;padding:8px 17px;border:0;background:transparent;color:#e8d4a4;border-radius:24px;font-size:14px;white-space:nowrap}
+#scene-audio-entry #scene-audio-mute{color:#9caabc;font-size:12px;border-left:1px solid #b2c3d025;border-radius:0;padding-inline:12px}
+#scene-audio-entry button:focus-visible{outline:2px solid #e8d4a4;outline-offset:-3px}
+.sky-event-return{width:100%;margin-top:8px;color:#b4c4d5;background:transparent;border:0;font-size:12px;min-height:36px}
+@media(max-height:500px){.immersive-sky #scene-audio-entry:not([hidden]){bottom:70px}}

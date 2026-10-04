@@ -1,0 +1,32 @@
+.tech-workbench{display:contents}
+body.tech-workbench-active .tech-workbench{display:grid;grid-template-columns:minmax(0,1fr) 340px;height:calc(100dvh - 48px - env(safe-area-inset-bottom,0px));gap:0;background:#08121f}
+body.tech-workbench-active #cosmic-observatory{height:100%;min-width:0}
+body.tech-workbench-active #cosmic-rules{min-width:0;height:100%;overflow:auto;padding:18px;border-radius:0;border-left:1px solid #bda27340;background:linear-gradient(160deg,#152438,#09131f 70%);color:#d7dfeb;scrollbar-width:thin}
+#cosmic-rules .tech-workbench-panel{margin:0;padding:0;border:0;background:none;border-radius:0}
+#cosmic-rules .tech-workbench-panel h2{color:#e1c58d;font-size:24px;letter-spacing:2px;margin:18px 0 10px}
+#cosmic-rules .tech-workbench-panel .muted{color:#a3b4c8;font-size:13px;line-height:1.8}
+#cosmic-rules .tech-scan-controls{grid-template-columns:1fr 1fr;gap:14px;margin:24px 0 18px}
+#cosmic-rules .tech-scan-controls label:nth-child(-n+2){grid-column:1/-1}
+#cosmic-rules .tech-scan-controls label{font-size:13px;color:#b4c5d8}
+#cosmic-rules .tech-scan-controls input,#cosmic-rules .tech-scan-controls select{padding:10px 9px;border:1px solid #7f91a750;background:#0b1726;color:#e1e7ef;border-radius:6px;font-family:inherit;min-height:42px}
+#cosmic-rules button{min-height:40px;border:1px solid #a28c644d;color:#dec798;background:#182637;border-radius:6px;padding:8px 14px;cursor:pointer}
+#cosmic-rules button.book-primary{background:#cab17e;color:#162030;border-color:#cab17e;width:100%;font-weight:600}
+#cosmic-rules button:disabled{opacity:.5;cursor:wait}
+#cosmic-rules .tech-chart-layouts{display:flex;gap:6px;background:#09111d;border:1px solid #71829b33;padding:4px;border-radius:9px}
+#cosmic-rules .tech-chart-layouts button{flex:1;border:0;background:transparent;color:#8b9bb0}
+#cosmic-rules .tech-chart-layouts button[aria-pressed=true]{color:#e7ce9e;background:#bfa57220}
+#cosmic-rules .tech-match-results .tech-card{background:radial-gradient(ellipse at top left,#3c52642e,transparent),#0b1728;border-color:#b9a0724d;padding:15px}
+#cosmic-rules .tech-match-results h3{font-size:16px;color:#d4c09b}
+#cosmic-rules .tech-match-state{color:#bce1d1;font-size:18px}
+#cosmic-rules .tech-space:not(.tech-workbench-panel){padding:12px;margin-top:28px;font-size:12px;color:#b0bfd0}
+#cosmic-rules [hidden]{display:none!important}
+@media(max-width:1000px){body.tech-workbench-active .tech-workbench{grid-template-columns:minmax(0,1fr) 290px}body.tech-workbench-active #cosmic-rules{padding:14px}}
+@media(max-width:760px){
+ body.chart-fit-active.tech-workbench-active{height:auto;overflow:auto}
+ body.chart-fit-active.tech-workbench-active main#top,body.chart-fit-active.tech-workbench-active #model{height:auto;overflow:visible}
+ body.tech-workbench-active .tech-workbench{display:flex;flex-direction:column;height:auto;padding-bottom:calc(64px + env(safe-area-inset-bottom,0px))}
+ body.chart-fit-active.tech-workbench-active #cosmic-observatory{height:72dvh;min-height:460px;flex:none}
+ body.tech-workbench-active #cosmic-rules{height:auto;overflow:visible;border-left:0;border-top:1px solid #bda27340;padding:20px 16px}
+ body.chart-fit-active .chart-mobile-bar{gap:3px}
+ body.chart-fit-active .chart-mobile-bar button{padding:5px 6px;font-size:12px}
+}

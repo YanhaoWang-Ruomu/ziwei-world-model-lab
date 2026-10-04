@@ -1,0 +1,7 @@
+allowBuilds:
+  esbuild: true
+  tesseract.js: false
+  workerd: true
+minimumReleaseAgeExclude:
+  - miniflare@5.20260918.0-alpha
+  - wrangler@4.135.0

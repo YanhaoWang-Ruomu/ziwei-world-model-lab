@@ -1,0 +1,92 @@
+/* The solar plane and the distant asterisms occupy separate visual layers. */
+.atlas-orrery .orrery-compass{transform-origin:300px 300px;stroke:#c7a96b4d;stroke-width:.65}
+.atlas-orrery .orrery-track{stroke:#8eaeb632;stroke-width:.6}
+.atlas-orrery .celestial-hit{fill:transparent;stroke:none}
+.atlas-orrery .belt-hit{fill:none;stroke:transparent;stroke-width:15}
+.atlas-orrery .orrery-label{font:10px 'Microsoft YaHei',sans-serif;fill:#cedbe7;stroke:#07111c;stroke-width:2.5px;paint-order:stroke;pointer-events:none;letter-spacing:.04em}
+.atlas-orrery .asterism-title{font:12px 'Songti SC',SimSun,serif;letter-spacing:.18em;fill:#ddc589;stroke:none}
+.atlas-orrery:not(.explorable) .orrery-label,.atlas-orrery:not(.explorable) .asterism-title{display:none}
+.atlas-orrery:not(.explorable) .orrery-sun{opacity:.45}
+.atlas-orrery .orrery-asterism>path{fill:none;stroke:#96bfc45c;stroke-width:.85}
+.atlas-orrery .stellar-point{fill:#d8e9f4}
+.atlas-orrery [data-asterism=南斗] .stellar-point{fill:#edcf96}
+.atlas-orrery .stellar-halo{fill:#9abfe6;opacity:.065}
+.atlas-orrery .orrery-fixed-star{animation:orrery-starlight 6.4s ease-in-out infinite alternate}
+.atlas-orrery [data-asterism=南斗] .orrery-fixed-star{animation-delay:-2.3s}
+.atlas-orrery .orrery-moon{offset-rotate:0deg;animation:orrery-revolution var(--orbit-duration) linear infinite;animation-delay:var(--orbit-delay)}
+.atlas-orrery .orrery-moon-track{fill:none;stroke:#b4c6cc50;stroke-width:.4}
+.atlas-orrery .orrery-light{transform-origin:0 0;animation:orrery-light-turn var(--orbit-duration) linear infinite;animation-delay:var(--orbit-delay)}
+.atlas-orrery .solar-corona{animation:solar-corona-breath 9s ease-in-out infinite alternate}
+.atlas-orrery .solar-prominences{animation:solar-turn 87s linear infinite;transform-origin:0 0}
+.atlas-orrery .solar-granules{animation:solar-turn 43s linear infinite;transform-origin:0 0}
+.atlas-orrery .orrery-dwarf .orrery-globe{opacity:.75}
+.orrery-expand{position:absolute;right:7px;top:7px;z-index:4;border:1px solid #a7936352;border-radius:50%;background:#0a1728c9;color:#d7c194;width:28px;height:28px;padding:0;font:20px/1 sans-serif;cursor:pointer;display:grid;place-items:center}
+.orrery-expand:hover{background:#30424c;color:#fff0c9;border-color:#bfa374}
+.wheel-orrery-expand{cursor:pointer}.wheel-orrery-expand circle{fill:#142333;stroke:#baa16b88;stroke-width:1}.wheel-orrery-expand text{fill:#d5c28f;font:22px sans-serif;text-anchor:middle}
+.orrery-settings-entry{width:100%;min-height:44px;margin:12px 0 0;padding:10px;border:1px solid #bca77670;border-radius:6px;background:#173043;color:#e4d2a8;font-size:15px;cursor:pointer}
+.orrery-explorer{padding:0;background:radial-gradient(ellipse at 42% 52%,#152e43,#06111e 60%,#030a12);color:#c4d1dc;border:1px solid #b9a17370;border-radius:16px;width:min(1180px,calc(100vw - 24px));height:min(890px,calc(100dvh - 24px));max-width:none;max-height:none;margin:auto;overflow:hidden;box-shadow:0 30px 120px #000b;color-scheme:dark}
+.orrery-explorer:not([open]){display:none}
+.orrery-explorer[open]{display:grid;grid-template-rows:auto minmax(0,1fr) auto}
+.orrery-explorer::backdrop{background:#01060be8;backdrop-filter:blur(7px)}
+.orrery-explorer-header{display:flex;align-items:center;gap:10px;padding:18px 22px;border-bottom:1px solid #ad986533}
+.orrery-explorer-header>div{margin-right:auto}
+.orrery-explorer h2{margin:4px 0 0;color:#e9d1a1;font:24px/1.4 'Songti SC',SimSun,serif;letter-spacing:.08em}
+.orrery-eyebrow{font:10px/1.6 Georgia,'Microsoft YaHei',serif;letter-spacing:.12em;color:#ad966c;margin:0}
+.orrery-explorer button{min-height:40px;padding:8px 12px;border:1px solid #9c91614f;border-radius:5px;background:#162536;color:#d9cba8;font-size:13px;cursor:pointer;white-space:nowrap}
+.orrery-explorer-body{display:grid;grid-template-columns:minmax(0,1fr) 250px;min-height:0}
+.orrery-scene{min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.orrery-scene .atlas-orrery{width:100%;height:100%;max-width:100%;overflow:visible;stroke:none;animation:none}
+.orrery-information{border-left:1px solid #aa976332;padding:28px 22px;min-width:0;overflow:auto;overscroll-behavior:contain;background:#06111bd9}
+.orrery-select-label{display:block;font-size:11px;color:#9baebc}
+.orrery-select-label select{display:block;width:100%;min-height:42px;font:14px 'Microsoft YaHei',sans-serif;color:#e2d5b6;background:#112534;border:1px solid #8b9a9857;border-radius:5px;padding:8px;margin:7px 0 30px}
+.orrery-body-card h3{font:30px/1.4 'Songti SC',SimSun,serif;color:#ead4a5;margin:8px 0}
+.orrery-modern{font-size:13px;line-height:1.7;color:#a5bfd0;margin:0 0 24px}
+.orrery-description{font-size:14px;line-height:1.9;color:#becbd8;margin:0 0 24px}
+.orrery-fact{font-size:12px;line-height:1.8;color:#c9bc99;border-top:1px solid #8b917832;padding-top:16px}
+.orrery-cultural-note{font-size:11px;line-height:1.8;color:#8ea5b8}
+.orrery-source{display:block;font-size:12px;color:#d4bd87;margin-top:26px;line-height:1.7}
+.orrery-credit{display:block;font-size:10px;color:#8ba2b8;margin-top:10px}
+body .orrery-explorer-footer,body.chart-fit-active .orrery-explorer-footer{display:flex;justify-content:space-between;gap:18px;padding:13px 22px;margin:0;border-top:1px solid #ad986533;color:#8197aa;font-size:11px;line-height:1.5}
+.orrery-explorer .explorable [data-celestial-id]{cursor:pointer;outline:none}
+.orrery-explorer .celestial-selected>.celestial-hit,.orrery-explorer [data-celestial-id]:focus-visible>.celestial-hit{stroke:#d7bf83;stroke-width:1;stroke-dasharray:2 3}
+.orrery-explorer .celestial-selected .orrery-label{fill:#ffe2a2}
+.orrery-explorer .celestial-selected .stellar-halo{opacity:.23}
+.orrery-explorer button:focus-visible,.orrery-expand:focus-visible,.wheel-orrery-expand:focus-visible{outline:2px solid #e2c38e;outline-offset:2px}
+.orrery-explorer[data-motion=paused] *,.page-hidden .orrery-explorer *,.orrery-exploring .chart-stage *{animation-play-state:paused!important}
+@keyframes orrery-light-turn{to{transform:rotate(360deg)}}
+@keyframes orrery-starlight{from{opacity:.62}to{opacity:1}}
+@keyframes solar-corona-breath{from{opacity:.6;transform:scale(.92)}to{opacity:1;transform:scale(1.1)}}
+@keyframes solar-turn{to{transform:rotate(360deg)}}
+@media(max-width:700px){
+ .orrery-expand{right:3px;top:3px;width:24px;height:24px;font-size:17px}
+ .orrery-explorer{width:calc(100vw - 8px);height:calc(100dvh - 12px);border-radius:9px}
+ .orrery-explorer-header{padding:10px 12px;gap:6px;flex-wrap:wrap}
+ .orrery-explorer-header>div{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px}
+ .orrery-explorer-header .orrery-eyebrow{display:none}
+ .orrery-explorer h2{font-size:19px;margin:0}
+ .orrery-explorer-header button{min-height:34px;font-size:12px;padding:5px 10px}
+ .orrery-explorer-header button:last-child{margin-left:auto}
+ .orrery-explorer-body{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto}
+ .orrery-information{border-left:0;border-top:1px solid #aa976333;padding:10px 13px;max-height:210px}
+ .orrery-select-label{font-size:0;float:right;width:44%;margin:0 0 7px 8px}
+ .orrery-select-label select{margin:0;font-size:13px;min-height:36px}
+ .orrery-body-card h3{font-size:22px;margin:1px 0}
+ .orrery-body-card>.orrery-eyebrow{font-size:9px}
+ .orrery-modern{font-size:11px;line-height:1.4;margin:0 0 9px}
+ .orrery-description{clear:both;font-size:12px;line-height:1.7;margin:0 0 6px}
+ .orrery-fact{font-size:11px;margin:4px 0;padding:0;border:0}
+ .orrery-cultural-note{font-size:10px;line-height:1.5;margin:5px 0}
+ .orrery-source,.orrery-credit{display:inline-block;font-size:10px;margin:5px 10px 0 0}
+ body .orrery-explorer-footer,body.chart-fit-active .orrery-explorer-footer{padding:7px 12px;font-size:9px;gap:3px;flex-direction:column}
+ .orrery-explorer-footer span:first-child{display:none}
+ .orrery-explorer .orrery-label{font-size:16px}
+ .orrery-explorer [data-celestial-id]:not(.celestial-selected)>.orrery-label{display:none}
+ .orrery-explorer .asterism-title{font-size:15px}
+}
+@media(max-height:500px) and (min-width:701px){
+ .orrery-explorer-header{padding:6px 14px}.orrery-explorer-header .orrery-eyebrow{display:none}.orrery-explorer h2{font-size:19px}
+ .orrery-information{padding:12px}.orrery-select-label select{margin-bottom:10px}.orrery-body-card h3{font-size:23px}.orrery-description,.orrery-modern{margin-bottom:10px}
+ body .orrery-explorer-footer,body.chart-fit-active .orrery-explorer-footer{padding:5px 12px;font-size:10px}
+}
+@media(prefers-reduced-motion:reduce){.atlas-orrery *{animation:none!important}}
+@media print{.orrery-explorer,.orrery-expand,.wheel-orrery-expand{display:none}}

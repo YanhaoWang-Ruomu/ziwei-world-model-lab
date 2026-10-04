@@ -1,0 +1,25 @@
+Southern Dipper star cards, verified 20 September 2026
+
+Astronomical identities and HIP numbers:
+https://github.com/Stellarium/stellarium-skycultures/blob/master/chinese/index.json
+Dipper I: HIP 92041, phi Sagittarii
+Dipper II: HIP 90496, lambda Sagittarii
+Dipper III: HIP 89341, mu Sagittarii
+Dipper IV: HIP 92855, sigma Sagittarii
+Dipper V: HIP 93864, tau Sagittarii
+Dipper VI: HIP 93506, zeta Sagittarii
+Modern names cross-reference:
+https://hk.space.museum/en/web/spm/resources/teachers-corner/constellations-and-myths/glossary-of-bright-stars.html
+All distances, magnitudes and coordinates remain from the existing HYG 4.1 catalogue.
+
+Cultural association scheme used by this edition:
+https://zh.wikipedia.org/w/index.php?title=南斗六星&oldid=94291277
+Tianfu (order 1) -> Dipper VI; Tianliang (2) -> Dipper V;
+Tianji (3) -> Dipper IV; Tiantong (4) -> Dipper I;
+Tianxiang (5) -> Dipper II; Qisha (6) -> Dipper III.
+This is the cited table's scheme, not a universally agreed physical identification.
+Astronomical numbering, Ziwei terminology and Daoist six-office deity ordering
+must not be silently substituted for one another. For example, the deity order in
+https://zh.wikisource.org/wiki/太上說南斗六司延壽度人妙經
+differs from the Ziwei order displayed here.
+No cultural association modifies astrometric coordinates or chart calculations.
