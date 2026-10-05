@@ -32,6 +32,7 @@ export async function logoutAccount(request,db){
   return cookie('',0);
 }
 export async function accountRoute({path,method,request,db}){
+  if(['/api/account/security','/api/account/password','/api/account/recovery-code','/api/account/recover'].includes(path))return securityRoute({path,method,request,db});
   if(!['/api/account/register','/api/account/login'].includes(path))return null;
   if(method!=='POST')throw new HttpError(405,'请从账户页面登录或注册。');
   const data=await jsonBody(request,4096),kind=path.endsWith('register')?'register':'login';
@@ -58,4 +59,45 @@ export async function accountRoute({path,method,request,db}){
     db.prepare('INSERT INTO personal_sessions(hash,user_id,expires_at) VALUES (?,?,?)').bind(await digest(token),account.id,expires),
   ]);
   return {cookie:cookie(token,data.remember?30*86400:null),account:{id:account.id,username:account.username}};
+}
+
+// Recovery secrets are shown once. Only their digest is retained by the service.
+async function securityRoute({path,method,request,db}){
+  const recovering=path==='/api/account/recover';
+  const token=cookieToken(request);
+  let account=!recovering&&token?await db.prepare('SELECT a.* FROM personal_accounts a JOIN personal_sessions s ON s.user_id=a.id WHERE s.hash=? AND s.expires_at>?').bind(await digest(token),now()).first():null;
+  if(!recovering&&!account)throw new HttpError(401,'请先登录需要管理的个人账户。');
+  if(path==='/api/account/security'&&method==='GET')return {result:{recoveryEnabled:Boolean(account.recovery_hash)}};
+  if(method!=='POST'||path==='/api/account/security')throw new HttpError(405,'不支持此账户操作。');
+  const data=await jsonBody(request,4096);
+  if(!data||typeof data!=='object'||Array.isArray(data))throw new HttpError(400,'请核对账户资料。');
+  const key=recovering?usernameKey(data.username).key:account.username_key;
+  await limit(request,db,'login',key);
+  let recoveryHash=null;
+  if(recovering){
+    account=await db.prepare('SELECT * FROM personal_accounts WHERE username_key=?').bind(key).first();
+    const raw=String(data.recoveryCode||'').replace(/^GXRC-/i,'').replace(/-/g,'').toLowerCase();
+    recoveryHash=await digest(/^[a-f0-9]{64}$/.test(raw)?raw:'invalid-recovery-code');
+    if(!account?.recovery_hash||!equals(recoveryHash,account.recovery_hash))throw new HttpError(403,'用户名或恢复码不正确。');
+  }else{
+    if(typeof data.currentPassword!=='string'||data.currentPassword.length>128)throw new HttpError(400,'请输入当前密码。');
+    if(!equals(await passwordHash(data.currentPassword,account.password_salt),account.password_hash))throw new HttpError(403,'当前密码不正确。');
+  }
+  if(path==='/api/account/recovery-code'){
+    const secret=randomToken();
+    const saved=await db.prepare('UPDATE personal_accounts SET recovery_hash=?,security_updated_at=? WHERE id=? AND password_hash=? RETURNING id').bind(await digest(secret),now(),account.id,account.password_hash).first();
+    if(!saved)throw new HttpError(409,'账户已变化，请重新登录后操作。');
+    return {result:{recoveryCode:'GXRC-'+secret.match(/.{8}/g).join('-')}};
+  }
+  if(typeof data.newPassword!=='string'||data.newPassword.length<12||data.newPassword.length>128)throw new HttpError(400,'新密码需要 12–128 位。');
+  const salt=randomToken(),hash=await passwordHash(data.newPassword,salt);
+  const predicate='id=? AND password_hash=?'+(recovering?' AND recovery_hash=?':'');
+  const args=[account.id,account.password_hash,...(recovering?[recoveryHash]:[])];
+  // Both changes share a transaction and the same expected credential revision.
+  const changes=await db.batch([
+    db.prepare(`DELETE FROM personal_sessions WHERE user_id=? AND EXISTS (SELECT 1 FROM personal_accounts WHERE ${predicate})`).bind(account.id,...args),
+    db.prepare(`UPDATE personal_accounts SET password_salt=?,password_hash=?,recovery_hash=NULL,security_updated_at=? WHERE ${predicate} RETURNING id`).bind(salt,hash,now(),...args),
+  ]);
+  if(!changes[1].results.length)throw new HttpError(409,'账户已变化，本次未重设；请重新操作。');
+  return {cookie:cookie('',0),result:{reset:true}};
 }

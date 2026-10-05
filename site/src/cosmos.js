@@ -279,7 +279,7 @@ const cycleControls=initCycleControls({getResult:()=>result,onChange(next){
   selected=null;focusedChartStar=null;symbol='';flightSource=null;palaceDialog.close();
   drawWheel();renderPalace();
 }});
-document.addEventListener('ziwei:technique-period',async e=>{let ok=false;try{if(result)ok=await cycleControls.selectPeriod(e.detail.date,e.detail.unit);}finally{e.detail.onComplete?.(ok);}});
+document.addEventListener('ziwei:technique-period',async e=>{let ok=false;try{if(result)ok=await cycleControls.selectPeriod(e.detail.date,e.detail.unit,e.detail.time);}finally{e.detail.onComplete?.(ok);}});
 const chartMobile=initChartMobile({onReset:resetChartSelection,onDetails:()=>palaceDialog.open(true)});
 async function selectChartDecade(index){
   if(await cycleControls.selectDecade(index)){

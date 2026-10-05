@@ -1,9 +1,9 @@
-import {ORRERY_STARS,NORTH_HIDDEN_STARS} from './orrery-data.mjs';
+import {ORRERY_STARS,NORTH_HIDDEN_STARS,WENCHANG_CULTURAL_STARS} from './orrery-data.mjs';
 // Use only associations already documented in the observatory's public catalogue.
 const associations=new Map([...ORRERY_STARS,...NORTH_HIDDEN_STARS].filter(s=>s.symbol).map(s=>[s.symbol,s.id]));
 associations.set('太阳','sun');associations.set('太阴','moon');
 export function starCelestialIds(name){
-  return name==='文昌'?ORRERY_STARS.filter(s=>s.group==='文昌').map(s=>s.id):[associations.get(name)].filter(Boolean);
+  return name==='文昌'?[...ORRERY_STARS.filter(s=>s.group==='文昌'),...WENCHANG_CULTURAL_STARS].map(s=>s.id):[associations.get(name)].filter(Boolean);
 }
 export function palaceCelestialIds(palace){
   return [...new Set([...(palace?.majorStars||[]),...(palace?.minorStars||[])].flatMap(s=>starCelestialIds(s.name)))];

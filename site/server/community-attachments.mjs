@@ -26,11 +26,12 @@ export async function attachViews(db,kind,rows,convert){
     for(const file of files){if(!byTarget.has(file.target_id))byTarget.set(file.target_id,[]);byTarget.get(file.target_id).push(attachmentView(file));}}
   return rows.map(row=>({...convert(row),format:row.format||'plain',attachments:byTarget.get(row.id)||[]}));
 }
-export async function attachmentConstraint(db,viewer,ids){
+export async function attachmentConstraint(db,viewer,ids,existing=null){
   if(!ids.length)return {sql:'1=1',args:[]};
-  const sql=`SELECT COUNT(*) FROM community_attachments WHERE user_id=? AND target_kind IS NULL AND created_at>? AND id IN (${ids.map(()=>'?').join(',')})`;
-  const args=[viewer.id,now()-86400,...ids];
-  const rows=(await db.prepare(`SELECT file_size FROM community_attachments WHERE user_id=? AND target_kind IS NULL AND created_at>? AND id IN (${ids.map(()=>'?').join(',')})`).bind(...args).all()).results;
+  const where=`user_id=? AND ((target_kind IS NULL AND created_at>?)${existing?' OR (target_kind=? AND target_id=?)':''}) AND id IN (${ids.map(()=>'?').join(',')})`;
+  const sql=`SELECT COUNT(*) FROM community_attachments WHERE ${where}`;
+  const args=[viewer.id,now()-86400,...(existing?[existing.kind,existing.id]:[]),...ids];
+  const rows=(await db.prepare(`SELECT file_size FROM community_attachments WHERE ${where}`).bind(...args).all()).results;
   if(rows.length!==ids.length)fail(409,'附件已使用、已过期或不属于当前账户，请重新选择。');
   if(rows.reduce((s,r)=>s+r.file_size,0)>totalLimit)fail(413,'附件合计不能超过 30 MB。');
   return {sql:`(${sql})=?`,args:[...args,ids.length]};

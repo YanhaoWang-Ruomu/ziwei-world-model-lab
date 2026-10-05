@@ -98,6 +98,7 @@ async function route(request, env) {
   const technique=await techniqueRoute(context);if(technique!==null)return json(technique);
   const storage=await storageRoute(context);if(storage!==null)return json(storage);
   const account=await accountRoute(context);if(account!==null){
+    if(account.result){const response=json(account.result);if(account.cookie)response.headers.append('Set-Cookie',account.cookie);return response;}
     const response=json({ok:true,account:account.account});response.headers.append('Set-Cookie',account.cookie);
     response.headers.append('Set-Cookie',await logoutSpecial(request,db));
     if(viewer.session)await db.prepare('DELETE FROM key_sessions WHERE hash=?').bind(viewer.session).run();
@@ -284,7 +285,8 @@ async function serveObject(env, key, request, fileName) {
 export default { async fetch(request, env, ctx) {
   try {
     const response=await route(request,env),path=new URL(request.url).pathname;
-    if(response.ok&&path!=='/api/techniques/match'&&!/^\/api\/world\/runs\/[a-f0-9-]{36}\/replay$/.test(path)&&!['GET','HEAD'].includes(request.method)&&/^\/api\/(world|community|books|cases|drafts|submissions|core-members|account-levels|techniques|account\/register)(?:\/|$)/.test(path)){
+    const savedChange=/^\/api\/(world|community|books|cases|drafts|submissions|core-members|account-levels|techniques|account\/(register|password|recovery-code|recover))(?:\/|$)/.test(path)||/^\/api\/storage\/restore\/[a-f0-9-]{36}\/commit$/.test(path);
+    if(response.ok&&savedChange&&path!=='/api/techniques/match'&&!/^\/api\/world\/runs\/[a-f0-9-]{36}\/replay$/.test(path)&&!['GET','HEAD'].includes(request.method)){
       // A delayed backup must never turn a committed save into a false failure.
       try{await markStored(env.DB);const backup=createBackup(env);if(ctx?.waitUntil)ctx.waitUntil(backup);else await backup;}catch{}
     }

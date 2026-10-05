@@ -1,3 +1,4 @@
+import {initBackupRestore} from './storage-restore.mjs';
 export function initStorage({api,el,btn}){
   let viewer={},generation=0;
   const account=document.querySelector('#account'),panel=el('section','storage-panel');
@@ -8,6 +9,7 @@ export function initStorage({api,el,btn}){
   });
   actions.append(btn('检查保存状态',()=>refresh()),backup);panel.append(status,counts,actions,el('p','storage-note','账户、命例、书籍文章、校订稿、卡片、规则与审核记录保存在当前保存位置。原文件和页图独立保存；退出登录、刷新和网站更新不会主动清除这些资料。密码只保存校验值。'));account.append(panel);
   const notices=[document.querySelector('#materials .library-heading'),document.querySelector('#library .library-heading')].filter(Boolean).map(host=>{const n=el('p','storage-location');host.after(n);return n;});
+  const recovery=initBackupRestore({api,el,btn,host:panel,onRestored:()=>refresh()});
   const names={personal_accounts:'注册账户',chart_cases:'命例',books:'书籍 / 文章',pages:'已保存页文',page_revisions:'校订历史',technique_cards:'技法卡片',card_rules:'计算规则',card_submissions:'审核记录',core_members:'核心授权',grants:'材料授权',workspace_drafts:'编辑草稿'};
   async function refresh(){
     const ticket=++generation;status.textContent='正在检查…';
@@ -25,7 +27,7 @@ export function initStorage({api,el,btn}){
       document.querySelectorAll('[data-save-location]').forEach(n=>n.textContent=place);
     }catch(e){if(ticket!==generation)return;status.textContent='暂时无法读取保存位置。这不代表资料为空或已被删除，请稍后重试。';notices.forEach(n=>n.textContent=status.textContent);}
   }
-  return {async setViewer(next){viewer=next;backup.hidden=!viewer.founder;await refresh();},refresh};
+  return {async setViewer(next){viewer=next;backup.hidden=!viewer.founder;recovery.setViewer(next);await refresh();},refresh};
 }
 
 // Version checks preserve another tab's draft instead of silently overwriting it.

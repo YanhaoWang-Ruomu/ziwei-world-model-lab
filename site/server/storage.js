@@ -1,7 +1,9 @@
-import {HttpError,jsonBody,now} from './security.js';
+import {HttpError,jsonBody,now,digest} from './security.js';
+import {restoreRoute,backupAssets} from './storage-restore.mjs';
 
 // No content or credentials are returned by the health check.
-const tables=['community_attachments','world_runs','world_projects','world_branches','world_reviews','community_posts','community_comments','community_favorites','community_reports','community_moderation','personal_accounts','chart_cases','chart_preferences','chart_profiles','books','pages','page_revisions','technique_cards','card_rules','card_submissions','core_members','grants','workspace_drafts','account_levels','authored_techniques','technique_history'];
+export const backupTables=['personal_accounts','books','world_projects','world_branches','world_reviews','world_runs','community_posts','community_comments','community_attachments','community_favorites','community_reports','community_moderation','community_revisions','community_notifications','chart_cases','chart_preferences','chart_profiles','pages','page_revisions','technique_cards','card_rules','card_submissions','core_members','grants','workspace_drafts','account_levels','authored_techniques','technique_history'];
+const tables=backupTables;
 const quoted=table=>'"'+table+'"';
 export const storageLocation=env=>env.LOCAL_PREVIEW==='1'?'local':'cloud';
 export async function markStored(db){
@@ -12,7 +14,7 @@ export async function createBackup(env,force=false){
   await db.prepare("INSERT INTO storage_state(id) VALUES ('main') ON CONFLICT(id) DO NOTHING").run();
   const state=await db.prepare("UPDATE storage_state SET lock_until=? WHERE id='main' AND lock_until<? AND (?=1 OR (dirty_version>backup_version AND backup_at<?)) RETURNING dirty_version").bind(t+300,t,force?1:0,t-3600).first();
   if(!state)return {busy:true};
-  const id=crypto.randomUUID(),prefix='backups/'+id,counts={},files=[];
+  const id=crypto.randomUUID(),prefix='backups/'+id,counts={},files=[],assetKeys=new Set();
   try{
     // Do not promote a paged backup if another completed save was observed.
     for(const table of tables){
@@ -21,14 +23,17 @@ export async function createBackup(env,force=false){
         const rows=(await db.prepare(`SELECT * FROM ${quoted(table)} ORDER BY rowid LIMIT 80 OFFSET ?`).bind(offset).all()).results;
         if(!rows.length)break;
         const key=`${prefix}/${table}-${part++}.json`;
-        await env.BUCKET.put(key,JSON.stringify(rows),{httpMetadata:{contentType:'application/json'}});
-        files.push({table,key,count:rows.length});counts[table]+=rows.length;offset+=rows.length;
+        const contents=JSON.stringify(rows);await env.BUCKET.put(key,contents,{httpMetadata:{contentType:'application/json'}});
+        files.push({table,key,count:rows.length,checksum:await digest(contents)});counts[table]+=rows.length;offset+=rows.length;
+        for(const row of rows)for(const object of backupAssets(table,row))assetKeys.add(object);
       }
     }
+    const assets=[];
+    for(const key of assetKeys){const original=await env.BUCKET.head(key);if(!original)throw Error('Source file unavailable');const savedKey='backups/assets/'+await digest(key+':'+original.etag);if(!await env.BUCKET.head(savedKey)){const object=await env.BUCKET.get(key,{onlyIf:{etagMatches:original.etag}});if(!object?.body)throw Error('Source file changed');await env.BUCKET.put(savedKey,object.body,{httpMetadata:object.httpMetadata});}assets.push({key,savedKey,size:original.size,etag:original.etag});}
     const current=await db.prepare("SELECT dirty_version FROM storage_state WHERE id='main'").first();
     if(current.dirty_version!==state.dirty_version)throw new Error('Concurrent write; retry on the next checkpoint');
     const manifestKey=prefix+'/manifest.json';
-    await env.BUCKET.put(manifestKey,JSON.stringify({format:1,id,createdAt:t,location:storageLocation(env),counts,files,originalFiles:'books/; immutable source files remain in the private file store'}),{httpMetadata:{contentType:'application/json'}});
+    await env.BUCKET.put(manifestKey,JSON.stringify({format:2,id,createdAt:t,location:storageLocation(env),counts,files,assets}),{httpMetadata:{contentType:'application/json'}});
     await db.batch([
       db.prepare('INSERT INTO storage_backups(id,created_at,manifest_key,counts) VALUES (?,?,?,?)').bind(id,t,manifestKey,JSON.stringify(counts)),
       db.prepare("UPDATE storage_state SET backup_version=?,backup_at=?,lock_until=0,backup_error=0 WHERE id='main'").bind(state.dirty_version,t),
@@ -49,6 +54,7 @@ async function checkDraft(data,viewer,db,bookFor){
 }
 export async function storageRoute({path,method,request,db,viewer,env,bookFor,url}){
   if(!path.startsWith('/api/storage')&&!path.startsWith('/api/drafts'))return null;
+  if(path.startsWith('/api/storage/restore'))return restoreRoute({path,method,request,db,viewer,env,tables});
   if(path==='/api/storage'&&method==='GET'){
     await db.prepare('SELECT 1').first();await env.BUCKET.list({limit:1});
     const result={location:storageLocation(env),persistent:true,accountSaved:Boolean(viewer.id),passwords:'hashed',personalCases:viewer.id?(await db.prepare('SELECT COUNT(*) AS n FROM chart_cases WHERE user_id=?').bind(viewer.id).first()).n:0};

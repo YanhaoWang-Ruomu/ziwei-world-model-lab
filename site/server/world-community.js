@@ -1,6 +1,8 @@
 import {HttpError,jsonBody,now,safeText} from './security.js';
 import {runSummary} from './scenario-runs.js';
 import {contentPayload,attachViews,attachmentConstraint,attachStatement} from './community-attachments.mjs';
+import {communityFollowup,notificationStatements} from './community-followup.mjs';
+import {techniqueResearch} from './technique-research.mjs';
 const uid=()=>crypto.randomUUID();
 const fail=(s,m)=>{throw new HttpError(s,m);};
 const text=(v,n,required=true)=>safeText(v,n,required).trim();
@@ -23,12 +25,14 @@ export function postPayload(v){
 const project=r=>({id:r.id,title:r.title,...JSON.parse(r.payload),revision:r.revision,createdAt:r.created_at,updatedAt:r.updated_at});
 const record=r=>({id:r.id,...JSON.parse(r.payload),createdAt:r.created_at});
 const post=(r,v)=>({id:r.id,title:r.title,body:r.body,kind:r.kind,tags:JSON.parse(r.tags),status:r.status,revision:r.revision,note:r.user_id===v.id||v.core?r.note:'',mine:r.user_id===v.id,favorite:Boolean(r.favorite),createdAt:r.created_at});
-const comment=(r,v)=>({id:r.id,postId:r.post_id,body:r.body,status:r.status,revision:r.revision,note:r.user_id===v.id||v.core?r.note:'',mine:r.user_id===v.id,createdAt:r.created_at});
+const comment=(r,v)=>({id:r.id,postId:r.post_id,parentId:r.parent_id||null,body:r.body,status:r.status,revision:r.revision,note:r.user_id===v.id||v.core?r.note:'',mine:r.user_id===v.id,createdAt:r.created_at});
 export async function worldCommunityRoute({path,method,request,db,viewer,url}){
   if(!/^\/api\/(world|community)(\/|$)/.test(path))return null;
   const body=()=>jsonBody(request,65536);
   const posts=rows=>attachViews(db,'post',rows,r=>post(r,viewer));
   const comments=rows=>attachViews(db,'comment',rows,r=>comment(r,viewer));
+  const followup=await communityFollowup({path,method,request,db,viewer,postPayload,posts,comments});if(followup!==null)return followup;
+  const research=await techniqueResearch({path,method,request,db,viewer});if(research!==null)return research;
   async function own(id){personal(viewer);const r=await db.prepare('SELECT * FROM world_projects WHERE id=? AND user_id=?').bind(id,viewer.id).first();if(!r)fail(404,'找不到这份个人研究。');return r;}
   async function visible(id){const r=await db.prepare('SELECT p.*,EXISTS(SELECT 1 FROM community_favorites f WHERE f.post_id=p.id AND f.user_id=?) AS favorite FROM community_posts p WHERE p.id=?').bind(viewer.id||'',id).first();if(!r||(r.status!=='published'&&r.user_id!==viewer.id&&!viewer.core))fail(404,'讨论不存在或尚未公开。');return r;}
   if(path==='/api/world/projects'){
@@ -61,9 +65,10 @@ export async function worldCommunityRoute({path,method,request,db,viewer,url}){
     if(!m[2]&&method==='GET'){const rows=(await db.prepare("SELECT * FROM community_comments WHERE post_id=? AND (status='published' OR user_id=? OR ?=1) ORDER BY created_at,id LIMIT 200").bind(p.id,viewer.id||'',viewer.core?1:0).all()).results;return {post:(await posts([p]))[0],comments:await comments(rows)};}
     if(!m[2]&&method==='DELETE'){personal(viewer);if(p.user_id!==viewer.id)fail(403,'只能撤回自己的讨论。');const v=await body();shape(v,['revision']);const r=await db.prepare("UPDATE community_posts SET status='withdrawn',revision=revision+1,updated_at=? WHERE id=? AND user_id=? AND revision=? RETURNING id").bind(now(),p.id,viewer.id,revision(v.revision)).first();if(!r)fail(409,'讨论状态已改变，请刷新。');return {ok:true};}
     if(m[2]==='comments'&&method==='POST'){
-      personal(viewer);const v=await body();shape(v,['body','format','attachments','sharingConfirmed']);if(v.sharingConfirmed!==true)fail(400,'请确认公开评论。');
+      personal(viewer);const v=await body();shape(v,['body','format','attachments','sharingConfirmed','parentId']);if(v.sharingConfirmed!==true)fail(400,'请确认公开评论。');
+      if(v.parentId!==undefined&&v.parentId!==null&&(typeof v.parentId!=='string'||!/^[a-f0-9-]{36}$/.test(v.parentId)))fail(400,'回复对象不正确。');
       const c=contentPayload(v,4000),t=now(),id=uid(),guard=await attachmentConstraint(db,viewer,c.attachments);
-      const results=await db.batch([db.prepare(`INSERT INTO community_comments(id,post_id,user_id,body,format,created_at) SELECT ?,?,?,?,?,? WHERE EXISTS(SELECT 1 FROM community_posts WHERE id=? AND status='published') AND (SELECT COUNT(*) FROM community_comments WHERE user_id=? AND created_at>?)<50 AND (SELECT COUNT(*) FROM community_comments WHERE post_id=?)<200 AND ${guard.sql} RETURNING *`).bind(id,p.id,viewer.id,c.body,c.format,t,p.id,viewer.id,t-86400,p.id,...guard.args),...attachStatement(db,'comment',id,viewer,c.attachments)]);
+      const results=await db.batch([db.prepare(`INSERT INTO community_comments(id,post_id,user_id,body,format,created_at,parent_id) SELECT ?,?,?,?,?,?,? WHERE EXISTS(SELECT 1 FROM community_posts WHERE id=? AND status='published') AND (? IS NULL OR EXISTS(SELECT 1 FROM community_comments WHERE id=? AND post_id=? AND status='published')) AND (SELECT COUNT(*) FROM community_comments WHERE user_id=? AND created_at>?)<50 AND (SELECT COUNT(*) FROM community_comments WHERE post_id=?)<200 AND ${guard.sql} RETURNING *`).bind(id,p.id,viewer.id,c.body,c.format,t,v.parentId||null,p.id,v.parentId||null,v.parentId||null,p.id,viewer.id,t-86400,p.id,...guard.args),...attachStatement(db,'comment',id,viewer,c.attachments)]);
       const row=results[0].results[0];if(!row)fail(409,'讨论已停止公开、评论达到上限，或附件已提交。');return {comment:(await comments([row]))[0]};
     }
     if(m[2]==='favorite'&&['POST','DELETE'].includes(method)){personal(viewer);if(method==='POST'){const r=await db.prepare("INSERT INTO community_favorites(user_id,post_id,created_at) SELECT ?,?,? WHERE EXISTS(SELECT 1 FROM community_posts WHERE id=? AND status='published') ON CONFLICT(user_id,post_id) DO UPDATE SET created_at=excluded.created_at RETURNING post_id").bind(viewer.id,p.id,now(),p.id).first();if(!r)fail(404,'只能收藏公开讨论。');}else await db.prepare('DELETE FROM community_favorites WHERE user_id=? AND post_id=?').bind(viewer.id,p.id).run();return {ok:true};}
@@ -84,7 +89,7 @@ export async function worldCommunityRoute({path,method,request,db,viewer,url}){
       if(v.kind==='report'){sql=`UPDATE ${table} SET status='resolved',note=? WHERE id=? AND status='open'`;args=[reason,id];}
       else {sql=`UPDATE ${table} SET status=?,note=?,revision=revision+1${v.kind==='post'?',updated_at=?':''} WHERE id=? AND revision=? AND status<>'withdrawn' AND (?<>'published' OR status='pending')${v.kind==='comment'&&v.decision==='published'?" AND EXISTS(SELECT 1 FROM community_posts p WHERE p.id=community_comments.post_id AND p.status='published')":''}`;args=[v.decision,reason,...(v.kind==='post'?[t]:[]),id,revision(v.revision),v.decision];}
       // batch is transactional; changes() ties the audit record to this successful decision.
-      const results=await db.batch([db.prepare(sql).bind(...args),db.prepare('INSERT INTO community_moderation(id,target_kind,target_id,actor,decision,reason,created_at) SELECT ?,?,?,?,?,?,? WHERE changes()=1').bind(uid(),v.kind,id,viewer.id,v.decision,reason,t)]);if(results[0].meta.changes!==1)fail(409,'内容已改变或已撤回，请刷新队列。');return {ok:true};}
+      const auditId=uid(),results=await db.batch([db.prepare(sql).bind(...args),db.prepare('INSERT INTO community_moderation(id,target_kind,target_id,actor,decision,reason,created_at) SELECT ?,?,?,?,?,?,? WHERE changes()=1').bind(auditId,v.kind,id,viewer.id,v.decision,reason,t),...notificationStatements(db,v,auditId,t)]);if(results[0].meta.changes!==1)fail(409,'内容已改变或已撤回，请刷新队列。');return {ok:true};}
   }
   fail(405,'不支持此操作。');
 }

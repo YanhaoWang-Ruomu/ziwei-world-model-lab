@@ -1,4 +1,5 @@
 import {fictionalScenario} from './scenario-engine.mjs';
+import {techniqueScenario} from './technique-scenario.mjs';
 const source=s=>s==='fictional-demo'?'虚构演示规则':'用户假设规则';
 export function scenarioComparison({el,runs,branches}){
   const root=el('div','research-table-scroll');if(!runs.length)return root;
@@ -12,6 +13,7 @@ export function mountScenario({api,el,btn,branch,runs,onSaved}){
   form.append(area('ruleSet','可编辑规则集 JSON（字段定义、条件、状态更新、依据和不确定性）'),area('initial','初始状态 JSON',4000),area('steps','行动与假设序列 JSON',12000),area('uncertainty','整体不确定性（文字）',2000));
   const submit=el('button','book-primary','运行并保存推演');submit.type='submit';form.append(submit);
   panel.append(btn('载入虚构三步示例',()=>{const example=fictionalScenario();for(const key of ['ruleSet','initial','steps'])form.elements[key].value=JSON.stringify(example[key],null,2);form.elements.uncertainty.value=example.uncertainty;status.textContent='已载入虚构演示，可编辑变量、条件、行动、版本和更新值。';}),form,status,list,output);
+  if(branch.baseline?.assessment){const a=branch.baseline.assessment;panel.prepend(el('p','muted','关联技法：'+a.title+' · 发布版 V'+a.releaseVersion+' · '+a.date+' '+a.time+' · '+(a.status==='matches'?'符合条件':'未符合条件')),btn('以关联技法结果建立观察假设',()=>{const input=techniqueScenario(a);for(const key of ['ruleSet','initial','steps'])form.elements[key].value=JSON.stringify(input[key],null,2);form.elements.uncertainty.value=input.uncertainty;status.textContent='已带入保存时的匹配结果。请编辑行动、更新值和不确定性，再运行假设推演。';}));}
   const instructions=el('details'),heading=el('summary','','规则格式与语义');instructions.append(heading,el('p','research-copy','ruleSet.source 只能是 fictional-demo（虚构演示）或 user-assumption（用户假设）；version 为正整数。fields 定义 id、name、type（number/text/boolean）和 meaning。when 是 AND 条件，使用 eq/ne/gt/gte/lt/lte；未知值填 null。effects 支持 set 和数值 add。每条规则填写 action、rationale 和 uncertainty。steps 中 action 匹配规则；assumptions 是需人工核实的假设说明，不是自动提取的事实。更新无法确定时整条规则不写入。规则数组顺序会影响结果，所有顺序均进入快照。'));panel.append(instructions);
   let busy=false,showGeneration=0;
   function error(e){if(root.isConnected)status.textContent=e.message;}

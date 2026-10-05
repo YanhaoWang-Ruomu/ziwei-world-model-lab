@@ -36,7 +36,7 @@ test('asterisms retain catalogue coordinates and unknown distances without inven
 
 test('Wenchang lights its documented asterism without inventing an individual identity',()=>{
   const ids=starCelestialIds('文昌');
-  assert.deepEqual(ids,['hip-48319','hip-48402','hip-46853','hip-44901','hip-45493']);
+  assert.deepEqual(ids,['hip-48319','hip-48402','hip-46853','hip-44901','hip-45493','wenchang-shangjiang']);
   assert.deepEqual(palaceCelestialIds({majorStars:[{name:'太阳'}],minorStars:[{name:'文昌'},{name:'文昌'}]}),['sun',...ids]);
   assert.deepEqual(starCelestialIds('文曲'),['hip-59774']);
   assert.deepEqual(starCelestialIds('火星'),[]);

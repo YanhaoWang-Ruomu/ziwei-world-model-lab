@@ -5,7 +5,7 @@ export const BRANCHES='子丑寅卯辰巳午未申酉戌亥'.split('');
 export const RELATIONS={independent:'分别满足（不限制位置）',same:'落在同一地支宫位',opposite:'互为对宫'};
 export function conditionScopes(c){return c?.flight?[c.scope,c.flight.target?.scope]:c?.compare?[c.scope,c.compare.scope]:[c?.scope];}
 export const STARS='紫微 天机 太阳 武曲 天同 廉贞 天府 太阴 贪狼 巨门 天相 天梁 七杀 破军 文昌 文曲 左辅 右弼 天魁 天钺 禄存 天马 擎羊 陀罗 火星 铃星 地空 地劫 红鸾 天喜 天姚 咸池 天刑 天空'.split(' ');
-export function parseTechnique(text,fold=v=>v){
+function parseSimpleTechnique(text,fold=v=>v){
   const conditions=[],unresolved=[];
   const scopes=Object.values(SCOPES).join('|'),stars=STARS.join('|'),palaces=PALACES.join('|');
   for(const raw of text.split(/[\n；;。]+/).map(s=>s.trim()).filter(Boolean)){
@@ -22,14 +22,34 @@ export function parseTechnique(text,fold=v=>v){
   }
   return {version:1,mode:'all',conditions,unresolved};
 }
+export function parseTechnique(text,fold=v=>v){
+  const rule={version:1,mode:'all',conditions:[],unresolved:[]},groupModes={};let nextGroup=0;
+  for(const raw of text.split(/[\n；;。]+/).map(t=>t.trim()).filter(Boolean)){
+    const simple=parseSimpleTechnique(raw,fold);if(!simple.unresolved.length){rule.conditions.push(...simple.conditions);continue;}
+    // Only explicit complete clauses are combined. Ambiguous prose remains
+    // unresolved; we do not infer omitted stars, scopes or causal claims.
+    const clauses=fold(raw).replace(/（/g,'(').replace(/）/g,')').split(/并且|且|同时/),parsed=[],modes={};let groupCount=nextGroup,valid=true;
+    for(let clause of clauses){clause=clause.trim();if(clause.startsWith('(')&&clause.endsWith(')'))clause=clause.slice(1,-1);if(/[()]/.test(clause)){valid=false;break;}
+      const alternatives=clause.split(/或(?:者)?(?=本命|大限|流年|流月|流日|流时)/),group=alternatives.length>1?'ABCDEF'[groupCount++]:'';
+      if(alternatives.length>1&&!group){valid=false;break;}
+      for(const alternative of alternatives){const part=parseSimpleTechnique(alternative,fold);if(part.unresolved.length||part.conditions.length!==1||group&&part.conditions[0].exclude){valid=false;break;}parsed.push({...part.conditions[0],...(group?{group}:{})});}
+      if(group)modes[group]='any';if(!valid)break;
+    }
+    if(valid&&parsed.length>1){rule.conditions.push(...parsed);Object.assign(groupModes,modes);nextGroup=groupCount;}else rule.unresolved.push(raw);
+  }
+  if(Object.keys(groupModes).length)rule.groupModes=groupModes;return rule;
+}
+export function techniqueLogic(rule){const groups=rule.groupModes||{};return '组合之间'+(rule.mode==='all'?'全部满足':'任一满足')+Object.entries(groups).map(([name,mode])=>'；组 '+name+' 内'+(mode==='all'?'全部满足':'任一满足')).join('')+'；排除条件始终单独检查';}
 export function validateTechnique(rule){
   const issues=[];
   if(!rule||rule.version!==1||!['all','any'].includes(rule.mode))return ['规则格式无效'];
   if(!Array.isArray(rule.conditions)||!rule.conditions.length||rule.conditions.length>24)return ['请设置 1–24 条条件'];
   if(!Array.isArray(rule.unresolved)||rule.unresolved.length)issues.push('仍有中文内容未确认');
   if(!rule.conditions.some(c=>c&&!c.exclude))issues.push('至少需要一条满足条件');
+  if(rule.groupModes!==undefined&&(!rule.groupModes||typeof rule.groupModes!=='object'||Array.isArray(rule.groupModes)||Object.entries(rule.groupModes).some(([key,value])=>!['A','B','C','D','E','F'].includes(key)||!['all','any'].includes(value))))issues.push('条件组格式无效');
   const validSide=(c,allowAny=false)=>c&&Object.hasOwn(SCOPES,c.scope)&&['',...STARS].includes(c.star)&&['',...PALACES].includes(c.palace)&&['','禄','权','科','忌'].includes(c.mutagen)&&(c.branches===undefined||Array.isArray(c.branches)&&c.branches.length<=12&&c.branches.every(b=>BRANCHES.includes(b)))&&(allowAny||Boolean(c.star||c.palace||c.mutagen||c.branches?.length));
   for(const c of rule.conditions){
+    if(c?.group&&(!['A','B','C','D','E','F'].includes(c.group)||!['all','any'].includes(rule.groupModes?.[c.group])||c.exclude))issues.push('请选择有效的条件组；排除条件不可加入组');
     if(!validSide(c)||typeof c.exclude!=='boolean')issues.push('每侧至少选择一项有效的星曜、宫位、地支或四化；层级也必须有效');
     if(c?.compare&&(!validSide(c.compare)||c.compare.scope===c.scope||!Object.hasOwn(RELATIONS,c.relation)))issues.push('两层对照需要不同层级、有效的对照条件和位置关系');
     if(c?.compare!==undefined&&(c.compare===null||typeof c.compare!=='object'||Array.isArray(c.compare)))issues.push('两层对照格式无效');
@@ -43,7 +63,7 @@ export function validateTechnique(rule){
 }
 export function describeCondition(c){
   const side=s=>[SCOPES[s.scope],s.star||'不限星曜',s.palace?(s.palace==='命宫'?s.palace:s.palace+'宫'):'不限宫位',s.branches?.length?s.branches.join('／')+'位':'',s.mutagen?'化'+s.mutagen:''].filter(Boolean).join(' · ');
-  return `${c.exclude?'排除：':''}${side(c)}${c.flight?' 所在宫干 → '+(c.flight.mutagen?'化'+c.flight.mutagen:'任一四化')+' → '+side(c.flight.target):c.compare?' ↔ '+side(c.compare)+' · '+RELATIONS[c.relation]:''}`;
+  return `${c.group?'组 '+c.group+' · ':''}${c.exclude?'排除：':''}${side(c)}${c.flight?' 所在宫干 → '+(c.flight.mutagen?'化'+c.flight.mutagen:'任一四化')+' → '+side(c.flight.target):c.compare?' ↔ '+side(c.compare)+' · '+RELATIONS[c.relation]:''}`;
 }
 export function evaluateTechnique(rule,chart,cycle,flights){
   const issues=validateTechnique(rule);if(issues.length)return {status:'needs_clarification',issues};
@@ -88,6 +108,8 @@ export function evaluateTechnique(rule,chart,cycle,flights){
     return {...base,value,branch:left.map(p=>p.earthlyBranch).filter(Boolean).join('／'),...(c.compare?{comparisonBranches:right.map(p=>p.earthlyBranch).filter(Boolean)}:{})};
   });
   if(checks.some(c=>c.value===null))return {status:'insufficient',checks};
-  const yes=checks.filter(c=>!c.exclude),blocked=checks.some(c=>c.exclude&&c.value);
-  return {status:!blocked&&(rule.mode==='all'?yes.every(c=>c.value):yes.some(c=>c.value))?'matches':'does_not_match',checks};
+  const groups=new Map(),values=[],blocked=checks.some(c=>c.exclude&&c.value);
+  checks.forEach((check,i)=>{if(check.exclude)return;const group=rule.conditions[i].group;if(!group)values.push(check.value);else{if(!groups.has(group))groups.set(group,[]);groups.get(group).push(check.value);}});
+  for(const [group,list]of groups)values.push(rule.groupModes[group]==='all'?list.every(Boolean):list.some(Boolean));
+  return {status:!blocked&&(rule.mode==='all'?values.every(Boolean):values.some(Boolean))?'matches':'does_not_match',checks};
 }

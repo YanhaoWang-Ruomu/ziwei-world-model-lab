@@ -17,12 +17,14 @@ test('comment login returns to the same post; rich replies and review live in th
   const replies=[],calls=[];let authenticated=false;
   const api=async(path,options={})=>{
     calls.push({path,options});const method=options.method||'GET';
+    if(path==='/api/community/notifications')return {notifications:[]};
     if(path.startsWith('/api/community/posts?'))return {posts:[structuredClone(p)],hasMore:false};
     if(path==='/api/community/posts/'+pid)return {post:structuredClone(p),comments:authenticated?structuredClone(replies):[]};
     if(path==='/api/community/posts/'+pid+'/comments'){
       assert.equal(authenticated,true);const v=JSON.parse(options.body);assert.equal(v.sharingConfirmed,true);replies.push({...v,attachments:[],id:cid,postId:pid,status:'pending',mine:true,revision:1});return {comment:replies.at(-1)};
     }
     if(path==='/api/community/attachments'&&method==='POST')return {attachment:{id:fid,name:'虚构.txt',type:'text/plain',size:9}};
+    if(path==='/api/community/comments/'+cid&&method==='PUT'){const v=JSON.parse(options.body);assert.equal(v.sharingConfirmed,true);assert.equal(v.revision,replies[0].revision);replies[0]={...replies[0],...v,revision:v.revision+1,status:'pending'};return {comment:structuredClone(replies[0])};}
     if(path==='/api/community/moderation')return {posts:[],comments:structuredClone(replies),reports:[]};
     if(path.startsWith('/api/community/moderation/target'))return {postId:pid,post:structuredClone(p),comment:structuredClone(replies[0])};
     throw Error('Unexpected fictional request '+path);
@@ -45,6 +47,8 @@ test('comment login returns to the same post; rich replies and review live in th
   assert.match(doc.querySelector('.community-comments [role=status]').textContent,/评论已保存/);assert.equal(doc.querySelector('.community-comment strong').textContent,'虚构评论');assert.equal(doc.querySelectorAll('.community-comment li').length,1);
   assert.ok(doc.querySelector('.community-comment-form').compareDocumentPosition(doc.querySelector('.community-comment-list'))&win.Node.DOCUMENT_POSITION_FOLLOWING);
   assert.equal(doc.querySelector('#community .community-moderation'),null);assert.equal(doc.querySelector('#community .community-review-shortcut'),null);
+  const editPanel=[...doc.querySelectorAll('.community-comment details')].find(d=>d.querySelector('summary').textContent==='编辑并重新送审');assert.ok(editPanel);assert.equal(editPanel.querySelector('textarea'),null);editPanel.open=true;editPanel.dispatchEvent(new win.Event('toggle'));await tick();
+  const ef=editPanel.querySelector('form');assert.equal(ef.querySelector('textarea').value,'**虚构评论**\n\n- 合成列表');ef.querySelector('textarea').value='**修订虚构评论**';ef.querySelector('[name=confirmed]').checked=true;button('保存并送审',ef).click();await tick();assert.equal(doc.querySelector('.community-comment strong').textContent,'修订虚构评论');assert.equal(replies[0].revision,2);
   authenticated=true;win.location.hash='review';session({core:true});await tick();
   assert.match(doc.querySelector('#community-review').textContent,/待审评论/);assert.ok(button('保存审核决定',doc.querySelector('#review')));assert.equal(button('保存审核决定',doc.querySelector('#community')),undefined);
   button('查看所属讨论',doc.querySelector('#review')).click();await tick();assert.match(doc.querySelector('.community-review-target').textContent,/虚构讨论/);assert.equal(win.location.hash,'#review');assert.ok(button('隐藏内容',doc.querySelector('#review')));

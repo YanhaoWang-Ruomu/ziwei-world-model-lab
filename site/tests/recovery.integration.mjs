@@ -1,0 +1,35 @@
+// Fictional service only: refuse to exercise real user or production storage.
+import assert from 'node:assert/strict';
+const base='http://127.0.0.1:8770',tag='recover-'+Date.now(),founder='local_preview_owner=1';let count=0;
+const eq=(a,b)=>{assert.deepEqual(a,b);count++;};
+async function req(path,{method='GET',body,cookie=''}={}){const r=await fetch(base+path,{method,headers:{'Content-Type':'application/json',Origin:base,Cookie:cookie,'CF-Connecting-IP':'192.0.2.129'},body:body===undefined?undefined:JSON.stringify(body)});return {status:r.status,data:await r.json(),cookies:r.headers.getSetCookie()};}
+const ok=async(...args)=>{const r=await req(...args);assert.equal(r.status,200,'Fictional API request failed: '+args[0]);count++;return r;};
+eq((await req('/api/storage')).data.testStore,true);
+const username=tag,password='Fictional-recovery-password',next='Fictional-replaced-password';
+const registered=await ok('/api/account/register',{method:'POST',body:{username,password}}),cookie=registered.cookies.find(c=>c.startsWith('__Host-ziwei_account=')).split(';')[0];
+const code=(await ok('/api/account/recovery-code',{method:'POST',cookie,body:{currentPassword:password}})).data.recoveryCode;assert.match(code,/^GXRC-/);count++;
+await ok('/api/account/recover',{method:'POST',body:{username,recoveryCode:code,newPassword:next}});eq((await req('/api/session',{cookie})).data.authenticated,false);
+eq((await req('/api/account/recover',{method:'POST',body:{username,recoveryCode:code,newPassword:password}})).status,403);
+const login=await ok('/api/account/login',{method:'POST',body:{username,password:next}}),active=login.cookies.find(c=>c.startsWith('__Host-ziwei_account=')).split(';')[0];
+const birth={name:'虚构恢复样本',date:'2000-08-16',time:'03:30',gender:'男',dayDivide:'forward',fixLeap:true,daylight:false};
+const created=(await ok('/api/cases',{method:'POST',cookie:active,body:{title:'虚构恢复 '+tag,birth,provider:'public'}})).data.case;
+let backup;for(let i=0;i<30;i++){const r=await ok('/api/storage/backups',{method:'POST',cookie:founder});if(r.data.id){backup=r.data;break;}await new Promise(r=>setTimeout(r,1000));}assert.ok(backup,'Fictional backup must complete');
+await ok('/api/cases/'+created.id,{method:'DELETE',cookie:active});eq((await req('/api/cases/'+created.id,{cookie:active})).status,404);
+eq((await req('/api/storage/restore',{method:'POST',cookie:active,body:{backupId:backup.id}})).status,403);
+let job=(await ok('/api/storage/restore',{method:'POST',cookie:founder,body:{backupId:backup.id}})).data;
+for(let i=0;i<500&&job.state!=='ready';i++)job=(await ok('/api/storage/restore/'+job.id+'/prepare',{method:'POST',cookie:founder})).data;
+eq(job.state,'ready');await ok('/api/storage/restore/'+job.id+'/commit',{method:'POST',cookie:founder,body:{confirmed:true,mode:'missing-only'}});
+eq((await ok('/api/cases/'+created.id,{cookie:active})).data.case.title,created.title);
+const author='local_preview_subject='+tag+'-author',reader='local_preview_subject='+tag+'-reader';
+const payload={title:'虚构更新讨论 '+tag,body:'初始内容',kind:'case',tags:[],sharingConfirmed:true};
+let post=(await ok('/api/community/posts',{method:'POST',cookie:author,body:payload})).data.post;
+const approve=async(kind,v)=>ok('/api/community/moderation',{method:'POST',cookie:founder,body:{kind,id:v.id,revision:v.revision,decision:'published',reason:'虚构审核'}});
+await approve('post',post);post=(await ok('/api/community/posts/'+post.id,{cookie:author})).data.post;
+const parent=(await ok('/api/community/posts/'+post.id+'/comments',{method:'POST',cookie:reader,body:{body:'虚构提问',sharingConfirmed:true}})).data.comment;await approve('comment',parent);
+const reply=(await ok('/api/community/posts/'+post.id+'/comments',{method:'POST',cookie:author,body:{body:'虚构回复',parentId:parent.id,sharingConfirmed:true}})).data.comment;await approve('comment',reply);
+const notes=(await ok('/api/community/notifications',{cookie:reader})).data.notifications;const note=notes.find(n=>n.commentId===reply.id&&n.kind==='reply');assert.ok(note);count++;
+await ok('/api/community/notifications',{method:'POST',cookie:author,body:{id:note.id}});eq((await ok('/api/community/notifications',{cookie:reader})).data.notifications.find(n=>n.id===note.id).readAt,null);
+await ok('/api/community/notifications',{method:'POST',cookie:reader,body:{id:note.id}});assert.ok((await ok('/api/community/notifications',{cookie:reader})).data.notifications.find(n=>n.id===note.id).readAt);count++;
+post=(await ok('/api/community/posts/'+post.id,{method:'PUT',cookie:author,body:{...payload,body:'修订后的虚构内容',revision:post.revision}})).data.post;eq(post.status,'pending');eq((await req('/api/community/posts/'+post.id)).status,404);
+eq((await ok('/api/community/posts/'+post.id+'/history',{cookie:author})).data.history[0].content.body,payload.body);await approve('post',post);eq((await ok('/api/community/posts/'+post.id)).data.post.body,'修订后的虚构内容');
+console.log('PASS '+count+' fictional recovery, ownership, editing, reply and notification integration checks');

@@ -41,14 +41,15 @@ const ASTROMETRY=[
 export const ORRERY_STARS=ASTROMETRY.map(([hip,ra,dec,pc,mag])=>{
   const star=NAMED_STARS.find(s=>s.hip===hip);
   return {...star,id:'hip-'+hip,ra,dec,pc,mag,source:SOURCES.hyg,
-    intro:star.group==='北极'?'勾陈一，当前北天极附近的恒星。它属于遥远恒星背景，并不绕太阳公转。':star.group==='文昌'?`${star.tag}。文昌在北斗斗勺上方，古称六星；此处只绘制星表已核定的五颗，文昌一现代对应未定。点击命盘文昌会点亮这个星官，表示文化意象，不是单一恒星认定。`:`${star.group==='北斗'?'大熊座':'人马座'}方向的${star.group}星官成员。${star.symbol?`传统文化对照：${star.symbol}。${PROFILES[star.symbol]?.intro||''}`:''}`};
+    intro:star.group==='北极'?'勾陈一，当前北天极附近的恒星。它属于遥远恒星背景，并不绕太阳公转。':star.group==='文昌'?`${star.tag}。文昌在北斗斗勺上方，古称六星；其中五颗采用已核定星表坐标；上将以文化意象星标补全，现代对应未定。点击命盘文昌会点亮这个星官，表示文化意象，不是单一恒星认定。`:`${star.group==='北斗'?'大熊座':'人马座'}方向的${star.group}星官成员。${star.symbol?`传统文化对照：${star.symbol}。${PROFILES[star.symbol]?.intro||''}`:''}`};
 });
 // The two hidden stars are cultural entries, never catalogue coordinates.
 export const NORTH_HIDDEN_STARS=[
   {id:'north-dongming',name:'洞明',symbol:'左辅',order:8,group:'北斗',kind:'cultural',modern:'现代恒星对应未核定',intro:'北斗第八隐曜，传统辅星意象。本页采用洞明—左辅的文化对照；点击命盘左辅时辉映。图中位置为示意，不代表真实恒星坐标。'},
   {id:'north-yinyuan',name:'隐元',symbol:'右弼',order:9,group:'北斗',kind:'cultural',modern:'现代恒星对应未核定',intro:'北斗第九隐曜，传统弼星意象。本页采用隐元—右弼的文化对照；点击命盘右弼时辉映。图中位置为示意，不代表真实恒星坐标。'},
 ].map(s=>({...s,source:'https://zh.wikisource.org/zh-hans/雲笈七籤/24'}));
-export const ORRERY_ITEMS=[...SOLAR_ITEMS,...ORRERY_STARS,...NORTH_HIDDEN_STARS];
+export const WENCHANG_CULTURAL_STARS=[{id:'wenchang-shangjiang',name:'上将',group:'文昌',kind:'cultural',modern:'现代恒星对应未核定',intro:'文昌六星之首上将，名称见《史记·天官书》。以独立的文化意象星标补全文昌六星，随命盘文昌辉映；不赋予未经核定的天文坐标。其余五颗使用公开星表坐标。',source:'https://zh.wikisource.org/wiki/史記/卷027'}];
+export const ORRERY_ITEMS=[...SOLAR_ITEMS,...ORRERY_STARS,...NORTH_HIDDEN_STARS,...WENCHANG_CULTURAL_STARS];
 const ANCIENT_NAMES={mercury:'辰星',venus:'太白',mars:'荧惑',jupiter:'岁星',saturn:'镇星',moon:'太阴'};
 // Later discoveries keep their established names instead of inventing ancient aliases.
 export const traditionalName=item=>ANCIENT_NAMES[item.id]||item.name;

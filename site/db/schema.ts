@@ -17,11 +17,18 @@ export const communityPosts=sqliteTable('community_posts',{
   id:text('id').primaryKey(),userId:text('user_id').notNull(),title:text('title').notNull(),body:text('body').notNull(),format:text('format').notNull().default('plain'),kind:text('kind').notNull(),tags:text('tags').notNull(),status:text('status').notNull().default('pending'),revision:integer('revision').notNull().default(1),note:text('note').notNull().default(''),createdAt:integer('created_at').notNull(),updatedAt:integer('updated_at').notNull(),
 },t=>[index('idx_community_public').on(t.status,t.createdAt),index('idx_community_owner').on(t.userId,t.createdAt),check('community_post_kind',sql`${t.kind} IN ('case','technique')`),check('community_post_status',sql`${t.status} IN ('pending','published','rejected','hidden','withdrawn')`)]);
 export const communityComments=sqliteTable('community_comments',{
+  parentId:text('parent_id'),
   id:text('id').primaryKey(),postId:text('post_id').notNull().references(()=>communityPosts.id,{onDelete:'cascade'}),userId:text('user_id').notNull(),body:text('body').notNull(),format:text('format').notNull().default('plain'),status:text('status').notNull().default('pending'),revision:integer('revision').notNull().default(1),note:text('note').notNull().default(''),createdAt:integer('created_at').notNull(),
 },t=>[index('idx_community_comments').on(t.postId,t.status,t.createdAt),check('community_comment_status',sql`${t.status} IN ('pending','published','rejected','hidden','withdrawn')`)]);
 export const communityFavorites=sqliteTable('community_favorites',{
   userId:text('user_id').notNull(),postId:text('post_id').notNull().references(()=>communityPosts.id,{onDelete:'cascade'}),createdAt:integer('created_at').notNull(),
 },t=>[primaryKey({columns:[t.userId,t.postId]})]);
+export const communityRevisions=sqliteTable('community_revisions',{
+  id:text('id').primaryKey(),kind:text('kind').notNull(),targetId:text('target_id').notNull(),owner:text('owner').notNull(),revision:integer('revision').notNull(),payload:text('payload').notNull(),createdAt:integer('created_at').notNull(),
+},t=>[unique('community_revision_once').on(t.kind,t.targetId,t.revision)]);
+export const communityNotifications=sqliteTable('community_notifications',{
+  id:text('id').primaryKey(),recipient:text('recipient').notNull(),postId:text('post_id').notNull(),commentId:text('comment_id'),kind:text('kind').notNull(),createdAt:integer('created_at').notNull(),readAt:integer('read_at'),
+},t=>[index('idx_community_notifications_recipient').on(t.recipient,t.createdAt)]);
 export const communityReports=sqliteTable('community_reports',{
   id:text('id').primaryKey(),userId:text('user_id').notNull(),targetKind:text('target_kind').notNull(),targetId:text('target_id').notNull(),reason:text('reason').notNull(),status:text('status').notNull().default('open'),note:text('note').notNull().default(''),createdAt:integer('created_at').notNull(),
 },t=>[index('idx_community_reports').on(t.status,t.createdAt),unique('community_report_unique').on(t.userId,t.targetKind,t.targetId),check('community_report_kind',sql`${t.targetKind} IN ('post','comment')`),check('community_report_status',sql`${t.status} IN ('open','resolved')`)]);
@@ -41,6 +48,15 @@ export const storageBackups = sqliteTable('storage_backups', {
   id: text('id').primaryKey(), createdAt: integer('created_at').notNull(),
   manifestKey: text('manifest_key').notNull(), counts: text('counts').notNull(),
 });
+export const storageRestoreJobs=sqliteTable('storage_restore_jobs',{
+  id:text('id').primaryKey(),owner:text('owner').notNull(),backupId:text('backup_id').notNull(),
+  manifest:text('manifest').notNull(),cursor:integer('cursor').notNull().default(0),assetCursor:integer('asset_cursor').notNull().default(0),
+  assets:text('assets'),state:text('state').notNull().default('preparing'),historyMax:integer('history_max').notNull().default(0),createdAt:integer('created_at').notNull(),
+});
+export const storageRestoreRows=sqliteTable('storage_restore_rows',{
+  jobId:text('job_id').notNull().references(()=>storageRestoreJobs.id,{onDelete:'cascade'}),tableName:text('table_name').notNull(),
+  ordinal:integer('ordinal').notNull(),payload:text('payload').notNull(),
+},t=>[primaryKey({columns:[t.jobId,t.tableName,t.ordinal]})]);
 export const workspaceDrafts = sqliteTable('workspace_drafts', {
   ownerKey: text('owner_key').notNull(), key: text('key').notNull(), kind: text('kind').notNull(),
   bookId: text('book_id'), payload: text('payload').notNull(),
@@ -50,6 +66,7 @@ export const workspaceDrafts = sqliteTable('workspace_drafts', {
 export const personalAccounts = sqliteTable('personal_accounts', {
   id: text('id').primaryKey(), username: text('username').notNull(), usernameKey: text('username_key').notNull().unique(),
   passwordSalt: text('password_salt').notNull(), passwordHash: text('password_hash').notNull(), createdAt: integer('created_at').notNull(),
+  recoveryHash: text('recovery_hash'), securityUpdatedAt: integer('security_updated_at').notNull().default(0),
 });
 export const personalSessions = sqliteTable('personal_sessions', {
   hash: text('hash').primaryKey(), userId: text('user_id').notNull().references(() => personalAccounts.id,{onDelete:'cascade'}), expiresAt: integer('expires_at').notNull(),

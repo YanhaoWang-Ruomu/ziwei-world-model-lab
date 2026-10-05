@@ -50,13 +50,14 @@ public class MainActivity extends Activity {
     s.setAllowFileAccess(false);s.setAllowContentAccess(true);s.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
     s.setMediaPlaybackRequiresUserGesture(false);s.setSupportMultipleWindows(true);s.setJavaScriptCanOpenWindowsAutomatically(false);
     s.setBuiltInZoomControls(true);s.setDisplayZoomControls(false);s.setUseWideViewPort(true);s.setLoadWithOverviewMode(true);
-    s.setUserAgentString(s.getUserAgentString()+" GuanXingTaiAndroid/1.0.1");
+    s.setUserAgentString(s.getUserAgentString()+" GuanXingTaiAndroid/1.0.2");
     CookieManager.getInstance().setAcceptCookie(true);CookieManager.getInstance().setAcceptThirdPartyCookies(view,false);
     view.setBackgroundColor(Color.rgb(7,17,30));
     view.setWebViewClient(new WebViewClient(){
       @Override public boolean shouldOverrideUrlLoading(WebView v,WebResourceRequest r){return navigation(v,r.getUrl().toString(),login,r.isForMainFrame());}
       @Override public void onPageFinished(WebView v,String url){
         CookieManager.getInstance().flush();
+        if(v==web&&UrlPolicy.own(url))v.evaluateJavascript("(()=>{if(window.__gxtDownloadNames)return;const names=window.__gxtDownloadNames=new Map(),click=HTMLAnchorElement.prototype.click;HTMLAnchorElement.prototype.click=function(){if(this.href.startsWith('blob:')&&this.download){if(names.size>100)names.clear();names.set(this.href,this.download)}return click.apply(this,arguments)};document.addEventListener('click',e=>{const a=e.target.closest?.('a[download]');if(a&&a.href.startsWith('blob:')){if(names.size>100)names.clear();names.set(a.href,a.download)}},true)})()",null);
         if(login&&UrlPolicy.own(url)&&!url.contains("/signin-with-chatgpt")&&!url.contains("/signout-with-chatgpt")){if(authDialog!=null)authDialog.dismiss();web.loadUrl(UrlPolicy.SITE+"/#account");}
       }
       @Override public void onReceivedError(WebView v,WebResourceRequest r,WebResourceError e){if(r.isForMainFrame()&&!login)showOffline();}
@@ -80,7 +81,7 @@ public class MainActivity extends Activity {
       @Override public boolean onCreateWindow(WebView opener,boolean dialog,boolean gesture,Message message){
         if(!gesture||!UrlPolicy.own(opener.getUrl()))return false;
         WebView temp=new WebView(MainActivity.this);temp.getSettings().setJavaScriptEnabled(false);
-        temp.setWebViewClient(new WebViewClient(){@Override public boolean shouldOverrideUrlLoading(WebView v,WebResourceRequest r){String url=r.getUrl().toString();if(UrlPolicy.blob(url))requestExport(url,"application/pdf","观星台文件.pdf");else if(!navigation(web,url,false,true)&&UrlPolicy.own(url))web.loadUrl(url);handler.post(v::destroy);return true;}});
+        temp.setWebViewClient(new WebViewClient(){@Override public boolean shouldOverrideUrlLoading(WebView v,WebResourceRequest r){String url=r.getUrl().toString();if(UrlPolicy.blob(url))requestExport(url,null,null);else if(!navigation(web,url,false,true)&&UrlPolicy.own(url))web.loadUrl(url);handler.post(v::destroy);return true;}});
         ((WebView.WebViewTransport)message.obj).setWebView(temp);message.sendToTarget();return true;
       }
     });
@@ -97,7 +98,7 @@ public class MainActivity extends Activity {
       if(url.contains("/signin-with-chatgpt")||url.contains("/signout-with-chatgpt")){startAuth(url);return true;}
       return false;
     }
-    if(UrlPolicy.blob(url)){requestExport(url,"application/pdf","观星台文件.pdf");return true;}
+    if(UrlPolicy.blob(url)){requestExport(url,null,null);return true;}
     if(UrlPolicy.https(url))new AlertDialog.Builder(this).setMessage("在浏览器打开外部网页？\n"+Uri.parse(url).getHost()).setPositiveButton("打开",(d,w)->{try{startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse(url)));}catch(ActivityNotFoundException e){notice("未找到浏览器。");}}).setNegativeButton("取消",null).show();
     return true;
   }
@@ -119,14 +120,32 @@ public class MainActivity extends Activity {
   private void requestExport(String url,String mime,String name){
     if(exporting){notice("请等待当前文件保存完成。");return;}
     if(!UrlPolicy.own(url)&&!UrlPolicy.blob(url))return;
-    exporting=true;exportUrl=url;exportMime=(mime!=null&&mime.contains("/"))?mime:"application/octet-stream";
-    Intent save=new Intent(Intent.ACTION_CREATE_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType(exportMime).putExtra(Intent.EXTRA_TITLE,UrlPolicy.filename(name));
-    try{startActivityForResult(save,SAVE);}catch(ActivityNotFoundException e){exporting=false;notice("此设备没有可用的文件保存器。");}
+    exporting=true;exportUrl=url;exportMime=ExportPolicy.mime(null,mime);
+    if(UrlPolicy.blob(url)){
+      if(!UrlPolicy.own(web.getUrl())){exporting=false;return;}
+      blobSlot="__gxtExport"+UUID.randomUUID().toString().replace("-","");String slot=JSONObject.quote(blobSlot),address=JSONObject.quote(url);
+      web.evaluateJavascript("(()=>{const s=window["+slot+"]={ready:false,name:window.__gxtDownloadNames?.get("+address+")||''};fetch("+address+").then(r=>r.blob()).then(b=>{s.blob=b;s.ready=true}).catch(()=>s.error=true);return true})()",v->probeBlobMetadata(name,0));return;
+    }
+    openSaveDialog(ExportPolicy.filename(name,exportMime));
+  }
+  private void openSaveDialog(String name){
+    Intent save=new Intent(Intent.ACTION_CREATE_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType(exportMime).putExtra(Intent.EXTRA_TITLE,name);
+    try{startActivityForResult(save,SAVE);}catch(ActivityNotFoundException e){if(blobSlot!=null)web.evaluateJavascript("delete window["+JSONObject.quote(blobSlot)+"]",null);blobSlot=null;exporting=false;notice("此设备没有可用的文件保存器。");}
+  }
+  private void probeBlobMetadata(String suppliedName,int attempt){
+    if(destroyed||!UrlPolicy.own(web.getUrl())||attempt>300){finishExport(false);return;}
+    web.evaluateJavascript("(()=>{const s=window["+JSONObject.quote(blobSlot)+"];return !s||s.error?{error:true}:s.ready?{ready:true,type:s.blob.type,name:s.name}:{ready:false}})()",value->{try{
+      JSONObject data=new JSONObject(value);if(data.optBoolean("error")){finishExport(false);return;}if(!data.optBoolean("ready")){handler.postDelayed(()->probeBlobMetadata(suppliedName,attempt+1),50);return;}
+      exportMime=ExportPolicy.mime(data.optString("type"),exportMime);String name=data.optString("name");
+      // A generic WebView guess may contain the blob UUID; use a useful MIME-based fallback.
+      if(name.isEmpty()&&suppliedName!=null&&!suppliedName.contains(exportUrl.substring(exportUrl.lastIndexOf('/')+1)))name=suppliedName;
+      openSaveDialog(ExportPolicy.filename(name,exportMime));
+    }catch(Exception e){finishExport(false);}});
   }
   @Override protected void onActivityResult(int request,int result,Intent data){
     super.onActivityResult(request,result,data);
     if(request==PICK&&chooser!=null){Uri[] values=null;if(result==RESULT_OK&&data!=null){if(data.getClipData()!=null){values=new Uri[data.getClipData().getItemCount()];for(int i=0;i<values.length;i++)values[i]=data.getClipData().getItemAt(i).getUri();}else if(data.getData()!=null)values=new Uri[]{data.getData()};}chooser.onReceiveValue(values);chooser=null;}
-    if(request==SAVE){if(result!=RESULT_OK||data==null||data.getData()==null){exporting=false;return;}Uri destination=data.getData();
+    if(request==SAVE){if(result!=RESULT_OK||data==null||data.getData()==null){if(blobSlot!=null)web.evaluateJavascript("delete window["+JSONObject.quote(blobSlot)+"]",null);blobSlot=null;exporting=false;return;}Uri destination=data.getData();
       progress=new ProgressDialog(this);progress.setMessage("正在保存文件…");progress.setCancelable(false);progress.show();
       if(UrlPolicy.blob(exportUrl))saveBlob(destination);else saveNetwork(destination);
     }
@@ -148,6 +167,7 @@ public class MainActivity extends Activity {
   private void saveBlob(Uri destination){
     if(!UrlPolicy.own(web.getUrl())){finishExport(false);return;}
     try{exportStream=getContentResolver().openOutputStream(destination,"wt");}catch(Exception e){finishExport(false);return;}
+    if(blobSlot!=null){pollBlob(0,0);return;}
     blobSlot="__gxtExport"+UUID.randomUUID().toString().replace("-","");
     String slot=JSONObject.quote(blobSlot),url=JSONObject.quote(exportUrl);
     // No JavascriptInterface is exposed. Only a user-requested export is read in bounded chunks.

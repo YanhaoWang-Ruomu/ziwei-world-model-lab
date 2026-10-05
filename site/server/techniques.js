@@ -13,7 +13,7 @@ export async function techniqueRoute({path,method,request,viewer,db,url}){
     if(payload.publicationMode==='reference')throw new HttpError(400,'这是原文参考卡片，尚未配置可执行规则，不能用于自动筛选年月。');
     if(data.chart?.palaces?.length!==12||!data.cycle)throw new HttpError(400,'需要完整命盘与运限资料。');
     const scopes=['natal','decadal','yearly','monthly','daily','hourly'];
-    if(!['current','yearly','monthly'].includes(data.unit)||(data.unit!=='current'&&payload.rule.conditions.some(c=>conditionScopes(c).some(s=>scopes.indexOf(s)>scopes.indexOf(data.unit)))))throw new HttpError(400,'技法任一侧包含更细的运限条件，不能用于判断整个所选区间。');
+    if(!['current','yearly','monthly','daily','hourly'].includes(data.unit)||(data.unit!=='current'&&payload.rule.conditions.some(c=>conditionScopes(c).some(s=>scopes.indexOf(s)>scopes.indexOf(data.unit)))))throw new HttpError(400,'技法任一侧包含更细的运限条件，不能用于判断整个所选区间。');
     const result=evaluateTechnique(payload.rule,data.chart,data.cycle,data.flights);
     return {...(viewer.core?result:{status:result.status,checks:[]}),outcome:result.status==='matches'?payload.outcome:''};
   }

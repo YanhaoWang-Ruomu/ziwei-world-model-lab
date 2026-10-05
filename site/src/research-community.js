@@ -53,4 +53,5 @@ export function initResearchCommunity({api,el,btn}){
   document.addEventListener('ziwei:session',e=>{clear();viewer=e.detail;newProject.hidden=!viewer.authenticated;enter(location.hash.slice(1));});
   document.addEventListener('ziwei:logout',()=>{clear();viewer={};newProject.hidden=true;});
   document.addEventListener('ziwei:view',e=>enter(e.detail));
+  document.addEventListener('ziwei:open-research',async e=>{if(!viewer.authenticated)return;try{researchTab='branches';await loadProjects();await openWorld(e.detail.id);}catch(error){status.textContent=error.message;}});
 }

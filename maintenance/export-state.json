@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "f945ac9957b90c78f2bf60a33e2a9bfc618073ce",
+  "sourceCommit": "bbdc6a3d3ae1476255746d3719358a1731755fe6",
   "files": [
     {
       "path": "site/db/schema.ts",
-      "sha256": "623273a0323990a875fafb11e0fcff73e9ecde3171145bb295d6c4ba19f1103c"
+      "sha256": "47b137f83686ff714402560b666b571014c019fd5dd472753104f941374f75fa"
     },
     {
       "path": "site/docs/community-local-acceptance.md",
@@ -79,6 +79,14 @@
       "sha256": "aa4164957cfe5408e0eb1da9d262f35d0672b5758e9d376ffd0d1782a77d9126"
     },
     {
+      "path": "site/drizzle/0015_recovery_and_community.sql",
+      "sha256": "5b9187236df82dc036d5416bd9648de69b5cfadbaad1938ea23649d9affb2ff1"
+    },
+    {
+      "path": "site/drizzle/meta/_journal.json",
+      "sha256": "fc5f68a8cce840db63982843ccd51d796c39b19bcec43a8dba89bdaff583c61e"
+    },
+    {
       "path": "site/drizzle/meta/0000_snapshot.json",
       "sha256": "c19e8b2924661a0626aa4d9b8444d30efbe9487a9b88206fd95306aad5979379"
     },
@@ -139,8 +147,8 @@
       "sha256": "9ccd73c49ab31d4ff5bf4a3ae57e84312ccb0a6c2c36e552658eebdc3ac26a71"
     },
     {
-      "path": "site/drizzle/meta/_journal.json",
-      "sha256": "105b821d9d7d9b4c30b4a74db95aa237c145c2225c4438d86f54d6c117a9a0f8"
+      "path": "site/drizzle/meta/0015_snapshot.json",
+      "sha256": "a4211b03bb2992c5867ead7cbd6c5db64e58e4cda6a1b8670e5bc3cac29afd69"
     },
     {
       "path": "site/package.json",
@@ -168,7 +176,7 @@
     },
     {
       "path": "site/server/accounts.js",
-      "sha256": "7720c5ceb0be4a5b0a700fc48b89736c685d77a72adf08fd327f47f4601c8f5a"
+      "sha256": "36cc06d785396f5503b2c98a0c19b4be5df8ab098f8f53cf62ba3c30848d4ecf"
     },
     {
       "path": "site/server/activity-history.mjs",
@@ -183,12 +191,12 @@
       "sha256": "75d735a047d8482f87f9841e2c7394bb5c83802ac52dd18f85ebed95c7b25d0f"
     },
     {
-      "path": "site/server/chart-cases.js",
-      "sha256": "d764e0ab20678881c6fba6ae8a7f6637ccda21f2384d1a6f97a0950272b417de"
-    },
-    {
       "path": "site/server/chart-case-transfer.mjs",
       "sha256": "d6e2895d10d4e0d758aba562e7ecd4f2af9f8f515513dc1e0c49f84a18608c71"
+    },
+    {
+      "path": "site/server/chart-cases.js",
+      "sha256": "d764e0ab20678881c6fba6ae8a7f6637ccda21f2384d1a6f97a0950272b417de"
     },
     {
       "path": "site/server/chart-preferences.mjs",
@@ -200,7 +208,11 @@
     },
     {
       "path": "site/server/community-attachments.mjs",
-      "sha256": "5522fef3968174e5268415ccab1891d23a207af845b09e2b79d154731590d7d9"
+      "sha256": "54633fd18a298c50b2891f278352daa6250b58339b6c8840027e0bdd8e037def"
+    },
+    {
+      "path": "site/server/community-followup.mjs",
+      "sha256": "2728bfac3ac2aa1fb77f36bdfbff04c81ff715309938886363db82d900a0fc84"
     },
     {
       "path": "site/server/library-search.mjs",
@@ -235,8 +247,12 @@
       "sha256": "8321ac6cb48fdb44030b931fade2a2140e5fede1f9cc2f034869bd28cd7345ca"
     },
     {
+      "path": "site/server/storage-restore.mjs",
+      "sha256": "771feb45913a7d02c54b23695c60ceccc8002d5636650fdce940516f8bbadfcf"
+    },
+    {
       "path": "site/server/storage.js",
-      "sha256": "e048a5afed3c60bc4974aaa436e5d849cd761ce05ebc83690abde75dbc2ac936"
+      "sha256": "cef5b6ad3744150676d44b205ced42f8efd995887f06626130bf52b38dc2dd6f"
     },
     {
       "path": "site/server/submissions.js",
@@ -247,16 +263,24 @@
       "sha256": "5f84dca38fe286da7ac3e44968bf3028151bbf5401f531c9a574737285891739"
     },
     {
+      "path": "site/server/technique-research.mjs",
+      "sha256": "023953f0f88b4b5f9032100d2052689c351c41a2267472911e88556ced2d5cf8"
+    },
+    {
       "path": "site/server/techniques.js",
-      "sha256": "f1cd4d9e2cea693d3351e3397f113d785b19db37962cd356d6c4f610ad55856d"
+      "sha256": "7fb983b645d4e01f3e93c60df4b68bc59dd17c7d28a844190e12d3f7008909c9"
     },
     {
       "path": "site/server/worker.js",
-      "sha256": "c4d521dc26f9a378a4ff38fddaf31eadce91f9ba4b9483e30f723f36721ede57"
+      "sha256": "54beaa77f3626c04f3a466a27a0485ff3f1ee91e72ea235ff2b9ef1a723b7a9c"
     },
     {
       "path": "site/server/world-community.js",
-      "sha256": "2e32a4a20be81a55c2723355baa4497cb92a16d77fc004ae1778b1b17b239d81"
+      "sha256": "7f960e0b4f99ea2a6f671d3055b03522d46153cbda599c0e02d6f62ece4845ff"
+    },
+    {
+      "path": "site/src/account-security.mjs",
+      "sha256": "6174925476d805524ce54b6f6de0059dc8cda6d3c38462d242dd0a8dbc18efbd"
     },
     {
       "path": "site/src/activity-history.mjs",
@@ -287,6 +311,10 @@
       "sha256": "4f8f9c540adb6e1671409662d72be16d801f0d178b6ca2dc59c15277e6b09a41"
     },
     {
+      "path": "site/src/case-import-panel.mjs",
+      "sha256": "9e6bf2fe81840965b16b3cd052588a585411c794ae4479480a91aa9d880b13c8"
+    },
+    {
       "path": "site/src/celestial-events.mjs",
       "sha256": "c835dc6f92589ad6dd9e0f37a40171cc774152fa618756e859cd1c2d15d2956b"
     },
@@ -307,28 +335,8 @@
       "sha256": "0ce204b6d3cd44644d7641c294eec79cad9633f857bd647f88a6107fd906cde5"
     },
     {
-      "path": "site/src/case-import-panel.mjs",
-      "sha256": "9e6bf2fe81840965b16b3cd052588a585411c794ae4479480a91aa9d880b13c8"
-    },
-    {
       "path": "site/src/chart-conventions.mjs",
       "sha256": "da38ac560c4ec36ac41a96bd81ef013ede9164a0126f7c3fceb4fdddde4253fa"
-    },
-    {
-      "path": "site/src/chart-method-controls.mjs",
-      "sha256": "ba18fa4538d69cb64dc14bd36b4c057e1717f8877f84e0d618ab5759891f890d"
-    },
-    {
-      "path": "site/src/chart-star-methods.mjs",
-      "sha256": "5c985ddda248f9ad680818309d32b96e608e5bd739536ef2605018e02f751826"
-    },
-    {
-      "path": "site/src/chart-preferences.css",
-      "sha256": "d19d98cbb27f634d10efe0df73c2a4850fdeab142e08e4d02c4e05b6da5fff0a"
-    },
-    {
-      "path": "site/src/chart-settings.mjs",
-      "sha256": "556994069809e83f513b4ef58b321895a1cc16f316160e62c96f3882cf9d35b9"
     },
     {
       "path": "site/src/chart-engine.mjs",
@@ -351,6 +359,10 @@
       "sha256": "bfc0e3f57266dc0fcf7780bbc31c7ed210d5d1205269305a75115f96049c2423"
     },
     {
+      "path": "site/src/chart-method-controls.mjs",
+      "sha256": "ba18fa4538d69cb64dc14bd36b4c057e1717f8877f84e0d618ab5759891f890d"
+    },
+    {
       "path": "site/src/chart-mobile.mjs",
       "sha256": "132d61f8262c4f51c6eb2d686f4b0cff9142125322a5b39bb1376a2d5bc7f048"
     },
@@ -361,6 +373,10 @@
     {
       "path": "site/src/chart-motion.mjs",
       "sha256": "33cc188c5f9122565c1cd218e9c9ab33be4089a436628aba33e1daff0d6b7f1a"
+    },
+    {
+      "path": "site/src/chart-preferences.css",
+      "sha256": "d19d98cbb27f634d10efe0df73c2a4850fdeab142e08e4d02c4e05b6da5fff0a"
     },
     {
       "path": "site/src/chart-projection.mjs",
@@ -375,12 +391,20 @@
       "sha256": "1e3057f2755d379521a2753243245ca3bf74f7aea86351ca328b97aab4a7b252"
     },
     {
+      "path": "site/src/chart-settings.mjs",
+      "sha256": "556994069809e83f513b4ef58b321895a1cc16f316160e62c96f3882cf9d35b9"
+    },
+    {
+      "path": "site/src/chart-star-methods.mjs",
+      "sha256": "5c985ddda248f9ad680818309d32b96e608e5bd739536ef2605018e02f751826"
+    },
+    {
       "path": "site/src/cinematic.css",
       "sha256": "36b0565e205dfca0707fd5804496ad13b087c22dad32ffb3543310c7167d6aee"
     },
     {
       "path": "site/src/community-editor.js",
-      "sha256": "439308b0bb04530bffd9b161096d91ffa3285fab2ccc4a0251d141cabbec05b8"
+      "sha256": "f56e32913f63c470e6f996b0a37c3d99a7dee126e87b38c626ef99710cbe6117"
     },
     {
       "path": "site/src/community-text.mjs",
@@ -388,7 +412,7 @@
     },
     {
       "path": "site/src/community.js",
-      "sha256": "5396dfad38ad5efb80d9803051f339935071ebc35da8c8ec3e83513dd05e4290"
+      "sha256": "5e48197988f319a0a0b888a4909b0f34725c24a89c1de03439d1e0fff35229cb"
     },
     {
       "path": "site/src/compact-controls.mjs",
@@ -400,7 +424,7 @@
     },
     {
       "path": "site/src/cosmos.js",
-      "sha256": "08e27a443e56f49cf54d3ff8805176aadbc18d56a0a1ecba0c14a96051965d79"
+      "sha256": "fb6df42fe482a1f935f56ead2066c22edbd954849e4948db33fc5cf4d1ea82d3"
     },
     {
       "path": "site/src/cycle-controls.css",
@@ -408,7 +432,7 @@
     },
     {
       "path": "site/src/cycle-controls.mjs",
-      "sha256": "c3f03c4fbc90dc50a18d42c8ee2b318dfd5f42ca85fb3a077289160d0977b92e"
+      "sha256": "f4face115c3c63759e9e112c5ecfab414fcd30d76b18c978292fac595673f661"
     },
     {
       "path": "site/src/cycle-navigation.mjs",
@@ -436,7 +460,7 @@
     },
     {
       "path": "site/src/downloads-manifest.json",
-      "sha256": "d69664e93d69c819797b5e09ed50eebd7cf120404c10c099841c5afc22a7ea97"
+      "sha256": "320396801f181c7b88e947c44c4839dd8c504d4237c19d36ff103077aaf36434"
     },
     {
       "path": "site/src/earth-globe.mjs",
@@ -456,7 +480,7 @@
     },
     {
       "path": "site/src/index.html",
-      "sha256": "75aa8333ee761c97bcc4377fdd24f837c7745ad4b16d6c0fc8d4b4708873d823"
+      "sha256": "b099e723aee1e990c3b62c05d934e53358b9ea344f28933324c3030d95e4297f"
     },
     {
       "path": "site/src/journey-motion.mjs",
@@ -504,7 +528,7 @@
     },
     {
       "path": "site/src/orrery-data.mjs",
-      "sha256": "0dd5166906d57768fe51a839c5eaf9eeabaea8161565f508c27cbca1f31b1870"
+      "sha256": "a333083033db24dbbd1a9652a1c4f6def281832a23ca91f68a3f5051c8f23490"
     },
     {
       "path": "site/src/orrery-explorer.mjs",
@@ -516,7 +540,7 @@
     },
     {
       "path": "site/src/orrery.mjs",
-      "sha256": "ec5c3c073078547cb00ef5e4a66ea3387847a1d53aa2241868210cc9cc4a5ccf"
+      "sha256": "fefb8b738175144e3e5390a0500ac2ca15a39bf72b78dfb6b7764698a9a7391a"
     },
     {
       "path": "site/src/page-image-highlights.mjs",
@@ -528,7 +552,7 @@
     },
     {
       "path": "site/src/palace-resonance.mjs",
-      "sha256": "4a05a0125ddb75738de085ca56c6cd71c88e0ca224f841e819996b2b9c9e9f2b"
+      "sha256": "c815df371484392edabed10ae1d5928e9c26e4b4abed27490ee944bb06e0f86d"
     },
     {
       "path": "site/src/personal-account.css",
@@ -536,11 +560,11 @@
     },
     {
       "path": "site/src/personal-account.js",
-      "sha256": "858ea2f615f9a30287de0db188569aff58748069ffe056161520849df22a6dac"
+      "sha256": "2a677763412f3c368fc34720cf1bcfc00498243cce6011d4188d4000547673c1"
     },
     {
       "path": "site/src/private-vault.mjs",
-      "sha256": "45f92dfd987130c9a0295c5d9c2aa52635b77e2b3b37e2236e85e1d37334df0d"
+      "sha256": "427e44b557faff7a613e37426a6b06c5f7126d6d25712402bb35475a219be39f"
     },
     {
       "path": "site/src/research-community.css",
@@ -548,7 +572,7 @@
     },
     {
       "path": "site/src/research-community.js",
-      "sha256": "1f4d36f810b8ad0bb5e29ea44d8a5fc43eb676cf301e0dde4c95fbe2e06c2037"
+      "sha256": "7384668222d04bcd90fa06388381f45ef902be1800d7b786323b6d29836d4fe1"
     },
     {
       "path": "site/src/review.css",
@@ -576,7 +600,7 @@
     },
     {
       "path": "site/src/scenario-workbench.js",
-      "sha256": "e55354969736efafd45b83e2c96d765e6bcf2e6712dd6679bbe92576d69b3fa7"
+      "sha256": "bc4ee3d0322d7d598226c19642a83ea7d31e6936e878858fc567177d8ee8668e"
     },
     {
       "path": "site/src/scene-geometry.mjs",
@@ -631,26 +655,6 @@
       "sha256": "90b3060e09a0a1b086d8305e5ce78dc59d1bff3cb41268e3c786ed38ab73e37b"
     },
     {
-      "path": "site/src/sky/EARTH-SOURCE.txt",
-      "sha256": "c1c73760704944b18ce1d3f3fd5d9daa38d7f756afcd794a2f8d15b3510a2447"
-    },
-    {
-      "path": "site/src/sky/LANDSCAPE-SOURCE.txt",
-      "sha256": "305ea1774f3e3e1ee0deaa5f489f393c81c798d53179b9fe6c35151ea261c99d"
-    },
-    {
-      "path": "site/src/sky/LICENSE.txt",
-      "sha256": "d8d3127d99375e7f778a5a0807191f410e6fc42ebc7b99b19ff05a781cd18e35"
-    },
-    {
-      "path": "site/src/sky/LIVING-WORLD-SOURCES.txt",
-      "sha256": "708a2b9fe1a2f36bf09c1ce1abcc233a647a5b62438609f841cbf83377ae48f8"
-    },
-    {
-      "path": "site/src/sky/SOUTH-STARS-SOURCES.txt",
-      "sha256": "c890f3a6ecabf933e8456e1219dc330d710d2ea47b8fd2e8ed8e7f3318f12ac8"
-    },
-    {
       "path": "site/src/sky/catalog.json",
       "sha256": "5b429b3cdd6d0f0ac6f38c0bcd8e1e99e15bf354d372d8249c54e8399b29bb31"
     },
@@ -691,8 +695,24 @@
       "sha256": "d87de751a264e4f8ff69c68de5dab9606daee87a6f15ae743c93200743bd7ec1"
     },
     {
+      "path": "site/src/sky/EARTH-SOURCE.txt",
+      "sha256": "c1c73760704944b18ce1d3f3fd5d9daa38d7f756afcd794a2f8d15b3510a2447"
+    },
+    {
       "path": "site/src/sky/guilin-terrain.png",
       "sha256": "741a0cf65aecc1e5dc5a6b6cee114cf37804700fc33a71301a578afe533a9bc0"
+    },
+    {
+      "path": "site/src/sky/LANDSCAPE-SOURCE.txt",
+      "sha256": "305ea1774f3e3e1ee0deaa5f489f393c81c798d53179b9fe6c35151ea261c99d"
+    },
+    {
+      "path": "site/src/sky/LICENSE.txt",
+      "sha256": "d8d3127d99375e7f778a5a0807191f410e6fc42ebc7b99b19ff05a781cd18e35"
+    },
+    {
+      "path": "site/src/sky/LIVING-WORLD-SOURCES.txt",
+      "sha256": "708a2b9fe1a2f36bf09c1ce1abcc233a647a5b62438609f841cbf83377ae48f8"
     },
     {
       "path": "site/src/sky/milkyway-gaia.jpg",
@@ -731,6 +751,10 @@
       "sha256": "1c2ec11eefc4c2e301877db190fe04fc72108d105fdc2b0a6656ffafaf755b42"
     },
     {
+      "path": "site/src/sky/SOUTH-STARS-SOURCES.txt",
+      "sha256": "c890f3a6ecabf933e8456e1219dc330d710d2ea47b8fd2e8ed8e7f3318f12ac8"
+    },
+    {
       "path": "site/src/square-chart.css",
       "sha256": "00d5ce7ed8303df2838a9d58826a1642258314aa5aa7020b4bbdb7d8a9c75e58"
     },
@@ -740,11 +764,15 @@
     },
     {
       "path": "site/src/star-profiles.mjs",
-      "sha256": "62ffac651df93ad12dc9935ebd8b0910d310b22f19f2e5cdf3085594d7690fcc"
+      "sha256": "6ee7abc0aa7601f5c09632761bf37e066397daf445e1f7dd9bedd54572dc6162"
     },
     {
       "path": "site/src/starfield.mjs",
       "sha256": "b9e036a49abbd77ba2c131664ff05a29577c06ed50fc3aa9147633151e8ce45f"
+    },
+    {
+      "path": "site/src/storage-restore.mjs",
+      "sha256": "34bf522a70e4a58968552ac03c40022300a33244c26007e96a9b51cc2b9c236d"
     },
     {
       "path": "site/src/storage.css",
@@ -752,7 +780,7 @@
     },
     {
       "path": "site/src/storage.js",
-      "sha256": "18f75e89b41e0a0dfaf8110d9e2a5060aa6958b5ebed8c6ba4866bafb49212d4"
+      "sha256": "d0afa8837da3940f63db2b1b11c8e9e55ed477e5710be223b55ff860dd4b4d24"
     },
     {
       "path": "site/src/styles.css",
@@ -768,15 +796,23 @@
     },
     {
       "path": "site/src/technique-engine.mjs",
-      "sha256": "44103644864804f4b513160c4d26eb852003153356ed0ee2273ce7cbba8ff41a"
+      "sha256": "fb8be70e0ecd52f07894848b3b717ed0dec5e7a2aec44ecc1cb6732b896d5f7c"
     },
     {
       "path": "site/src/technique-history.js",
       "sha256": "e53f0788ee4a9b2f8d21c700db63054175f5d73b8432a43dcc119f86b2faff3a"
     },
     {
+      "path": "site/src/technique-periods.mjs",
+      "sha256": "f951f5168f3f46287aea102a04fd221e3ca907bb322479e56324037653eb3452"
+    },
+    {
       "path": "site/src/technique-scan.mjs",
-      "sha256": "d5e9ec3c0ff464edc2dbaa26c1af8b8b73628d2e418b4e3920130b78d8dcc68b"
+      "sha256": "cf6f89a9b6d41202a1139a7903b24e61949b50575a12a8b9a6521268f54a354e"
+    },
+    {
+      "path": "site/src/technique-scenario.mjs",
+      "sha256": "400f325e7a21e22e341d623f8e8e3abd228f03b89872b5be65861296bff86738"
     },
     {
       "path": "site/src/techniques.css",
@@ -784,7 +820,7 @@
     },
     {
       "path": "site/src/techniques.js",
-      "sha256": "9eed4f89cb62b7c2b3e01242ce1783a71d0c0b265495d055c19422d6ce8bf08c"
+      "sha256": "a038c5099a53097cd61f944ba46bd0e290e5c0187a379be83e35b2d5ee5ae920"
     },
     {
       "path": "site/src/terrain-profile.mjs",
@@ -797,6 +833,14 @@
     {
       "path": "site/src/upload.js",
       "sha256": "358241841fcdbc9ccbf8ad058c67c1adcbca7e47812a79f03ceb0c2efa721a56"
+    },
+    {
+      "path": "site/src/vault-books.mjs",
+      "sha256": "f85f91b6d3015d10252ea6ed50bd6c52605dc4e6ee22d94821f437069668d117"
+    },
+    {
+      "path": "site/src/vault-storage.mjs",
+      "sha256": "84c0634704977f341f977e431300e1e8b4c5ff7fbfff6d15375ea8554d63a41c"
     },
     {
       "path": "site/src/wheel-chart.mjs",
@@ -851,8 +895,12 @@
       "sha256": "aad28b8a5a7b357c35f610ec3c4913724534bb45cd5f2ee427ba0db46b345cd2"
     },
     {
-      "path": "site/tests/chart.test.mjs",
-      "sha256": "4ae63db738b70f24014f5d6a1cdfed5ee7cbb491cfc31edfaaff0266aee40dca"
+      "path": "site/tests/chart-preferences-demo.mjs",
+      "sha256": "6dde02904ea5d8c997e1f926afc4ce47eab02e9af5c41b5f9588b684baf9c3b0"
+    },
+    {
+      "path": "site/tests/chart-preferences.integration.mjs",
+      "sha256": "bb802f8722cdc2ac85e511b05abab01e563d56332e370b06b7bcd74ad98f6f91"
     },
     {
       "path": "site/tests/chart-preferences.test.mjs",
@@ -863,12 +911,8 @@
       "sha256": "25597c3e3e7ba211d0895513551390c993355a4c9b512609e166a05f2617fd68"
     },
     {
-      "path": "site/tests/chart-preferences.integration.mjs",
-      "sha256": "bb802f8722cdc2ac85e511b05abab01e563d56332e370b06b7bcd74ad98f6f91"
-    },
-    {
-      "path": "site/tests/chart-preferences-demo.mjs",
-      "sha256": "6dde02904ea5d8c997e1f926afc4ce47eab02e9af5c41b5f9588b684baf9c3b0"
+      "path": "site/tests/chart.test.mjs",
+      "sha256": "4ae63db738b70f24014f5d6a1cdfed5ee7cbb491cfc31edfaaff0266aee40dca"
     },
     {
       "path": "site/tests/community-demo-seed.mjs",
@@ -888,11 +932,15 @@
     },
     {
       "path": "site/tests/community-ui.test.mjs",
-      "sha256": "6f7de5158e8828bbee22cac4b72f51591e89dbf441ab26313330a13bb7a97154"
+      "sha256": "e72e97896c4e1f502dc3f83fe40d630d0d4e77461ceda4ad699c2ee9bd167604"
     },
     {
       "path": "site/tests/cycle-navigation.test.mjs",
       "sha256": "1d9c25c11ddef1564121ea550b87bdaf7f9b3b5011f09c5557d662ab89d6c279"
+    },
+    {
+      "path": "site/tests/fictional-store.mjs",
+      "sha256": "e9863c8aaf2a498e2722ef0591708e8b50854375ca696d7d77b23699384edef7"
     },
     {
       "path": "site/tests/landscape-journey.test.mjs",
@@ -904,7 +952,15 @@
     },
     {
       "path": "site/tests/orrery.test.mjs",
-      "sha256": "16691b47e407a90b8bc8553b859ceb3852a9cb3145e69b0a99f70bfe9e5798fe"
+      "sha256": "a2d380f1d589a671c91ed98564e185aeb046fa0c6618bbf34b7c6096388129c6"
+    },
+    {
+      "path": "site/tests/recovery-community.test.mjs",
+      "sha256": "e3632b39c476ef460ce9694d6f6d3053a66c51022b119c6a5658d616544cdfce"
+    },
+    {
+      "path": "site/tests/recovery.integration.mjs",
+      "sha256": "7f299b4b80eca324702b538bb62ca56bc58b0909b603575189cc8527e4eb7a7b"
     },
     {
       "path": "site/tests/scenario-engine.test.mjs",
@@ -939,6 +995,22 @@
       "sha256": "9657b5d0511d1c5d6e320be297d78f8f867fd8bdf7ffe8544187dc5e42641da2"
     },
     {
+      "path": "site/tests/technique-groups.test.mjs",
+      "sha256": "7756e303477455abbf6b7fd5aa22055f144a259e70078065b53486fc6abcf5d7"
+    },
+    {
+      "path": "site/tests/technique-periods.test.mjs",
+      "sha256": "e197d1c54320c66ddc1cd594bbab988ab7777b93aad08ec4f22028dfbb17338b"
+    },
+    {
+      "path": "site/tests/technique-research.test.mjs",
+      "sha256": "0e4a44336ebcaa12f6e65b297d94b9dc4fecf6bafa12e4b10549203b244a1a8a"
+    },
+    {
+      "path": "site/tests/vault-recovery.test.mjs",
+      "sha256": "5bc2b22eebbf43ba9828715a4ba7ad786940f7751c173fb500f2e4428b0bb2de"
+    },
+    {
       "path": "site/tests/workspace-access.test.mjs",
       "sha256": "3184a526eaf9c72f1d4310b590a90cdc8b1ebf465d3c3eb2f4d58c55aa3a540e"
     },
@@ -971,28 +1043,28 @@
       "sha256": "749052824223870f45f9d33d7c96b0f360f8c072e8834ed446b2cd7b1c7febcf"
     },
     {
-      "path": "site/vendor-models/LICENSE",
-      "sha256": "a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9"
-    },
-    {
-      "path": "site/vendor-models/README.md",
-      "sha256": "d592951f8a70fb81e7e7032c2582815561edbc8d37625018a21e47c6b52ea060"
+      "path": "site/vendor-models/chi_sim_vert.traineddata",
+      "sha256": "ea672a78157199c333aa12ec4e74550077689b545df5fc770903716850c8b2e5"
     },
     {
       "path": "site/vendor-models/chi_sim.traineddata",
       "sha256": "4fef2d1306c8e87616d4d3e4c6c67faf5d44be3342290cf8f2f0f6e3aa7e735b"
     },
     {
-      "path": "site/vendor-models/chi_sim_vert.traineddata",
-      "sha256": "ea672a78157199c333aa12ec4e74550077689b545df5fc770903716850c8b2e5"
+      "path": "site/vendor-models/chi_tra_vert.traineddata",
+      "sha256": "bbe518f94b9e3852109113507357bfe7e257834d88d2d1ead44178046bcd2181"
     },
     {
       "path": "site/vendor-models/chi_tra.traineddata",
       "sha256": "1aa60488574cafa69486d919284f079ca9b68fcc7f6ad8dc1ff1b318dfd97028"
     },
     {
-      "path": "site/vendor-models/chi_tra_vert.traineddata",
-      "sha256": "bbe518f94b9e3852109113507357bfe7e257834d88d2d1ead44178046bcd2181"
+      "path": "site/vendor-models/LICENSE",
+      "sha256": "a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9"
+    },
+    {
+      "path": "site/vendor-models/README.md",
+      "sha256": "d592951f8a70fb81e7e7032c2582815561edbc8d37625018a21e47c6b52ea060"
     },
     {
       "path": "site/wrangler.jsonc",
@@ -1080,7 +1152,7 @@
     },
     {
       "path": "android/AndroidManifest.xml",
-      "sha256": "7d00cd97e477c2cb17662b2d8352d6658f357dc22b979691e1f103e65a9cda04"
+      "sha256": "b299bbc1284ac69070dd92ff9e4a589835e7932e7eb0b83f7cff34bca8e8585a"
     },
     {
       "path": "android/README.md",
@@ -1111,8 +1183,12 @@
       "sha256": "faf46902d9843e7b57a7b639a4c9024f13e46147effa5e45322f200b38c9f3a4"
     },
     {
+      "path": "android/src/site/guanxingtai/android/ExportPolicy.java",
+      "sha256": "e3bd842d9d75ea264be217f6007ab17a85270b4ca82c747e629f4f748c5ee1f4"
+    },
+    {
       "path": "android/src/site/guanxingtai/android/MainActivity.java",
-      "sha256": "55384d9fc3de11ef0232187e534faeb14e95615da0ec8d2e25d75d06112fba03"
+      "sha256": "9b563a9f66a5874550076a512c9cdcd7569ca9a8d63a046e846e77b4d20be13c"
     },
     {
       "path": "android/src/site/guanxingtai/android/UpdatePolicy.java",
@@ -1125,6 +1201,10 @@
     {
       "path": "android/src/site/guanxingtai/android/UrlPolicy.java",
       "sha256": "939ec3d756c11957679844e3436c1fd6ecd493bf11b970bc98ff78f85b4f6c3d"
+    },
+    {
+      "path": "android/tests/ExportPolicyTest.java",
+      "sha256": "0016b26b8e9413d0196203e08a7cad9b5eadfb171e7ba394e4aa9fbfc0e71ef6"
     },
     {
       "path": "android/tests/PolicyTest.java",

@@ -4,7 +4,7 @@ import {renderCommunityText,renderCommunityFiles} from './community-text.mjs';
 export function initCommunity({api,el,btn}) {
   const root=document.querySelector('#community'),reviewRoot=document.querySelector('#community-review');
   if(!root)return;
-  let viewer={},generation=0,offset=0,listRequest=0,detailRequest=0,reviewRequest=0,detailId='',commentEditor=null;
+  let viewer={},generation=0,offset=0,listRequest=0,detailRequest=0,reviewRequest=0,detailId='',commentEditor=null,editingPost=null,editors=[];
   const status=message(),reviewStatus=message(),list=el('div','research-feed'),detail=el('article','community-detail'),queue=el('div');
   detail.hidden=true;detail.tabIndex=-1;
   function message(){const n=el('p','research-status');n.setAttribute('role','status');return n;}
@@ -35,15 +35,18 @@ export function initCommunity({api,el,btn}) {
   composerPanel.append(el('summary','','发起讨论'),composer);composerPanel.hidden=true;
   composer.append(select('kind','讨论类型',[['case','案例讨论'],['technique','技法讨论']]),field('title','标题'),field('tags','标签（逗号分隔，最多五个）',124),postEditor.root,check('我已检查文字、图片、附件及链接，同意将本次提交的内容送审，审核后公开。'),submit('提交审核'),composerStatus);
   composer.elements.title.required=true;
-  const actions=el('div','community-actions'),compose=action('发起讨论',()=>{if(!viewer.authenticated){login();return;}composerPanel.open=true;composerPanel.scrollIntoView({behavior:'smooth',block:'start'});composer.elements.title.focus({preventScroll:true});});compose.className='book-primary';actions.append(compose);
+  const actions=el('div','community-actions'),compose=action('发起讨论',()=>{if(!viewer.authenticated){login();return;}editingPost=null;postEditor.reset();composer.reset();composerPanel.querySelector('summary').textContent='发起讨论';composerPanel.open=true;composerPanel.scrollIntoView({behavior:'smooth',block:'start'});composer.elements.title.focus({preventScroll:true});});compose.className='book-primary';actions.append(compose);
+  const inbox=el('details','storage-panel'),inboxTitle=el('summary','','消息'),inboxList=el('div');inbox.hidden=true;inbox.append(inboxTitle,action('刷新消息',loadNotifications),inboxList);
   const search=form('research-form research-inline');search.append(field('q','关键词'),field('tag','标签（完整匹配）',24),select('scope','范围',[['public','公开讨论'],['mine','我的投稿'],['favorites','我的收藏']]),submit('搜索'));
-  root.append(heading,actions,status,composerPanel,search,list,detail);
+  root.append(heading,actions,status,inbox,composerPanel,search,list,detail);
   guarded(composer,composerStatus,async v=>{
-    const g=generation,data=await api('/api/community/posts',{method:'POST',body:JSON.stringify({title:v.title,kind:v.kind,tags:v.tags.split(/[,，]/).map(t=>t.trim()).filter(Boolean),...postEditor.value(),sharingConfirmed:v.confirmed==='on'})});
-    if(g!==generation)return;postEditor.reset();composer.reset();composerPanel.open=false;search.elements.scope.value='mine';offset=0;
+    const g=generation,data=await api('/api/community/posts'+(editingPost?'/'+editingPost.id:''),{method:editingPost?'PUT':'POST',body:JSON.stringify({title:v.title,kind:v.kind,tags:v.tags.split(/[,，]/).map(t=>t.trim()).filter(Boolean),...postEditor.value(),sharingConfirmed:v.confirmed==='on',...(editingPost?{revision:editingPost.revision}:{})})});
+    if(g!==generation)return;editingPost=null;postEditor.reset();composer.reset();composerPanel.open=false;search.elements.scope.value='mine';offset=0;
     await loadPosts();await openPost(data.post.id,{scroll:true});status.textContent='投稿已保存，可在“我的投稿”查看审核状态。';composerStatus.textContent='';
   });
   guarded(search,status,async()=>{offset=0;await loadPosts();status.textContent='';});
+  async function loadNotifications(){if(!viewer.authenticated)return;const g=generation,data=await api('/api/community/notifications');if(g!==generation)return;inbox.hidden=false;inboxList.replaceChildren();const unread=data.notifications.filter(n=>!n.readAt).length;inboxTitle.textContent='消息'+(unread?' · '+unread+' 条未读':'');for(const n of data.notifications){const row=el('div','storage-actions');row.append(action((n.readAt?'':'未读 · ')+(n.kind==='reply'?'收到回复':'审核状态更新')+' · '+new Date(n.createdAt*1000).toLocaleString('zh-CN'),async()=>{await openPost(n.postId,{scroll:true});await api('/api/community/notifications',{method:'POST',body:JSON.stringify({id:n.id})});await loadNotifications();}));inboxList.append(row);}if(!data.notifications.length)inboxList.append(el('p','muted','暂无消息。这里显示最近 60 条可访问的回复与审核消息。'));}
+  function history(kind,item){const panel=el('details'),box=el('div');panel.append(el('summary','','编辑历史（本人及核心可见）'),box);let loaded=false;panel.addEventListener('toggle',async()=>{if(!panel.open||loaded)return;const g=generation;try{const data=await api('/api/community/'+(kind==='post'?'posts':'comments')+'/'+item.id+'/history');if(g!==generation)return;loaded=true;for(const h of data.history){const entry=el('article','research-card');entry.append(el('p','muted','修改前版本 '+h.revision+' · '+new Date(h.createdAt*1000).toLocaleString('zh-CN')),content({...h.content,attachments:[]}));box.append(entry);}if(!data.history.length)box.append(el('p','muted','暂无编辑历史。'));}catch(e){box.textContent=e.message;}});return panel;}
   async function loadPosts(){
     const g=generation,r=++listRequest,v=values(search),data=await api('/api/community/posts?'+new URLSearchParams({...v,offset:String(offset)}));if(g!==generation||r!==listRequest)return;
     list.replaceChildren();for(const p of data.posts){const card=el('article','research-card community-topic'),title=action(p.title,()=>openPost(p.id,{scroll:true})),tags=el('div','community-tags');title.classList.add('community-topic-title');
@@ -59,23 +62,29 @@ export function initCommunity({api,el,btn}) {
   }
   async function openPost(id,{scroll=false,notice='',focusComment=false}={}){
     const g=generation,r=++detailRequest;detailId=id;const data=await api('/api/community/posts/'+id);if(g!==generation||r!==detailRequest||detailId!==id)return;
-    commentEditor?.dispose();commentEditor=null;const p=data.post;detail.hidden=false;detail.replaceChildren(el('h2','',p.title),el('p','community-topic-meta',statusLabel(p.status)+(p.mine?' · 我的投稿':'')),content(p));if(p.note)detail.append(el('p','community-review-note',p.note));
+    commentEditor?.dispose();commentEditor=null;editors.forEach(ed=>ed.dispose());editors=[];let parentId=null;const replyLabel=el('p','muted');const p=data.post;detail.hidden=false;detail.replaceChildren(el('h2','',p.title),el('p','community-topic-meta',statusLabel(p.status)+(p.mine?' · 我的投稿':'')),content(p));if(p.note)detail.append(el('p','community-review-note',p.note));
     const comments=el('section','community-comments'),commentStatus=message();comments.append(el('h3','','评论'),commentStatus);commentStatus.textContent=notice;
     if(p.status!=='published')comments.append(el('p','muted','讨论公开后即可评论。'));
     else if(!viewer.authenticated){const prompt=el('div','community-comment-login');prompt.append(el('p','','登录后参与评论，登录成功会回到这篇讨论。'),action('登录 / 注册后评论',()=>login(id),commentStatus));comments.append(prompt);}
     else {
       const f=form('research-form community-comment-form'),ed=communityEditor({api,el,btn,label:'写下评论',max:4000});commentEditor=ed;
-      f.append(ed.root,check('同意将本条文字、图片、附件及链接送审，审核后公开。'),submit('提交评论审核'));comments.append(f);
-      guarded(f,commentStatus,async v=>{const epoch=generation;await api('/api/community/posts/'+id+'/comments',{method:'POST',body:JSON.stringify({...ed.value(),sharingConfirmed:v.confirmed==='on'})});if(epoch!==generation)return;ed.reset();await openPost(id,{notice:'评论已保存，等待审核；现在你可在下方看到自己的评论。',focusComment:true});});
+      f.append(replyLabel,action('改为直接评论',()=>{parentId=null;replyLabel.textContent='';}),ed.root,check('同意将本条文字、图片、附件及链接送审，审核后公开。'),submit('提交评论审核'));comments.append(f);
+      guarded(f,commentStatus,async v=>{const epoch=generation;await api('/api/community/posts/'+id+'/comments',{method:'POST',body:JSON.stringify({...ed.value(),parentId,sharingConfirmed:v.confirmed==='on'})});if(epoch!==generation)return;ed.reset();await openPost(id,{notice:'评论已保存，等待审核；现在你可在下方看到自己的评论。',focusComment:true});});
     }
     const commentList=el('div','community-comment-list');comments.append(commentList);
     for(const c of data.comments){const card=el('article','research-card community-comment'),out=message();card.append(el('p','community-topic-meta',(c.mine?'我的评论 · ':'')+statusLabel(c.status)),content(c));if(c.note)card.append(el('p','community-review-note',c.note));const bar=el('div','community-post-actions');
+      if(c.parentId){const parent=data.comments.findIndex(row=>row.id===c.parentId);card.prepend(el('p','muted',parent>=0?'回复第 '+(parent+1)+' 条评论':'回复的评论暂不可见'));}
+      if(viewer.authenticated&&p.status==='published'&&c.status==='published')bar.append(action('回复这条',()=>{parentId=c.id;replyLabel.textContent='正在回复第 '+(data.comments.indexOf(c)+1)+' 条评论';commentEditor?.input.focus();replyLabel.scrollIntoView({block:'center'});},out));
+      if(c.mine&&c.status!=='withdrawn'){const editPanel=el('details');let loaded=false;editPanel.append(el('summary','','编辑并重新送审'));editPanel.addEventListener('toggle',()=>{if(!editPanel.open||loaded)return;loaded=true;const f=form(),ed=communityEditor({api,el,btn,label:'修改评论',max:4000});ed.set(c);editors.push(ed);editPanel.append(el('p','muted','提交修改后暂时停止公开，审核通过后重新展示。'),f);f.append(ed.root,check('确认修改并重新送审。'),submit('保存并送审'));guarded(f,out,async v=>{const g=generation;await api('/api/community/comments/'+c.id,{method:'PUT',body:JSON.stringify({...ed.value(),revision:c.revision,sharingConfirmed:v.confirmed==='on'})});if(g===generation)await openPost(id,{notice:'评论修改已保存并重新送审。'});});});bar.append(editPanel);}
+      if(c.mine||viewer.core)card.append(history('comment',c));
       if(viewer.authenticated&&c.status==='published')bar.append(report('comment',c.id));
       if(c.mine&&c.status!=='withdrawn')bar.append(action('撤回评论',async()=>{await api('/api/community/comments/'+c.id,{method:'DELETE',body:JSON.stringify({revision:c.revision})});await openPost(id,{notice:'评论已撤回。'});},out));card.append(bar,out);commentList.append(card);
     }
     if(!data.comments.length)commentList.append(el('p','muted','还没有评论，欢迎分享你的观察。'));
     detail.append(comments);
     const postActions=el('div','community-post-actions'),postStatus=message();
+    if(p.mine&&p.status!=='withdrawn')postActions.append(action('编辑并重新送审',()=>{editingPost=p;composer.elements.title.value=p.title;composer.elements.kind.value=p.kind;composer.elements.tags.value=p.tags.join('，');composer.elements.confirmed.checked=false;postEditor.set(p);composerPanel.querySelector('summary').textContent='编辑讨论 · 保存后重新送审';composerPanel.open=true;composerPanel.scrollIntoView({block:'start',behavior:'smooth'});composerStatus.textContent='修改提交后暂时停止公开；审核通过后重新展示，原版本会保存在编辑历史。';},postStatus));
+    if(p.mine||viewer.core)detail.append(history('post',p));
     if(viewer.authenticated&&p.status==='published'){postActions.append(action(p.favorite?'取消收藏':'收藏讨论',async()=>{await api('/api/community/posts/'+id+'/favorite',{method:p.favorite?'DELETE':'POST'});await openPost(id);},postStatus),report('post',id));}
     if(p.mine&&p.status!=='withdrawn')postActions.append(action('撤回讨论',async()=>{if(!confirm('撤回后公开读者将无法查看此讨论。继续？'))return;await api('/api/community/posts/'+id,{method:'DELETE',body:JSON.stringify({revision:p.revision})});await openPost(id);await loadPosts();},postStatus));
     detail.append(postActions,postStatus);
@@ -109,8 +118,8 @@ export function initCommunity({api,el,btn}) {
     const find=el('details','community-review-search'),f=form('research-form research-inline'),found=el('div'),out=message();find.append(el('summary','','查找已公开讨论并处理'),f,found);f.append(field('q','关键词'),submit('查找'),out);reviewRoot.append(find);
     guarded(f,out,async v=>{const epoch=generation,data=await api('/api/community/posts?'+new URLSearchParams({q:v.q}));if(epoch!==generation)return;found.replaceChildren();out.textContent=data.posts.length?'选择内容查看或隐藏。':'没有匹配讨论。';for(const p of data.posts){const target=el('div');found.append(action(p.title,()=>loadTarget('post',p.id,target),out),target);}});find.dataset.reviewCategory='community';document.dispatchEvent(new Event('ziwei:review-updated'));
   }
-  function clear(){generation++;listRequest++;detailRequest++;reviewRequest++;commentEditor?.dispose();commentEditor=null;postEditor.reset();composer.reset();composerPanel.open=false;composerStatus.textContent='';search.reset();offset=0;detailId='';detail.replaceChildren();detail.hidden=true;list.replaceChildren();status.textContent='';reviewStatus.textContent='';queue.replaceChildren();reviewGate();}
-  async function enter(view){const g=generation;try{if(view==='community')await loadPosts();if(view==='review')await loadModeration();}catch(e){if(g===generation)(view==='review'?reviewStatus:status).textContent=e.message;}}
+  function clear(){generation++;listRequest++;detailRequest++;reviewRequest++;editingPost=null;editors.forEach(ed=>ed.dispose());editors=[];inbox.hidden=true;inboxList.replaceChildren();commentEditor?.dispose();commentEditor=null;postEditor.reset();composer.reset();composerPanel.open=false;composerStatus.textContent='';search.reset();offset=0;detailId='';detail.replaceChildren();detail.hidden=true;list.replaceChildren();status.textContent='';reviewStatus.textContent='';queue.replaceChildren();reviewGate();}
+  async function enter(view){const g=generation;try{if(view==='community'){await loadPosts();await loadNotifications();}if(view==='review')await loadModeration();}catch(e){if(g===generation)(view==='review'?reviewStatus:status).textContent=e.message;}}
   document.addEventListener('ziwei:session',e=>{
     clear();viewer=e.detail;composerPanel.hidden=!viewer.authenticated;for(const o of search.elements.scope.options)o.disabled=o.value!=='public'&&!viewer.authenticated;
     const id=viewer.authenticated?pendingReturn():'';

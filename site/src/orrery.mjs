@@ -1,4 +1,4 @@
-import {SOLAR_PLANETS,SMALL_BODIES,MOON,ORRERY_STARS,NORTH_HIDDEN_STARS,projectAsterism,traditionalName} from './orrery-data.mjs';
+import {SOLAR_PLANETS,SMALL_BODIES,MOON,ORRERY_STARS,NORTH_HIDDEN_STARS,WENCHANG_CULTURAL_STARS,projectAsterism,traditionalName} from './orrery-data.mjs';
 import {NORTH_LINES,SOUTH_LINES,WENCHANG_LINES} from './star-profiles.mjs';
 // A ceremonial overview, not a scale model or an ephemeris.
 const BODIES=[...SOLAR_PLANETS,...SMALL_BODIES];
@@ -37,12 +37,12 @@ function asterism(group,box,interactive){
   let content=`<g class="orrery-asterism" data-asterism="${group}"><text class="asterism-title" x="${box.x}" y="${box.y-18}">${group==='北斗'?'北斗九星':group==='南斗'?'南斗六星':'文昌星官'}</text>`;
   content+=lines.map(([a,b])=>`<path d="M${byId.get(a).x} ${byId.get(a).y}L${byId.get(b).x} ${byId.get(b).y}"/>`).join('');
   for(const p of points){const r=Math.max(1.4,3.2-p.mag*.35),[dx,dy,anchor]=labelOffsets[p.hip]||[5,-6,'start'];content+=`<g class="orrery-fixed-star" ${target(p.id,traditionalName(p),interactive)}><title>${escape(traditionalName(p))}</title><circle class="celestial-hit" cx="${p.x}" cy="${p.y}" r="12"/><circle class="stellar-halo" cx="${p.x}" cy="${p.y}" r="${r*4}"/><circle class="stellar-point" cx="${p.x}" cy="${p.y}" r="${r}"/><text class="orrery-label" x="${p.x+dx}" y="${p.y+dy}" text-anchor="${anchor}">${traditionalName(p)}</text></g>`;}
-  if(group==='北斗'){
+  if(group==='北斗'||group==='文昌'){
     const y=box.y+box.h+30;
-    content+=`<text class="orrery-hidden-caption" x="${box.x}" y="${y+20}">辅弼二隐 · 传统意象</text>`;
-    for(const [i,s] of NORTH_HIDDEN_STARS.entries()){
+    content+=`<text class="orrery-hidden-caption" x="${box.x}" y="${y+20}">${group==='北斗'?'辅弼二隐':'上将'} · 传统意象</text>`;
+    for(const [i,s] of (group==='北斗'?NORTH_HIDDEN_STARS:WENCHANG_CULTURAL_STARS).entries()){
       const x=box.x+12+i*90;
-      content+=`<g class="orrery-fixed-star orrery-hidden-star" data-cultural="true" ${target(s.id,s.name,interactive)}><title>${s.name} · 传统隐曜意象</title><circle class="celestial-hit" cx="${x}" cy="${y}" r="14"/><circle class="stellar-halo" cx="${x}" cy="${y}" r="11"/><circle class="hidden-star-orbit" cx="${x}" cy="${y}" r="7"/><circle class="stellar-point" cx="${x}" cy="${y}" r="2"/><text class="orrery-label" x="${x+13}" y="${y+4}">${s.name}</text></g>`;
+      content+=`<g class="orrery-fixed-star orrery-hidden-star" data-cultural="true" ${target(s.id,s.name,interactive)}><title>${s.name} · 星官文化意象</title><circle class="celestial-hit" cx="${x}" cy="${y}" r="14"/><circle class="stellar-halo" cx="${x}" cy="${y}" r="11"/><circle class="hidden-star-orbit" cx="${x}" cy="${y}" r="7"/><circle class="stellar-point" cx="${x}" cy="${y}" r="2"/><text class="orrery-label" x="${x+13}" y="${y+4}">${s.name}</text></g>`;
     }
   }
   return content+'</g>';

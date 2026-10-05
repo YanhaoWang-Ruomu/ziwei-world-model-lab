@@ -1,0 +1,4 @@
+export function techniqueScenario(assessment){
+  if(!assessment||!['matches','does_not_match'].includes(assessment.status))throw Error('尚无完整的已保存匹配结果。');
+  return {ruleSet:{name:'技法匹配后的观察假设',version:1,source:'user-assumption',fields:[{id:'matched',name:'保存时符合技法',type:'boolean',meaning:'已发布卡片在指定命盘与时间上的条件匹配结果，保持为历史输入。'},{id:'observed',name:'观察记录状态',type:'text',meaning:'研究进度，不是现实事件概率。'}],rules:[{id:'record_match',label:'记录待核实线索',action:'observe',when:[{field:'matched',operator:'eq',value:true}],effects:[{field:'observed',operation:'set',value:'有待核实的线索'}],event:'',rationale:'关联技法 '+assessment.title+'，发布版 V'+assessment.releaseVersion+'，日期 '+assessment.date+'。',uncertainty:'这是一项待验证的行动假设，不由匹配结果推定现实会发生。'}]},initial:{matched:assessment.status==='matches',observed:'尚未记录'},steps:[{label:'观察并记录证据',action:'observe',assumptions:'需要自行填写并验证实际观察，不将规则命中当作现实证据。'}],uncertainty:'原卡片、命盘与匹配时点已留在分支基线。后续卡片更新不改写这次记录。'};
+}

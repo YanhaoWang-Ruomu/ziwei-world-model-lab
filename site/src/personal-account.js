@@ -1,4 +1,6 @@
+import {initAccountSecurity} from './account-security.mjs';
 export function initPersonalAccount({api,onSession}){
+  const security=initAccountSecurity({api,onSession});
   const $=s=>document.querySelector(s),form=$('#personal-account-form');let mode='login',busy=false;
   const status=$('#personal-account-status');
   const switcher=document.createElement('select'),label=document.createElement('label');label.textContent='切换已授权级别';label.append(switcher);$('#account').prepend(label);
@@ -22,6 +24,7 @@ export function initPersonalAccount({api,onSession}){
     finally{busy=false;$('#personal-account-submit').disabled=false;}
   });
   return {setViewer(viewer){
+    security.setViewer(viewer);
     switcher.replaceChildren(...(viewer.availableRoles||[viewer.role]).map(role=>new Option({public:'公开',special:'特殊',core:'核心'}[role],role)));switcher.value=viewer.role;label.hidden=switcher.options.length<2;
     const signed=Boolean(viewer.authenticated);$('#personal-auth-entry').hidden=signed;$('#personal-profile').hidden=!signed;
     $('#personal-profile-name').textContent=viewer.username||'ChatGPT 个人账户';

@@ -122,7 +122,7 @@ export function initCycleControls({getResult,onChange}){
       return apply(now,'natal');
     },
     selectDecade(index){if(compact.matches)pickersOpen=false;return act(()=>chooseDecade(getResult(),cycle,index),'decadal',{kind:'select',unit:'decadal',value:index});},
-    selectPeriod(date,unit){return apply({date,time:'12:00'},unit);},
+    selectPeriod(date,unit,time='12:00'){return apply({date,time},unit);},
     get decadeKeys(){return new Set(nav?.decades.map(d=>d.key)||[]);},
     mount:panel.mount,
     close:panel.close,
