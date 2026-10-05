@@ -1,4 +1,5 @@
-import {SETTING_FIELDS,defaultSettings,normalizeSettings,encodeSettings,decodeSettings} from './chart-conventions.mjs';
+import {SETTING_FIELDS,ALL_SETTING_FIELDS,defaultSettings,normalizeSettings,upgradeSettings,encodeSettings,decodeSettings} from './chart-conventions.mjs';
+import {createMethodControls} from './chart-method-controls.mjs';
 const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
 const button=(text,fn)=>{const b=el('button','',text);b.type='button';b.addEventListener('click',fn);return b;};
 export async function chartAccountApi(path,options={}) {
@@ -7,29 +8,37 @@ export async function chartAccountApi(path,options={}) {
 }
 export function initChartSettings({onApply}) {
   const form=document.querySelector('#birth-form'),provider=document.querySelector('#chart-provider');
-  const extra=el('div','chart-advanced-settings');
-  for(const field of SETTING_FIELDS.slice(0,4)) {const label=el('label','',field.label),select=el('select');select.name=field.key;field.values.forEach((v,i)=>select.add(new Option(field.labels[i],v)));label.append(select);extra.append(label);}
-  form.querySelector('.chart-settings').prepend(extra);
-  function read(){return normalizeSettings({version:1,engine:defaultSettings().engine,options:Object.fromEntries(SETTING_FIELDS.map(f=>[f.key,f.key==='fixLeap'?form.elements[f.key].value==='true':form.elements[f.key].value]))});}
-  function apply(value,{notify=true}={}) {const settings=normalizeSettings(value);for(const f of SETTING_FIELDS)form.elements[f.key].value=String(settings.options[f.key]);provider.value='public';syncProvider();provider.dispatchEvent(new Event('change',{bubbles:true}));if(notify)form.dispatchEvent(new Event('input',{bubbles:true}));}
-  function syncProvider(){extra.hidden=provider.value!=='public';}
-  provider.addEventListener('change',syncProvider);form.addEventListener('reset',()=>queueMicrotask(syncProvider));syncProvider();
+  const extra=el('div','chart-advanced-settings'),backing=el('div');backing.hidden=true;
+  for(const field of SETTING_FIELDS.slice(0,4)){const select=el('select');select.name=field.key;field.values.forEach((v,i)=>select.add(new Option(field.labels[i],v)));backing.append(select);}
+  form.querySelector('.chart-settings').prepend(backing,extra);
+  let appliedSettings=defaultSettings();
+  function read(){return normalizeSettings({...appliedSettings,options:{...appliedSettings.options,...Object.fromEntries(SETTING_FIELDS.map(f=>[f.key,f.key==='fixLeap'?form.elements[f.key].value==='true':form.elements[f.key].value]))}});}
+  const inline=createMethodControls(extra,{prefix:'birth-method',onChange:(key,value)=>{
+    appliedSettings=upgradeSettings(read());appliedSettings.options[key]=value;
+    if(SETTING_FIELDS.some(f=>f.key===key))form.elements[key].value=String(value);
+    form.dispatchEvent(new Event('input',{bubbles:true}));
+  }});
+  function apply(value,{notify=true}={}){const settings=normalizeSettings(value);appliedSettings=settings;for(const f of SETTING_FIELDS)form.elements[f.key].value=String(settings.options[f.key]);inline.fill(upgradeSettings(settings).options);provider.value='public';syncProvider();provider.dispatchEvent(new Event('change',{bubbles:true}));if(notify)form.dispatchEvent(new Event('input',{bubbles:true}));}
+  function syncProvider(){const publicMode=provider.value==='public';extra.hidden=!publicMode;for(const key of ['dayDivide','fixLeap'])form.elements[key].closest('label').hidden=publicMode;inline.fill(upgradeSettings(read()).options);}
+  provider.addEventListener('change',syncProvider);form.addEventListener('reset',()=>{appliedSettings=defaultSettings();queueMicrotask(syncProvider);});syncProvider();
   const dialog=el('dialog','case-dialog method-dialog');dialog.id='chart-method-dialog';dialog.setAttribute('aria-labelledby','method-heading');
   dialog.innerHTML='<header><div><p>观星台 · 排盘设置</p><h2 id="method-heading">安星方案</h2></div><button type="button" data-method-close>关闭</button></header><div class="case-dialog-content"><p>自定义方案使用公开算法。夏令时属于出生资料，另行填写。</p><div class="method-fields"></div><div class="method-share"><label>当前方案安星码<input data-method-code readonly aria-label="当前方案安星码"></label><button type="button" data-method-copy>复制安星码</button><small>只包含选项与版本，不包含姓名、生日或技法。</small></div><details><summary>导入他人的安星码</summary><label>观星台安星码<input data-method-import placeholder="GXT1-…" autocomplete="off" spellcheck="false"></label><button type="button" data-method-preview>查看设置差异</button><div data-method-diff hidden></div></details><details class="method-saved"><summary>我的方案与默认设置</summary><label>已保存的方案<select data-method-profiles><option value="">选择方案</option></select></label><label>方案名称<input data-method-name maxlength="40" placeholder="例如：我的常用口径"></label><div class="case-tool-row"><button type="button" data-method-save>另存为新方案</button><button type="button" data-method-update disabled>更新所选方案</button><button type="button" data-method-delete disabled>删除所选方案</button></div><div data-method-delete-confirm hidden></div><button type="button" data-method-default>设为新命盘的默认方案</button></details><p data-method-status role="status"></p><button type="button" class="method-apply" data-method-apply>应用到当前命盘</button></div>';
   document.body.append(dialog);const $=s=>dialog.querySelector(s),status=$('[data-method-status]');let viewer={},profiles=[],generation=0,pending=null,accountDefault=null;
-  const controls=new Map();
-  function draft(){return normalizeSettings({version:1,engine:defaultSettings().engine,options:Object.fromEntries(SETTING_FIELDS.map(f=>[f.key,f.values[Number(controls.get(f.key).value)]]))});}
-  function updateCode(){ $('[data-method-code]').value=encodeSettings(draft());pending=null;$('[data-method-diff]').hidden=true;}
-  function fill(value){const normalized=normalizeSettings(value);for(const f of SETTING_FIELDS)controls.get(f.key).value=String(f.values.indexOf(normalized.options[f.key]));updateCode();}
-  for(const field of SETTING_FIELDS) {const label=el('label','',field.label),select=el('select');select.setAttribute('aria-label',field.label);field.values.forEach((_,i)=>select.add(new Option(field.labels[i],String(i))));select.addEventListener('change',updateCode);controls.set(field.key,select);label.append(select);$('.method-fields').append(label);}
+  let draftSettings=defaultSettings();
+  const compatibility=el('p','method-group-hint','旧版方案已保留；调整选项后会转为新版。');$('.method-share').append(compatibility);
+  function draft(){return normalizeSettings(draftSettings);}
+  function updateCode(){ $('[data-method-code]').value=encodeSettings(draft());compatibility.hidden=draftSettings.version!==1;pending=null;$('[data-method-diff]').hidden=true;}
+  function fill(value){draftSettings=normalizeSettings(value);controls.fill(upgradeSettings(draftSettings).options);updateCode();}
+  const controls=createMethodControls($('.method-fields'),{prefix:'dialog-method',onChange:(key,value)=>{draftSettings=upgradeSettings(draftSettings);draftSettings.options[key]=value;updateCode();}});
+  $('[data-method-import]').placeholder='GXT2-…（也支持旧版 GXT1）';
   function clearAccount(){generation++;profiles=[];accountDefault=null;$('[data-method-profiles]').replaceChildren(new Option('选择方案',''));$('[data-method-name]').value='';$('[data-method-update]').disabled=$('[data-method-delete]').disabled=true;$('[data-method-delete-confirm]').hidden=true;status.textContent='';}
   async function loadProfiles(){const ticket=generation;try{const data=await chartAccountApi('/api/chart-profiles');if(ticket!==generation)return;profiles=data.profiles;$('[data-method-profiles]').replaceChildren(new Option('选择方案',''),...profiles.map(p=>new Option(p.name,p.id)));$('[data-method-update]').disabled=$('[data-method-delete]').disabled=true;}catch(e){if(ticket===generation)status.textContent=e.message;}}
   async function open(){fill(read());status.textContent='';$('[data-method-import]').value='';$('[data-method-delete-confirm]').hidden=true;dialog.showModal();await loadProfiles();}
-  const entry=button('安星方案与分享码',open);entry.className='method-entry';form.querySelector('.chart-settings').append(entry);
+  const entry=button('保存方案 / 分享安星码',open);entry.className='method-entry';form.querySelector('.chart-settings').insertBefore(entry,extra);
   document.addEventListener('ziwei:open-chart-settings',open);
   $('[data-method-close]').addEventListener('click',()=>dialog.close());
   $('[data-method-copy]').addEventListener('click',async()=>{try{await navigator.clipboard.writeText($('[data-method-code]').value);status.textContent='安星码已复制。';}catch{$('[data-method-code]').select();status.textContent='请复制选中的安星码。';}});
-  $('[data-method-preview]').addEventListener('click',()=>{try{pending=decodeSettings($('[data-method-import]').value);const box=$('[data-method-diff]');box.replaceChildren();const table=el('table'),head=el('tr');['项目','本页草稿','导入方案'].forEach(t=>head.append(el('th','',t)));table.append(head);const current=draft();for(const f of SETTING_FIELDS){const row=el('tr');row.append(el('th','',f.label),el('td','',f.labels[f.values.indexOf(current.options[f.key])]),el('td','',f.labels[f.values.indexOf(pending.options[f.key])]));if(current.options[f.key]!==pending.options[f.key])row.className='method-changed';table.append(row);}box.append(table,button('采用这份方案',()=>{const next=pending;fill(next);status.textContent='已载入方案草稿，点击“应用到当前命盘”生效。';}));box.hidden=false;status.textContent='';}catch(e){pending=null;$('[data-method-diff]').hidden=true;status.textContent=e.message;}});
+  $('[data-method-preview]').addEventListener('click',()=>{try{pending=decodeSettings($('[data-method-import]').value);const box=$('[data-method-diff]');box.replaceChildren();const table=el('table'),head=el('tr');['项目','本页草稿','导入方案'].forEach(t=>head.append(el('th','',t)));table.append(head);const current=upgradeSettings(draft()),incoming=upgradeSettings(pending);for(const f of ALL_SETTING_FIELDS){const row=el('tr');row.append(el('th','',f.label),el('td','',f.labels[f.values.indexOf(current.options[f.key])]),el('td','',f.labels[f.values.indexOf(incoming.options[f.key])]));if(current.options[f.key]!==incoming.options[f.key])row.className='method-changed';table.append(row);}box.append(table,button('采用这份方案',()=>{const next=pending;fill(next);status.textContent='已载入方案草稿，点击“应用到当前命盘”生效。';}));box.hidden=false;status.textContent='';}catch(e){pending=null;$('[data-method-diff]').hidden=true;status.textContent=e.message;}});
   $('[data-method-import]').addEventListener('input',()=>{pending=null;$('[data-method-diff]').hidden=true;});
   $('[data-method-profiles]').addEventListener('change',()=>{const selected=profiles.find(p=>p.id===$('[data-method-profiles]').value);$('[data-method-update]').disabled=$('[data-method-delete]').disabled=!selected;$('[data-method-delete-confirm]').hidden=true;if(selected){fill(selected.settings);$('[data-method-name]').value=selected.name;status.textContent='已载入方案，应用后才会更新命盘。';}});
   async function save(update){const ticket=generation,selected=profiles.find(p=>p.id===$('[data-method-profiles]').value);if(update&&!selected)return;const body={name:$('[data-method-name]').value,settings:draft(),...(update?{revision:selected.revision}:{})};try{await chartAccountApi('/api/chart-profiles'+(update?'/'+selected.id:''),{method:update?'PUT':'POST',body:JSON.stringify(body)});if(ticket!==generation)return;await loadProfiles();status.textContent='方案已保存到当前账户。已有命例仍保留各自的设置。';}catch(e){if(ticket===generation)status.textContent=e.message;}}

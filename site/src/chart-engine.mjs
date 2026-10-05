@@ -1,5 +1,6 @@
 import { astro } from 'iztro';
-import {defaultSettings,normalizeSettings} from './chart-conventions.mjs';
+import {SETTING_FIELDS,defaultSettings,legacySettings,normalizeSettings,upgradeSettings} from './chart-conventions.mjs';
+import {applyStarMethods,applyCycleMethods} from './chart-star-methods.mjs';
 export const ENGINE_VERSION='iztro 2.6.1';
 export const DEFAULT_CONFIG=Object.freeze({yearDivide:'normal',horoscopeDivide:'normal',ageDivide:'normal',dayDivide:'forward',algorithm:'default'});
 export function validDate(value){
@@ -21,14 +22,24 @@ export function normalizeBirth(input){
 }
 export function makeChart(input){
   const normalized=normalizeBirth(input);
-  const settings=normalizeSettings(input.settings||defaultSettings(input));
+  const settings=normalizeSettings(input.settings||legacySettings(input));
   if(settings.options.dayDivide!==input.dayDivide||settings.options.fixLeap!==input.fixLeap)throw Error('命例与安星方案的口径不一致，请重新应用方案。');
-  const {fixLeap,...config}=settings.options;
+  const options=upgradeSettings(settings).options;
+  const config=Object.fromEntries(SETTING_FIELDS.filter(f=>f.key!=='fixLeap').map(f=>[f.key,options[f.key]]));
   astro.config(config);
-  const engine=astro.bySolar(normalized.date,normalized.timeIndex,normalized.gender,normalized.fixLeap,'zh-CN');
+  // V1 retains the original engine behavior. V2 uses one effective date/index
+  // for all star families, including late Zi during leap months.
+  const calculation={...normalized};
+  if(settings.version===2&&calculation.timeIndex===12){
+    calculation.timeIndex=0;
+    if(config.dayDivide==='forward'){const d=validDate(calculation.date);d.setUTCDate(d.getUTCDate()+1);calculation.date=d.toISOString().slice(0,10);validDate(calculation.date);}
+  }
+  const engine=astro.bySolar(calculation.date,calculation.timeIndex,calculation.gender,calculation.fixLeap,'zh-CN');
+  if(settings.version===2)applyStarMethods(engine,calculation,options,config);
+  if(normalized.timeIndex===12&&settings.version===2){engine.time='晚子时';engine.timeRange='23:00~00:00';}
   const chart=engine.toJSON();
   if(chart.palaces.length!==12||chart.palaces.flatMap(p=>p.majorStars).filter(s=>s.type==='major').length!==14)throw Error('排盘未通过结构检查，请重新输入。');
-  return {engine,chart,input:{...input},normalized,config,version:ENGINE_VERSION};
+  return {engine,chart,input:{...input,...(input.settings?{settings}: {})},normalized,config,settings,version:ENGINE_VERSION};
 }
 export function cycleAt(result,date,time='00:00'){
   validDate(date);
@@ -40,7 +51,7 @@ export function cycleAt(result,date,time='00:00'){
   // retains the civil-date lunar day when placing daily/hourly palaces.
   let effectiveDate=date,effectiveIndex=timeIndex;
   if(timeIndex===12){effectiveIndex=0;if(result.config.dayDivide==='forward'){const next=validDate(date);next.setUTCDate(next.getUTCDate()+1);effectiveDate=next.toISOString().slice(0,10);validDate(effectiveDate);}}
-  const h=result.engine.horoscope(effectiveDate,effectiveIndex).toJSON();
+  const h=applyCycleMethods(result.engine.horoscope(effectiveDate,effectiveIndex).toJSON(),result.chart,upgradeSettings(result.settings||defaultSettings(result.input)).options);
   return {date,time,timeIndex,effectiveDate,lunarDate:h.lunarDate,yearly:h.yearly,decadal:h.decadal,age:h.age.nominalAge,smallLimit:h.age,monthly:h.monthly,daily:h.daily,hourly:h.hourly};
 }
 // Positions are fixed by earthly branch, never by a palace's changing name.

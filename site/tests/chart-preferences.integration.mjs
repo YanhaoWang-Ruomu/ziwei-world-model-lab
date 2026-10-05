@@ -1,5 +1,6 @@
 // Fictional accounts only. Refuses the live preview and production services.
 import assert from 'node:assert/strict';
+import {defaultSettings} from '../src/chart-conventions.mjs';
 const base='http://127.0.0.1:8770',suffix=Date.now().toString(36),password='Fictional-case-test-only-928';let count=0;
 const check=(a,b)=>{assert.deepEqual(a,b);count++;};
 async function req(path,{cookie='',method='GET',body,origin=base}={}){const r=await fetch(base+path,{method,headers:{Cookie:cookie,Origin:origin,'Content-Type':'application/json','CF-Connecting-IP':'192.0.2.91'},body:body===undefined?undefined:JSON.stringify(body)});return {status:r.status,data:await r.json(),cookies:r.headers.getSetCookie()};}
@@ -40,6 +41,18 @@ check((await req('/api/chart-profiles',{cookie:a,method:'POST',body:{name:'未�
 check((await req('/api/chart-preferences',{cookie:a,method:'PUT',origin:'https://example.invalid',body:pref})).status,403);
 const invalid={...exported,records:[{...input,settings:{...settings,options:{...settings.options,fixLeap:true}}}]};
 check((await req('/api/cases/import-preview',{cookie:a,method:'POST',body:{bundle:invalid}})).status,400);
+// Granular schemes are stored with the case and survive both transfer and profiles.
+const detailed=defaultSettings({dayDivide:'current',fixLeap:false,tianma:'month',tiankong:'hour',kongwang:'double',kuiyue:'gengXinTigerHorse',yearlyMutagen:'palace',earthChangsheng:'fire'});
+const detailedCase=await req('/api/cases',{cookie:a,method:'POST',body:{...input,title:'虚构独立安法',settings:detailed}});check(detailedCase.status,200);
+const detailedId=detailedCase.data.case.id;
+check((await req('/api/cases/'+detailedId,{cookie:a})).data.case.settings,detailed);
+check((await req('/api/cases/'+detailedId,{cookie:b})).status,404);
+const detailedBundle=(await req('/api/cases/export?id='+detailedId,{cookie:a})).data;check(detailedBundle.records[0].settings,detailed);
+const detailedPreview=(await req('/api/cases/import-preview',{cookie:b,method:'POST',body:{bundle:detailedBundle}})).data;
+check((await req('/api/cases/import',{cookie:b,method:'POST',body:{bundle:detailedBundle,mode:'merge',revision:detailedPreview.revision}})).data.imported,1);
+check((await req('/api/cases',{cookie:b})).data.cases.find(c=>c.title==='虚构独立安法').settings,detailed);
+check((await req('/api/chart-profiles/'+profile.data.profile.id,{cookie:a,method:'PUT',body:{name:'虚构独立方案',settings:detailed,revision:2}})).data.profile.settings,detailed);
+check((await req('/api/chart-profiles',{cookie:a})).data.profiles.find(p=>p.id===profile.data.profile.id).settings,detailed);
 // Exercise the full supported file size without exposing or touching other accounts.
 const many={kind:'guanxingtai_cases',version:1,records:Array.from({length:300},(_,i)=>({...input,title:'虚构批量 '+i}))};
 preview=(await req('/api/cases/import-preview',{cookie:b,method:'POST',body:{bundle:many}})).data;
@@ -53,6 +66,7 @@ const again=cookieOf(await req('/api/account/login',{method:'POST',body:{usernam
 const persisted=(await req('/api/chart-preferences',{cookie:again})).data.preferences;check(persisted.defaultCaseId,id);check(persisted.defaultSettings,settings);check((await req('/api/cases/'+id,{cookie:again})).data.case.settings,settings);
 await req('/api/cases/'+id,{cookie:again,method:'DELETE'});const cleared=(await req('/api/chart-preferences',{cookie:again})).data.preferences;check(cleared.defaultCaseId,null);check(cleared.autoOpen,false);
 await req('/api/chart-profiles/'+profile.data.profile.id,{cookie:again,method:'DELETE'});
+await req('/api/cases/'+detailedId,{cookie:again,method:'DELETE'});
 // Synthetic account B remains a capacity fixture in the dedicated test store.
 await req('/api/logout',{cookie:again,method:'POST'});await req('/api/logout',{cookie:b,method:'POST'});
 console.log(`PASS ${count} fictional import, default-chart and profile checks`);

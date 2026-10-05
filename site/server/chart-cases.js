@@ -1,6 +1,6 @@
 import {now,jsonBody,HttpError} from './security.js';
 import {normalizeBirth} from '../src/chart-engine.mjs';
-import {REMOTE_PROVIDER,defaultSettings} from '../src/chart-conventions.mjs';
+import {REMOTE_PROVIDER,defaultSettings,legacySettings} from '../src/chart-conventions.mjs';
 import {preferencesFor,presentPreferences,bumpPreferences,validatedSettings,chartPreferencesRoute} from './chart-preferences.mjs';
 import {caseTransferRoute} from './chart-case-transfer.mjs';
 export function casePayload(data){
@@ -16,7 +16,7 @@ export function casePayload(data){
   if(settings&&(settings.options.dayDivide!==birth.dayDivide||settings.options.fixLeap!==birth.fixLeap))throw new HttpError(400,'命例与安星方案的口径不一致。');
   return {title,birth:Object.fromEntries(keys.map(k=>[k,birth[k]])),provider:data.provider,settings};
 }
-export const presentCase=row=>({id:row.id,...casePayload({title:row.title,birth:JSON.parse(row.birth),provider:row.provider,settings:row.settings?JSON.parse(row.settings):null}),revision:row.revision,createdAt:row.created_at,updatedAt:row.updated_at});
+export const presentCase=row=>({id:row.id,...casePayload({title:row.title,birth:JSON.parse(row.birth),provider:row.provider,settings:row.settings?JSON.parse(row.settings):row.provider==='public'?legacySettings(JSON.parse(row.birth)):null}),revision:row.revision,createdAt:row.created_at,updatedAt:row.updated_at});
 export async function casesRoute(context){
   const preferenceResult=await chartPreferencesRoute(context);if(preferenceResult!==null)return preferenceResult;
   const {path,method,request,db,viewer}=context;

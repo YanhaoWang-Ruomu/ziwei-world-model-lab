@@ -1,6 +1,6 @@
 import {now,jsonBody,HttpError} from './security.js';
 import {casePayload,presentCase} from './chart-cases.js';
-import {defaultSettings} from '../src/chart-conventions.mjs';
+import {legacySettings} from '../src/chart-conventions.mjs';
 import {preferencesFor,presentPreferences} from './chart-preferences.mjs';
 const birthKeys=['name','date','time','gender','dayDivide','fixLeap','daylight'];
 const snapshot=record=>casePayload(Object.fromEntries(['title','birth','provider','settings'].map(k=>[k,record[k]])));
@@ -9,7 +9,7 @@ export function normalizeCaseBundle(value) {
   if(!value||typeof value!=='object'||Array.isArray(value))throw new HttpError(400,'请选择观星台导出的命例文件。');
   if(value.kind==='ziwei_natal_chart'&&value.schemaVersion===1) {
     const input=value.input||{},provider=value.provider==='public-browser'?'public':value.provider;
-    const settings=provider==='public'?(input.settings||{...defaultSettings(input),options:{...defaultSettings(input).options,...Object.fromEntries(['yearDivide','horoscopeDivide','ageDivide','dayDivide','algorithm'].filter(k=>value.convention?.[k]!==undefined).map(k=>[k,value.convention[k]]))}}):null;
+    const settings=provider==='public'?(input.settings||legacySettings({...input,...Object.fromEntries(['yearDivide','horoscopeDivide','ageDivide','dayDivide','algorithm'].filter(k=>value.convention?.[k]!==undefined).map(k=>[k,value.convention[k]]))})):null;
     return {kind:'guanxingtai_cases',version:1,records:[casePayload({title:input.name||'导入的命盘',birth:Object.fromEntries(birthKeys.map(k=>[k,input[k]])),provider,settings})],defaultIndex:null,autoOpen:false};
   }
   if(value.kind!=='guanxingtai_cases'||value.version!==1||!Array.isArray(value.records)||!value.records.length||value.records.length>300)throw new HttpError(400,'文件格式或版本不支持；每次可导入 1–300 份观星台命例。');

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "f7ca8762e2a78b0acafac664b5b0f7dc9696df64",
+  "sourceCommit": "f945ac9957b90c78f2bf60a33e2a9bfc618073ce",
   "files": [
     {
       "path": "site/db/schema.ts",
@@ -184,11 +184,11 @@
     },
     {
       "path": "site/server/chart-cases.js",
-      "sha256": "58968b20851953343da60bd655dc6daf520326fc202173d6b5d31bb6b030e17c"
+      "sha256": "d764e0ab20678881c6fba6ae8a7f6637ccda21f2384d1a6f97a0950272b417de"
     },
     {
       "path": "site/server/chart-case-transfer.mjs",
-      "sha256": "ec672aa255e8806f2f8dd84aecba356f34c5cc0073fe1db52d5806869c727e90"
+      "sha256": "d6e2895d10d4e0d758aba562e7ecd4f2af9f8f515513dc1e0c49f84a18608c71"
     },
     {
       "path": "site/server/chart-preferences.mjs",
@@ -312,19 +312,27 @@
     },
     {
       "path": "site/src/chart-conventions.mjs",
-      "sha256": "c567a0d74a0612adf4b4749b0ef34cadd262126a6120ddfc1911dff23c6ca74b"
+      "sha256": "da38ac560c4ec36ac41a96bd81ef013ede9164a0126f7c3fceb4fdddde4253fa"
+    },
+    {
+      "path": "site/src/chart-method-controls.mjs",
+      "sha256": "ba18fa4538d69cb64dc14bd36b4c057e1717f8877f84e0d618ab5759891f890d"
+    },
+    {
+      "path": "site/src/chart-star-methods.mjs",
+      "sha256": "5c985ddda248f9ad680818309d32b96e608e5bd739536ef2605018e02f751826"
     },
     {
       "path": "site/src/chart-preferences.css",
-      "sha256": "569e5438858e64ffbc06b1ed59bbbcf78179bb38cecc9a56a397971eff0b1cf9"
+      "sha256": "d19d98cbb27f634d10efe0df73c2a4850fdeab142e08e4d02c4e05b6da5fff0a"
     },
     {
       "path": "site/src/chart-settings.mjs",
-      "sha256": "0419b8b0f526be195ce9f8e0b7e3991f6b7d353912abb075f71256c80d7da38f"
+      "sha256": "556994069809e83f513b4ef58b321895a1cc16f316160e62c96f3882cf9d35b9"
     },
     {
       "path": "site/src/chart-engine.mjs",
-      "sha256": "5d494b88e9202d79cb513413fd4b7eca3a8df5de7fac7ab1d539260375416983"
+      "sha256": "8708b59f310f90828fc571b4c52726e9dce84367acd7674d7b6683b031ee754c"
     },
     {
       "path": "site/src/chart-fit.css",
@@ -848,11 +856,15 @@
     },
     {
       "path": "site/tests/chart-preferences.test.mjs",
-      "sha256": "10d87112e492b68cb2c9c1a60d89b24cb4eee832f3f047e563293195886d480e"
+      "sha256": "8c2a9748fd1ef789c965e4149f2ab650caa7be75af3074054212af73aa89f1c8"
+    },
+    {
+      "path": "site/tests/chart-star-methods.test.mjs",
+      "sha256": "25597c3e3e7ba211d0895513551390c993355a4c9b512609e166a05f2617fd68"
     },
     {
       "path": "site/tests/chart-preferences.integration.mjs",
-      "sha256": "60577ea85032fd18d044bbc2bdaa044faaf11d659d4cef3e01bfe969cd70ee17"
+      "sha256": "bb802f8722cdc2ac85e511b05abab01e563d56332e370b06b7bcd74ad98f6f91"
     },
     {
       "path": "site/tests/chart-preferences-demo.mjs",
