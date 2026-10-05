@@ -7,6 +7,8 @@ import {clearSquareFlights} from './chart-motion.mjs';
 import {palaceFlights,activeLayers,starMutations,intrinsicTransforms,selectedFlights,transformationLabel,LAYER_COLORS} from './chart-insights.mjs';
 import {initChartMobile} from './chart-mobile.mjs';
 import {initChartCases} from './chart-cases.mjs';
+import {initChartSettings} from './chart-settings.mjs';
+import {defaultSettings} from './chart-conventions.mjs';
 import {initPalaceDialog} from './palace-dialog.mjs';
 import {initCycleControls} from './cycle-controls.mjs';
 import {renderSquareChart} from './square-chart.mjs';
@@ -118,8 +120,9 @@ function switchView(next){document.body.classList.toggle('tech-workbench-active'
 document.querySelectorAll('[data-cosmic-tab]').forEach(b=>b.addEventListener('click',()=>switchView(b.dataset.cosmicTab)));
 document.addEventListener('ziwei:view',e=>{document.body.classList.toggle('tech-workbench-active',e.detail==='model'&&view==='rules');if(e.detail!=='model'){palaceDialog.close();chartAtlas.close();}sound.visible(e.detail==='model'&&view==='sky');sky.visible(e.detail==='model'&&view!=='rules');earth.visible(e.detail==='model'&&view==='sky');document.body.classList.toggle('immersive-sky',e.detail==='model'&&view==='sky');cinema?.view(e.detail==='model'&&view==='sky');});
 
-function readBirth(){const f=new FormData(form);return {name:f.get('name'),date:f.get('date'),time:f.get('time'),gender:f.get('gender'),dayDivide:f.get('dayDivide'),fixLeap:f.get('fixLeap')==='true',daylight:f.has('daylight')};}
-function fillBirth(value){for(const [key,v]of Object.entries(value)){const f=form.elements.namedItem(key);if(key==='gender')f.value=v;else if(key==='daylight')f.checked=v;else f.value=String(v);}}
+const chartSettings=initChartSettings({onApply:()=>{sourceNote();calculate(readBirth());}});
+function readBirth(){const f=new FormData(form);return {name:f.get('name'),date:f.get('date'),time:f.get('time'),gender:f.get('gender'),dayDivide:f.get('dayDivide'),fixLeap:f.get('fixLeap')==='true',daylight:f.has('daylight'),...($('#chart-provider').value==='public'?{settings:chartSettings.read()}:{})};}
+function fillBirth(value){for(const [key,v]of Object.entries(value)){const f=form.elements.namedItem(key);if(!f)continue;if(key==='gender')f.value=v;else if(key==='daylight')f.checked=v;else f.value=String(v);}if(value.settings)chartSettings.apply(value.settings,{notify:false});}
 async function calculate(input,fictional=false){
   const generation=++castGeneration;castPending?.abort();castPending=new AbortController();$('#cast-chart').disabled=true;
   status('正在按所选安星方法起盘…');
@@ -152,7 +155,7 @@ form.addEventListener('submit',e=>{e.preventDefault();calculate(readBirth());});
 function sourceNote(){const server=$('#chart-provider').value==='public-server';$('#chart-privacy-note').textContent=server?'起盘时日期、时间与口径发送至服务器，姓名不发送；点击保存命例后，出生资料才存入个人账户。':'浏览器内计算；点击保存命例后，出生资料存入个人账户。';}
 sourceNote();$('#chart-provider').addEventListener('change',sourceNote);
 form.addEventListener('input',()=>{++castGeneration;castPending?.abort();castPending=null;$('#cast-chart').disabled=false;$('#chart-pending-badge').hidden=false;status('资料或安星方法已修改，点击“起盘”更新方盘与轮盘。');});
-$('#chart-example').addEventListener('click',()=>{fillBirth(example);calculate(example,true);});
+$('#chart-example').addEventListener('click',()=>{fillBirth(example);calculate(readBirth(),true);});
 function clearChart(){
   ++castGeneration;castPending?.abort();castPending=null;$('#cast-chart').disabled=false;$('#chart-pending-badge').hidden=true;
   clearSquareFlights();
@@ -168,9 +171,9 @@ function clearChart(){
   document.dispatchEvent(new Event('ziwei:chart-cleared'));
 }
 $('#chart-clear').addEventListener('click',clearChart);document.addEventListener('ziwei:logout',clearChart);
-initChartCases({getChart:()=>result?{birth:{...result.input},provider:result.provider==='public-server'?'public-server':'public'}:null,loadChart:async record=>{
-  document.querySelector('#chart-mobile-sheet[open]')?.close();location.hash='model';switchView('chart');
-  fillBirth(record.birth);$('#chart-provider').value=record.provider;sourceNote();return calculate(record.birth);
+initChartCases({getChart:()=>{if(!result)return null;const {settings,...birth}=result.input,provider=result.provider==='public-server'?'public-server':'public';return {birth,provider,settings:provider==='public'?(settings||defaultSettings(birth)):null};},resetChart:clearChart,applyDefaultSettings:settings=>{chartSettings.apply(settings,{notify:false});sourceNote();if(isExample)calculate(readBirth(),true);},loadChart:async (record,{automatic=false}={})=>{
+  document.querySelector('#chart-mobile-sheet[open]')?.close();if(!automatic)location.hash='model';if(!automatic||['','#model'].includes(location.hash))switchView('chart');
+  fillBirth(record.birth);if(record.provider==='public')chartSettings.apply(record.settings||defaultSettings(record.birth),{notify:false});$('#chart-provider').value=record.provider;chartSettings.syncProvider();sourceNote();return calculate({...record.birth,...(record.settings?{settings:record.settings}:{})});
 }});
 document.addEventListener('ziwei:case-opened',e=>{$('#chart-example-badge').textContent='已保存命例 · '+e.detail.title;});
 

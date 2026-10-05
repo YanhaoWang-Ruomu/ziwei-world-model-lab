@@ -32,6 +32,7 @@
   <link rel="stylesheet" href="gilded-theme.css" />
   <link rel="stylesheet" href="research-community.css" />
   <link rel="stylesheet" href="workspace-consolidated.css" />
+  <link rel="stylesheet" href="chart-preferences.css" />
 </head>
   <body data-role="public" class="immersive-sky sky-pending">
     <div class="grain" aria-hidden="true"></div>
@@ -97,7 +98,7 @@
                 <label>出生时间 <span>当地时间</span><input id="chart-birth-time" name="time" type="time" value="03:30" required /></label>
                 <fieldset class="gender-field"><legend>传统排盘性别</legend><label><input type="radio" name="gender" value="男" checked />男命</label><label><input type="radio" name="gender" value="女" />女命</label></fieldset>
                 <button class="cosmic-primary" id="cast-chart">起盘 <span aria-hidden="true">↗</span></button>
-                <details class="chart-settings"><summary>排盘口径 <span>历法与时制</span></summary><label>晚子时换日<select name="dayDivide"><option value="forward">23:00 起归次日</option><option value="current">00:00 起归次日</option></select></label><label>本命闰月处理<select name="fixLeap"><option value="true">前十五日作本月，之后作下月</option><option value="false">闰月全部作本月</option></select></label><label class="check-line"><input name="daylight" type="checkbox" />出生时间含夏令时，减去一小时</label><p>请使用出生地钟表时间。未自动校正时区或真太阳时；特殊历史时制需先核对。年界采用农历正月初一。运限的闰月依引擎通行规则，以十五日为界。</p></details>
+                <details class="chart-settings"><summary>排盘口径 <span>安星方案与时制</span></summary><label>晚子时换日<select name="dayDivide"><option value="forward">23:00 起归次日</option><option value="current">00:00 起归次日</option></select></label><label>本命闰月处理<select name="fixLeap"><option value="true">前十五日作本月，之后作下月</option><option value="false">闰月全部作本月</option></select></label><label class="check-line"><input name="daylight" type="checkbox" />出生时间含夏令时，减去一小时</label><p>请使用出生地钟表时间；未自动校正时区或真太阳时。公开算法可自选安星方案。运限月份按农历选择，干支按所选分界计算；运限闰月以十五日为界。</p></details>
               </form>
               <div class="chart-case-actions"><button type="button" data-case-save disabled>保存命例</button><button type="button" data-cases-open>我的命例</button></div><p id="chart-status" class="chart-status" role="status">示例使用虚构出生资料。</p><div class="chart-small-actions"><button id="chart-example" type="button">恢复示例</button><button id="chart-clear" type="button">清空本页</button></div><p class="local-note" id="chart-privacy-note">起盘时姓名不发送，结果不自动保存；点击保存命例后，出生资料存入个人账户。</p>
             </aside>

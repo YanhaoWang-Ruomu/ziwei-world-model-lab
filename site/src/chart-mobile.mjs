@@ -12,14 +12,15 @@ export function initChartMobile({onReset,onDetails}){
   const header=make('header',''),title=make('h2','','命例'),close=button('收起 ×',()=>dialog.close());header.append(title,close);
   const content=make('div','chart-mobile-sheet-body');dialog.append(header,content);document.body.append(dialog);
   const instrument=initOrreryExplorer(),instrumentEntry=button('展开太阳系与南北斗 ↗',()=>instrument.open(instrumentEntry));instrumentEntry.className='orrery-settings-entry';
+  const methodEntry=button('安星方案与分享码',()=>document.dispatchEvent(new Event('ziwei:open-chart-settings')));
   let moved=[],lastTrigger=null;
-  function restore(){for(const [element,anchor]of moved){anchor.after(element);anchor.remove();}moved=[];instrumentEntry.remove();lastTrigger?.focus({preventScroll:true});}
+  function restore(){for(const [element,anchor]of moved){anchor.after(element);anchor.remove();}moved=[];instrumentEntry.remove();methodEntry.remove();lastTrigger?.focus({preventScroll:true});}
   function open(kind){
     if(dialog.open)dialog.close();lastTrigger=document.activeElement;
     title.textContent=kind==='birth'?'命例与起盘':'观盘设置';
     const selectors=kind==='birth'?['.birth-panel']:['.chart-layout-switch','.atlas-toolbar','.cycle-utility','.chart-stem-proof'];
     for(const selector of selectors){const element=$(selector),anchor=document.createComment('chart sheet return');element.before(anchor);moved.push([element,anchor]);content.append(element);}
-    if(kind==='settings')content.append(instrumentEntry);
+    if(kind==='settings')content.append(methodEntry,instrumentEntry);
     dialog.dataset.kind=kind;dialog.showModal();content.scrollTop=0;
   }
   dialog.addEventListener('close',restore);

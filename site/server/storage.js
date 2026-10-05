@@ -1,7 +1,7 @@
 import {HttpError,jsonBody,now} from './security.js';
 
 // No content or credentials are returned by the health check.
-const tables=['community_attachments','world_runs','world_projects','world_branches','world_reviews','community_posts','community_comments','community_favorites','community_reports','community_moderation','personal_accounts','chart_cases','books','pages','page_revisions','technique_cards','card_rules','card_submissions','core_members','grants','workspace_drafts','account_levels','authored_techniques','technique_history'];
+const tables=['community_attachments','world_runs','world_projects','world_branches','world_reviews','community_posts','community_comments','community_favorites','community_reports','community_moderation','personal_accounts','chart_cases','chart_preferences','chart_profiles','books','pages','page_revisions','technique_cards','card_rules','card_submissions','core_members','grants','workspace_drafts','account_levels','authored_techniques','technique_history'];
 const quoted=table=>'"'+table+'"';
 export const storageLocation=env=>env.LOCAL_PREVIEW==='1'?'local':'cloud';
 export async function markStored(db){
@@ -54,7 +54,7 @@ export async function storageRoute({path,method,request,db,viewer,env,bookFor,ur
     const result={location:storageLocation(env),persistent:true,accountSaved:Boolean(viewer.id),passwords:'hashed',personalCases:viewer.id?(await db.prepare('SELECT COUNT(*) AS n FROM chart_cases WHERE user_id=?').bind(viewer.id).first()).n:0};
     if(env.LOCAL_PREVIEW==='1'&&env.PREVIEW_PURPOSE==='fictional-persistence')result.testStore=true;
     if(viewer.core){
-      const names=tables.filter(t=>viewer.founder||!['personal_accounts','chart_cases','core_members'].includes(t));
+      const names=tables.filter(t=>viewer.founder||!['personal_accounts','chart_cases','chart_preferences','chart_profiles','core_members'].includes(t));
       const counts=await db.batch(names.map(table=>db.prepare(`SELECT COUNT(*) AS n FROM ${quoted(table)}`)));
       result.counts=Object.fromEntries(names.map((name,i)=>[name,counts[i].results[0].n]));
       result.backup=await db.prepare("SELECT backup_at,backup_error,dirty_version,backup_version FROM storage_state WHERE id='main'").first();

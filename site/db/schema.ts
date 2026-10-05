@@ -56,8 +56,19 @@ export const personalSessions = sqliteTable('personal_sessions', {
 }, t => [index('idx_personal_sessions_expiry').on(t.expiresAt)]);
 export const chartCases = sqliteTable('chart_cases', {
   id: text('id').primaryKey(), userId: text('user_id').notNull(), title: text('title').notNull(), birth: text('birth').notNull(), provider: text('provider').notNull(),
+  settings: text('settings'),
   revision: integer('revision').notNull().default(1), createdAt: integer('created_at').notNull(), updatedAt: integer('updated_at').notNull(),
 }, t => [index('idx_chart_cases_user_updated').on(t.userId,t.updatedAt)]);
+
+export const chartPreferences = sqliteTable('chart_preferences', {
+  userId: text('user_id').primaryKey(), defaultCaseId: text('default_case_id'),
+  autoOpen: integer('auto_open').notNull().default(0), defaultSettings: text('default_settings'),
+  revision: integer('revision').notNull().default(0), updatedAt: integer('updated_at').notNull(),
+});
+export const chartProfiles = sqliteTable('chart_profiles', {
+  id: text('id').primaryKey(), userId: text('user_id').notNull(), name: text('name').notNull(), settings: text('settings').notNull(),
+  revision: integer('revision').notNull().default(1), createdAt: integer('created_at').notNull(), updatedAt: integer('updated_at').notNull(),
+}, t => [index('idx_chart_profiles_user_updated').on(t.userId,t.updatedAt)]);
 
 export const books = sqliteTable('books', {
   id: text('id').primaryKey(), title: text('title').notNull(),

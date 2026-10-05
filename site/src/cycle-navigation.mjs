@@ -24,13 +24,29 @@ export function lunarParts(date){
 function cacheFor(result){
   if(!caches.has(result)){
     astro.config(result.config);
-    caches.set(result,{decades:result.engine.decadalList(),years:new Map(),months:new Map()});
+    caches.set(result,{decades:result.engine.decadalList(),years:new Map(),months:new Map(),ageBoundaries:new Map()});
   }
   return caches.get(result);
 }
+// Resolve the age transition using the selected engine convention, including
+// lunar birthdays and leap months, without inventing a second age algorithm.
+function ageBoundary(result,year,age){
+  if(year>2099)return '2100-01-01';
+  const cache=cacheFor(result).ageBoundaries,key=`${year}:${age}`;
+  if(cache.has(key))return cache.get(key);
+  const start=clamp(solar(year,1,1),result.normalized.date,'2099-12-31');
+  const end=year>=2099?'2099-12-31':clamp(solar(year+1,1,1),start,'2099-12-31');
+  let low=Date.parse(start+'T12:00:00Z')/DAY,high=Date.parse(end+'T12:00:00Z')/DAY;
+  const date=n=>new Date(n*DAY).toISOString().slice(0,10);
+  if(cycleAt(result,end,'12:00').age<age)return '2100-01-01';
+  while(low<high){const middle=low+Math.floor((high-low)/2);if(cycleAt(result,date(middle),'12:00').age>=age)high=middle;else low=middle+1;}
+  const value=date(low);cache.set(key,value);return value;
+}
 export function cycleBounds(result){
-  const last=cacheFor(result).decades.at(-1).yearRange[1];
-  return {min:result.normalized.date,max:last>=2099?'2099-12-31':shiftDate(solar(last+1,1,1),-1)};
+  const decade=cacheFor(result).decades.at(-1),last=decade.yearRange[1];
+  if(last>=2099)return {min:result.normalized.date,max:'2099-12-31'};
+  const end=result.config.ageDivide==='birthday'?ageBoundary(result,last+1,decade.ageRange[1]+1):solar(last+1,1,1);
+  return {min:result.normalized.date,max:last>=2099?'2099-12-31':shiftDate(end,-1)};
 }
 function clippedPeriod(result,start,end){
   const {min,max}=cycleBounds(result);
@@ -40,7 +56,7 @@ export function decadeChoices(result){
   const decades=cacheFor(result).decades,birthYear=result.chart.rawDates.lunarDate.lunarYear;
   const all=decades.map(d=>({...d,key:String(d.index),label:`${d.ageRange.join('–')}岁 · ${d.heavenlyStem}${d.earthlyBranch} ${d.palaceName}`}));
   if(decades[0].ageRange[0]>1)all.unshift({key:'childhood',index:null,name:'童限',ageRange:[1,decades[0].ageRange[0]-1],yearRange:[birthYear,decades[0].yearRange[0]-1],label:`童限 · 1–${decades[0].ageRange[0]-1}岁`});
-  return all.map(d=>({...d,...clippedPeriod(result,solar(d.yearRange[0],1,1),shiftDate(solar(d.yearRange[1]+1,1,1),-1))})).filter(d=>d.start<=d.end);
+  return all.map(d=>{const birthday=result.config.ageDivide==='birthday';const start=birthday?ageBoundary(result,d.yearRange[0],d.ageRange[0]):solar(d.yearRange[0],1,1),end=birthday?ageBoundary(result,d.yearRange[1]+1,d.ageRange[1]+1):solar(d.yearRange[1]+1,1,1);return {...d,...clippedPeriod(result,start,shiftDate(end,-1))};}).filter(d=>d.start<=d.end);
 }
 export function currentDecade(result,cycle){
   return decadeChoices(result).find(d=>cycle.age>=d.ageRange[0]&&cycle.age<=d.ageRange[1]);
@@ -53,7 +69,7 @@ export function yearChoices(result,decade){
     const years=decade.key==='childhood'
       ?Array.from({length:decade.ageRange[1]},(_,i)=>{const year=decade.yearRange[0]+i;const h=result.engine.horoscope(solar(year,6,1),0).yearly;return {year,age:i+1,heavenlyStem:h.heavenlyStem,earthlyBranch:h.earthlyBranch};})
       :result.engine.yearlyList(decade.palaceName);
-    cache.years.set(decade.key,years.map(y=>({...y,...clippedPeriod(result,solar(y.year,1,1),shiftDate(solar(y.year+1,1,1),-1)),label:`${y.year} ${y.heavenlyStem}${y.earthlyBranch} · ${y.age}岁`})).filter(y=>y.start<=y.end));
+    cache.years.set(decade.key,years.map(y=>({...y,...clippedPeriod(result,solar(y.year,1,1),shiftDate(solar(y.year+1,1,1),-1)),label:`${y.year} ${y.heavenlyStem}${y.earthlyBranch} · ${result.config.ageDivide==='birthday'?'生日后 ':''}${y.age}岁`})).filter(y=>y.start<=y.end));
   }
   return cache.years.get(decade.key);
 }

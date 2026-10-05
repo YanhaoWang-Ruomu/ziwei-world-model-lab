@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "d7637dfa2961c4987dd2f5462a2340ef523aae04",
+  "sourceCommit": "f7ca8762e2a78b0acafac664b5b0f7dc9696df64",
   "files": [
     {
       "path": "site/db/schema.ts",
-      "sha256": "3738cb649fa36a9894a7281e432a79312aa5f10744e4f4b8fe4c7084148a9a61"
+      "sha256": "623273a0323990a875fafb11e0fcff73e9ecde3171145bb295d6c4ba19f1103c"
     },
     {
       "path": "site/docs/community-local-acceptance.md",
@@ -75,6 +75,10 @@
       "sha256": "2e201358c8a4ba7debb86602e048a95f7354ff9e536de9472159fb79edb4cbbc"
     },
     {
+      "path": "site/drizzle/0014_chart_preferences.sql",
+      "sha256": "aa4164957cfe5408e0eb1da9d262f35d0672b5758e9d376ffd0d1782a77d9126"
+    },
+    {
       "path": "site/drizzle/meta/0000_snapshot.json",
       "sha256": "c19e8b2924661a0626aa4d9b8444d30efbe9487a9b88206fd95306aad5979379"
     },
@@ -131,8 +135,12 @@
       "sha256": "7cef8228894f3b1d2ede61c335c8dd365f26290857c17ce9c3a9097b16e39194"
     },
     {
+      "path": "site/drizzle/meta/0014_snapshot.json",
+      "sha256": "9ccd73c49ab31d4ff5bf4a3ae57e84312ccb0a6c2c36e552658eebdc3ac26a71"
+    },
+    {
       "path": "site/drizzle/meta/_journal.json",
-      "sha256": "3cf796403070c24a203084938bde38802928205bf285d0968571b1b75a5f8168"
+      "sha256": "105b821d9d7d9b4c30b4a74db95aa237c145c2225c4438d86f54d6c117a9a0f8"
     },
     {
       "path": "site/package.json",
@@ -176,7 +184,15 @@
     },
     {
       "path": "site/server/chart-cases.js",
-      "sha256": "53a47a6754b42f64cd66ae32b497a65b2cb69ab811fbea5f5cdb90fca2c55872"
+      "sha256": "58968b20851953343da60bd655dc6daf520326fc202173d6b5d31bb6b030e17c"
+    },
+    {
+      "path": "site/server/chart-case-transfer.mjs",
+      "sha256": "ec672aa255e8806f2f8dd84aecba356f34c5cc0073fe1db52d5806869c727e90"
+    },
+    {
+      "path": "site/server/chart-preferences.mjs",
+      "sha256": "73f44e7d1f13916a3500dbef9061112614fbfeecdb26c1f85145487a05bfd19f"
     },
     {
       "path": "site/server/chart-route.mjs",
@@ -220,7 +236,7 @@
     },
     {
       "path": "site/server/storage.js",
-      "sha256": "1675180a855796d11692a5e148a5ae6cfb092a6212cd574f32371a0b7299d98f"
+      "sha256": "e048a5afed3c60bc4974aaa436e5d849cd761ce05ebc83690abde75dbc2ac936"
     },
     {
       "path": "site/server/submissions.js",
@@ -288,11 +304,27 @@
     },
     {
       "path": "site/src/chart-cases.mjs",
-      "sha256": "0111478dd1e8e5779ec9327c76e3ab3fa2d2c2752dfd0f545d5c147952645090"
+      "sha256": "0ce204b6d3cd44644d7641c294eec79cad9633f857bd647f88a6107fd906cde5"
+    },
+    {
+      "path": "site/src/case-import-panel.mjs",
+      "sha256": "9e6bf2fe81840965b16b3cd052588a585411c794ae4479480a91aa9d880b13c8"
+    },
+    {
+      "path": "site/src/chart-conventions.mjs",
+      "sha256": "c567a0d74a0612adf4b4749b0ef34cadd262126a6120ddfc1911dff23c6ca74b"
+    },
+    {
+      "path": "site/src/chart-preferences.css",
+      "sha256": "569e5438858e64ffbc06b1ed59bbbcf78179bb38cecc9a56a397971eff0b1cf9"
+    },
+    {
+      "path": "site/src/chart-settings.mjs",
+      "sha256": "0419b8b0f526be195ce9f8e0b7e3991f6b7d353912abb075f71256c80d7da38f"
     },
     {
       "path": "site/src/chart-engine.mjs",
-      "sha256": "3fb6ecfc81b0584fc5d94e6c3e7d7f25115488b04263cc4bf4a2ddecfba6f694"
+      "sha256": "5d494b88e9202d79cb513413fd4b7eca3a8df5de7fac7ab1d539260375416983"
     },
     {
       "path": "site/src/chart-fit.css",
@@ -312,7 +344,7 @@
     },
     {
       "path": "site/src/chart-mobile.mjs",
-      "sha256": "4efbc8365ec42352f33ff971c77cd22ca91f4db9d4c59a443f0b52a732f34523"
+      "sha256": "132d61f8262c4f51c6eb2d686f4b0cff9142125322a5b39bb1376a2d5bc7f048"
     },
     {
       "path": "site/src/chart-motion.css",
@@ -360,7 +392,7 @@
     },
     {
       "path": "site/src/cosmos.js",
-      "sha256": "8adfb99254ec9044cfc86d33a375b7fa680d4a49f9ba0408df3f946ec904e814"
+      "sha256": "08e27a443e56f49cf54d3ff8805176aadbc18d56a0a1ecba0c14a96051965d79"
     },
     {
       "path": "site/src/cycle-controls.css",
@@ -372,7 +404,7 @@
     },
     {
       "path": "site/src/cycle-navigation.mjs",
-      "sha256": "210ffe88e574b3363e12a2474c8162322e0fd0aeac0180df02a13ada0b13fcd7"
+      "sha256": "84f3e654938e0829f8a82b9325f440ad6d8db0e0c840911f744a0ed6450b1531"
     },
     {
       "path": "site/src/cycle-panel.mjs",
@@ -416,7 +448,7 @@
     },
     {
       "path": "site/src/index.html",
-      "sha256": "313bb7a1226a9fbd3cef8f8e0668d358b7b90c1eb19253750010f9426f429731"
+      "sha256": "75aa8333ee761c97bcc4377fdd24f837c7745ad4b16d6c0fc8d4b4708873d823"
     },
     {
       "path": "site/src/journey-motion.mjs",
@@ -792,7 +824,7 @@
     },
     {
       "path": "site/tests/accounts.test.mjs",
-      "sha256": "ea6909c0088ad719a552856db7d55d97c21aed532c25bcba9a1a142ff41e994b"
+      "sha256": "f1d41e7572f76bffe41a3e789ea3f79fc5634e1d8dfa1e97fa32250240062c0e"
     },
     {
       "path": "site/tests/activity-history.test.mjs",
@@ -815,12 +847,24 @@
       "sha256": "4ae63db738b70f24014f5d6a1cdfed5ee7cbb491cfc31edfaaff0266aee40dca"
     },
     {
+      "path": "site/tests/chart-preferences.test.mjs",
+      "sha256": "10d87112e492b68cb2c9c1a60d89b24cb4eee832f3f047e563293195886d480e"
+    },
+    {
+      "path": "site/tests/chart-preferences.integration.mjs",
+      "sha256": "60577ea85032fd18d044bbc2bdaa044faaf11d659d4cef3e01bfe969cd70ee17"
+    },
+    {
+      "path": "site/tests/chart-preferences-demo.mjs",
+      "sha256": "6dde02904ea5d8c997e1f926afc4ce47eab02e9af5c41b5f9588b684baf9c3b0"
+    },
+    {
       "path": "site/tests/community-demo-seed.mjs",
       "sha256": "f199a0f51d7f216a8f1970172a9fddb8868b7bcfbcccb8e352b3bc7b117f87cf"
     },
     {
       "path": "site/tests/community-demo.mjs",
-      "sha256": "d79b772a211aa662544453bac6db0427cc64d57228c57a057f02ff8c4f163ea3"
+      "sha256": "9facd2323e2859ecc032d4649389bbab337fd623570dd1701b9d98d196d8c551"
     },
     {
       "path": "site/tests/community-format.test.mjs",

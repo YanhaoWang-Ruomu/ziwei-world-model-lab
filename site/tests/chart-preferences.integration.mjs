@@ -1,0 +1,58 @@
+// Fictional accounts only. Refuses the live preview and production services.
+import assert from 'node:assert/strict';
+const base='http://127.0.0.1:8770',suffix=Date.now().toString(36),password='Fictional-case-test-only-928';let count=0;
+const check=(a,b)=>{assert.deepEqual(a,b);count++;};
+async function req(path,{cookie='',method='GET',body,origin=base}={}){const r=await fetch(base+path,{method,headers:{Cookie:cookie,Origin:origin,'Content-Type':'application/json','CF-Connecting-IP':'192.0.2.91'},body:body===undefined?undefined:JSON.stringify(body)});return {status:r.status,data:await r.json(),cookies:r.headers.getSetCookie()};}
+const cookieOf=r=>r.cookies.find(c=>c.startsWith('__Host-ziwei_account=')).split(';')[0];
+check((await req('/api/storage')).data.testStore,true);
+const a=cookieOf(await req('/api/account/register',{method:'POST',body:{username:'caseA'+suffix,password}}));
+const b=cookieOf(await req('/api/account/register',{method:'POST',body:{username:'caseB'+suffix,password}}));
+const settings={version:1,engine:'iztro 2.6.1',options:{algorithm:'zhongzhou',yearDivide:'exact',horoscopeDivide:'normal',ageDivide:'birthday',dayDivide:'current',fixLeap:false}};
+const input={title:'虚构命例甲',birth:{name:'虚构甲',date:'2000-08-16',time:'03:30',gender:'男',dayDivide:'current',fixLeap:false,daylight:false},provider:'public',settings};
+for(const path of ['/api/chart-preferences','/api/chart-profiles','/api/cases/export'])check((await req(path)).status,401);
+const saved=await req('/api/cases',{cookie:a,method:'POST',body:input});check(saved.status,200);check(saved.data.case.settings,settings);const id=saved.data.case.id;
+let pref=(await req('/api/chart-preferences',{cookie:a})).data.preferences;
+check((await req('/api/chart-preferences',{cookie:a,method:'PUT',body:{...pref,defaultCaseId:id,autoOpen:true,defaultSettings:settings}})).status,200);
+check((await req('/api/chart-preferences',{cookie:a,method:'PUT',body:pref})).status,409);
+const bp=(await req('/api/chart-preferences',{cookie:b})).data.preferences;
+check((await req('/api/chart-preferences',{cookie:b,method:'PUT',body:{...bp,defaultCaseId:id,autoOpen:true}})).status,404);
+check((await req('/api/cases/export?id='+id,{cookie:b})).status,404);
+const exported=(await req('/api/cases/export',{cookie:a})).data;check(exported.records.length,1);check(exported.defaultIndex,0);check('id' in exported.records[0],false);check(exported.records[0].settings,settings);
+const bundle={...exported,records:[...exported.records,...exported.records]};
+let preview=(await req('/api/cases/import-preview',{cookie:b,method:'POST',body:{bundle}})).data;check(preview.added,1);check(preview.skipped,1);
+check((await req('/api/cases/import',{cookie:b,method:'POST',body:{bundle,mode:'merge',revision:preview.revision}})).data.imported,1);
+preview=(await req('/api/cases/import-preview',{cookie:b,method:'POST',body:{bundle}})).data;check(preview.added,0);
+check((await req('/api/cases/import',{cookie:b,method:'POST',body:{bundle,mode:'merge',revision:preview.revision}})).data.imported,0);
+preview=(await req('/api/cases/import-preview',{cookie:b,method:'POST',body:{bundle:exported}})).data;
+check((await req('/api/cases/import',{cookie:b,method:'POST',body:{bundle:exported,mode:'restore',revision:preview.revision}})).status,400);
+const intervening=await req('/api/cases',{cookie:b,method:'POST',body:{...input,title:'并发新增虚构例'}});check(intervening.status,200);
+check((await req('/api/cases/import',{cookie:b,method:'POST',body:{bundle:exported,mode:'restore',confirmRestore:true,revision:preview.revision}})).status,409);
+check((await req('/api/cases',{cookie:b})).data.cases.length,2);
+preview=(await req('/api/cases/import-preview',{cookie:b,method:'POST',body:{bundle:exported}})).data;
+const restored=await req('/api/cases/import',{cookie:b,method:'POST',body:{bundle:exported,mode:'restore',confirmRestore:true,revision:preview.revision}});check(restored.status,200);check(restored.data.imported,1);check(restored.data.preferences.autoOpen,true);assert.notEqual(restored.data.preferences.defaultCaseId,id);count++;
+check((await req('/api/cases/'+id,{cookie:a})).status,200);
+const profile=await req('/api/chart-profiles',{cookie:a,method:'POST',body:{name:'虚构常用方案',settings}});check(profile.status,200);
+check((await req('/api/chart-profiles',{cookie:b})).data.profiles.length,0);
+check((await req('/api/chart-profiles/'+profile.data.profile.id,{cookie:b,method:'DELETE'})).status,404);
+check((await req('/api/chart-profiles/'+profile.data.profile.id,{cookie:a,method:'PUT',body:{name:'虚构改名',settings,revision:1}})).data.profile.revision,2);
+check((await req('/api/chart-profiles/'+profile.data.profile.id,{cookie:a,method:'PUT',body:{name:'旧版写入',settings,revision:1}})).status,409);
+check((await req('/api/chart-profiles',{cookie:a,method:'POST',body:{name:'未来版本',settings:{...settings,engine:'future'}}})).status,400);
+check((await req('/api/chart-preferences',{cookie:a,method:'PUT',origin:'https://example.invalid',body:pref})).status,403);
+const invalid={...exported,records:[{...input,settings:{...settings,options:{...settings.options,fixLeap:true}}}]};
+check((await req('/api/cases/import-preview',{cookie:a,method:'POST',body:{bundle:invalid}})).status,400);
+// Exercise the full supported file size without exposing or touching other accounts.
+const many={kind:'guanxingtai_cases',version:1,records:Array.from({length:300},(_,i)=>({...input,title:'虚构批量 '+i}))};
+preview=(await req('/api/cases/import-preview',{cookie:b,method:'POST',body:{bundle:many}})).data;
+check((await req('/api/cases/import',{cookie:b,method:'POST',body:{bundle:many,mode:'restore',revision:preview.revision,confirmRestore:true}})).data.imported,300);
+check((await req('/api/cases',{cookie:b})).data.cases.length,300);
+preview=(await req('/api/cases/import-preview',{cookie:b,method:'POST',body:{bundle:exported}})).data;
+const concurrent=await Promise.all([1,2].map(()=>req('/api/cases/import',{cookie:b,method:'POST',body:{bundle:exported,mode:'restore',revision:preview.revision,confirmRestore:true}})));
+check(concurrent.map(r=>r.status).sort(),[200,409]);check((await req('/api/cases',{cookie:b})).data.cases.length,1);
+await req('/api/logout',{cookie:a,method:'POST'});
+const again=cookieOf(await req('/api/account/login',{method:'POST',body:{username:'caseA'+suffix,password}}));
+const persisted=(await req('/api/chart-preferences',{cookie:again})).data.preferences;check(persisted.defaultCaseId,id);check(persisted.defaultSettings,settings);check((await req('/api/cases/'+id,{cookie:again})).data.case.settings,settings);
+await req('/api/cases/'+id,{cookie:again,method:'DELETE'});const cleared=(await req('/api/chart-preferences',{cookie:again})).data.preferences;check(cleared.defaultCaseId,null);check(cleared.autoOpen,false);
+await req('/api/chart-profiles/'+profile.data.profile.id,{cookie:again,method:'DELETE'});
+// Synthetic account B remains a capacity fixture in the dedicated test store.
+await req('/api/logout',{cookie:again,method:'POST'});await req('/api/logout',{cookie:b,method:'POST'});
+console.log(`PASS ${count} fictional import, default-chart and profile checks`);

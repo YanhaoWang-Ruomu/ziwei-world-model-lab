@@ -1,4 +1,5 @@
 import { astro } from 'iztro';
+import {defaultSettings,normalizeSettings} from './chart-conventions.mjs';
 export const ENGINE_VERSION='iztro 2.6.1';
 export const DEFAULT_CONFIG=Object.freeze({yearDivide:'normal',horoscopeDivide:'normal',ageDivide:'normal',dayDivide:'forward',algorithm:'default'});
 export function validDate(value){
@@ -20,7 +21,9 @@ export function normalizeBirth(input){
 }
 export function makeChart(input){
   const normalized=normalizeBirth(input);
-  const config={...DEFAULT_CONFIG,dayDivide:normalized.dayDivide};
+  const settings=normalizeSettings(input.settings||defaultSettings(input));
+  if(settings.options.dayDivide!==input.dayDivide||settings.options.fixLeap!==input.fixLeap)throw Error('命例与安星方案的口径不一致，请重新应用方案。');
+  const {fixLeap,...config}=settings.options;
   astro.config(config);
   const engine=astro.bySolar(normalized.date,normalized.timeIndex,normalized.gender,normalized.fixLeap,'zh-CN');
   const chart=engine.toJSON();
