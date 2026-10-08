@@ -19,10 +19,25 @@ export function initResearchAgent({api,el,btn}){
     output.replaceChildren();if(!run)return;
     output.append(el('h3','',run.goal));
     for(const event of run.events||[]){const row=el('article','agent-step');row.append(el('strong','',event.action==='search'?'检索公开书库':event.action==='clarify'?'AI 需要你补充':'研究草稿已生成'));if(event.query)row.append(el('p','',event.query+` · 找到 ${event.count} 段候选依据`));if(event.question)row.append(el('p','',event.question));output.append(row);}
-    if(run.result){for(const c of run.result.claims){const source=run.citations[c.source-1];const row=el('article','library-citation');row.append(el('p','',c.text),el('blockquote','',c.quote),el('small','',`${source.title} · 第 ${source.page} 页 / 段`));output.append(row);}for(const item of run.result.uncertainties)output.append(el('p','tech-unresolved',item));output.append(el('p','local-ai-warning','这是待核对的研究草稿。引用检查只能确认原文存在，不能保证解释正确。'));}
+    if(run.result){for(const c of run.result.claims){const source=run.citations[c.source-1];const row=el('article','library-citation');row.append(el('p','',c.text),el('blockquote','',c.quote),el('small','',`${source.title} · 第 ${source.page} 页 / 段`),btn('打开原页',()=>document.dispatchEvent(new CustomEvent('ziwei:open-book-page',{detail:{id:source.book_id,page:source.page,bookLevel:'public'}}))));output.append(row);}for(const item of run.result.uncertainties)output.append(el('p','tech-unresolved',item));output.append(el('p','local-ai-warning','这是待核对的研究草稿。引用检查只能确认原文存在，不能保证解释正确。'));
+      output.append(btn('带入个人研究，准备复盘',safely(()=>handoff('research'))));
+      if(viewer.core)output.append(btn('带入技法草稿，继续整理',safely(()=>handoff('technique'))));
+    }
     if(run.status==='clarify'&&run.step<MAX_STEPS)output.append(followup,btn('补充并继续',safely(async()=>{if(busy)return;if(!confirm.checked)throw Error('请确认补充内容可公开。');if(!followup.value.trim())throw Error('请填写补充说明。');if(run.followups.length>=3)throw Error('已达到本轮补充次数，请新建研究。');run.followups.push(followup.value.trim());followup.value='';await execute();})));
     if(run.status==='paused'&&run.step<MAX_STEPS)output.append(btn('继续已保存的下一步',safely(execute)));
     if(['inflight','uncertain'].includes(run.status))output.append(el('p','local-ai-warning','上次调用未确认完成，可能已计费。本轮不会自动重试；如需重新研究，请明确点击“开始新的研究”。'));
+  }
+  async function handoff(kind){
+    if(busy||!run?.result)throw Error('请等待研究完成。');
+    const ticket=await access(),snapshot=structuredClone(run);
+    const checked=await api('/api/ai/research/sources',{method:'POST',body:JSON.stringify({references:snapshot.citations.map(referenceOnly)})});
+    if(ticket!==epoch||run?.id!==snapshot.id)return;
+    parseAgentAction(JSON.stringify(snapshot.result),snapshot,checked.citations);
+    const quotes=snapshot.result.claims.map(c=>{const s=checked.citations[c.source-1];return `《${s.title}》第 ${s.page} 页：\n${c.quote}`;}).join('\n\n');
+    const detail={title:snapshot.goal,text:quotes,conclusion:snapshot.result.claims.map(c=>c.text).join('\n'),unknowns:snapshot.result.uncertainties.join('\n'),at:new Date().toISOString()};
+    if(kind==='research'&&[detail.text,detail.conclusion,detail.unknowns].some(s=>s.length>1800))throw Error('研究内容过长，请缩小问题范围后带入，避免截断原文和出处。');
+    document.dispatchEvent(new CustomEvent(kind==='technique'?'ziwei:ai-technique-draft':'ziwei:ai-research-draft',{detail}));
+    status.textContent='已带入待核对表单，尚未保存、审核或发布。';
   }
   async function execute(){
     if(busy)return;if(!confirm.checked)throw Error('请先确认公开资料与调用费用。');

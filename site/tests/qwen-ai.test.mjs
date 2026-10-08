@@ -12,7 +12,7 @@ function fixture(){
   const body={id:crypto.randomUUID(),question:'每天浇几次水？',publicQuestionConfirmed:true,references:[{book_id:'fiction',page:120,start:0,end:quote.length,source_hash:'hash',revision:0,source:'extracted'}]};
   let calls=0;
   const context={path:'/api/ai/qwen/answer',method:'POST',db,viewer:{id:'test-core',owner:true},env:{QWEN_ENABLED:'1',QWEN_BUDGET_CNY:'5',QWEN_PRICING_VERIFIED:'2026-10-09',DASHSCOPE_API_KEY:'fictional-key'},day:'2026-10-09',fetcher:async(url,options)=>{
-    calls++;assert.equal(new URL(url).host,'dashscope.aliyuncs.com');const payload=JSON.parse(options.body);assert.equal(payload.enable_search,false);assert.equal(payload.enable_thinking,false);assert.equal(payload.max_tokens,1536);
+    calls++;assert.equal(options.redirect,'manual');assert.equal(new URL(url).host,'dashscope.aliyuncs.com');const payload=JSON.parse(options.body);assert.equal(payload.enable_search,false);assert.equal(payload.enable_thinking,false);assert.equal(payload.max_tokens,1536);
     return Response.json({choices:[{finish_reason:'stop',message:{content:JSON.stringify({claims:[{text:'每天一次。',source:1,quote:'每天浇水一次'}],uncertainties:[]})}}],usage:{prompt_tokens:160,completion_tokens:50}});
   }};
   const call=(overrides={})=>qwenRoute({...context,request:new Request('https://test.invalid/api/ai/qwen/answer',{method:'POST',body:JSON.stringify(body)}),...overrides});

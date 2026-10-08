@@ -1,0 +1,178 @@
+{
+  "version": "fictional-retrieval-v1",
+  "scope": "关键词与 BM25 检索；不包含向量、OCR 或生成模型效果",
+  "syntheticOnly": true,
+  "cases": 12,
+  "recallAt5": 0.8888888888888888,
+  "mrrAt5": 0.8888888888888888,
+  "noEvidenceAccuracy": 1,
+  "rows": [
+    {
+      "id": "simplified",
+      "query": "蓝色花盆每天浇水一次",
+      "expected": [
+        "garden-a:1"
+      ],
+      "hits": [
+        "garden-a:1",
+        "garden-a:120",
+        "garden-b:1",
+        "garden-a:240"
+      ],
+      "recall": 1,
+      "reciprocalRank": 1,
+      "noEvidenceCorrect": null,
+      "elapsedMs": 6
+    },
+    {
+      "id": "traditional",
+      "query": "藍色花盆每天澆水一次",
+      "expected": [
+        "garden-a:1"
+      ],
+      "hits": [
+        "garden-a:1",
+        "garden-a:120",
+        "garden-b:1",
+        "garden-a:240"
+      ],
+      "recall": 1,
+      "reciprocalRank": 1,
+      "noEvidenceCorrect": null,
+      "elapsedMs": 2
+    },
+    {
+      "id": "page120",
+      "query": "冬季园圃花木每七天浇水",
+      "expected": [
+        "garden-a:120"
+      ],
+      "hits": [
+        "garden-a:120",
+        "garden-b:1",
+        "garden-a:1"
+      ],
+      "recall": 1,
+      "reciprocalRank": 1,
+      "noEvidenceCorrect": null,
+      "elapsedMs": 1
+    },
+    {
+      "id": "lastpage",
+      "query": "最后一页白色花盆",
+      "expected": [
+        "garden-a:240"
+      ],
+      "hits": [
+        "garden-a:240",
+        "garden-a:1"
+      ],
+      "recall": 1,
+      "reciprocalRank": 1,
+      "noEvidenceCorrect": null,
+      "elapsedMs": 1
+    },
+    {
+      "id": "crossbook",
+      "query": "冬季园圃花木浇水",
+      "expected": [
+        "garden-a:120",
+        "garden-b:1"
+      ],
+      "hits": [
+        "garden-a:120",
+        "garden-b:1",
+        "garden-a:1"
+      ],
+      "recall": 1,
+      "reciprocalRank": 1,
+      "noEvidenceCorrect": null,
+      "elapsedMs": 1
+    },
+    {
+      "id": "concept",
+      "query": "给盆栽补水以免枯萎",
+      "expected": [
+        "garden-b:2"
+      ],
+      "hits": [
+        "garden-b:2"
+      ],
+      "recall": 1,
+      "reciprocalRank": 1,
+      "noEvidenceCorrect": null,
+      "elapsedMs": 1
+    },
+    {
+      "id": "paraphrase",
+      "query": "植物渴了该怎么办",
+      "expected": [
+        "garden-b:2"
+      ],
+      "hits": [],
+      "recall": 0,
+      "reciprocalRank": 0,
+      "noEvidenceCorrect": null,
+      "elapsedMs": 1
+    },
+    {
+      "id": "instrument",
+      "query": "什么时候校准温度计",
+      "expected": [
+        "garden-b:3"
+      ],
+      "hits": [
+        "garden-b:3"
+      ],
+      "recall": 1,
+      "reciprocalRank": 1,
+      "noEvidenceCorrect": null,
+      "elapsedMs": 1
+    },
+    {
+      "id": "window",
+      "query": "阴天在哪个窗户记录叶片",
+      "expected": [
+        "garden-b:4"
+      ],
+      "hits": [
+        "garden-b:4",
+        "garden-a:240"
+      ],
+      "recall": 1,
+      "reciprocalRank": 1,
+      "noEvidenceCorrect": null,
+      "elapsedMs": 2
+    },
+    {
+      "id": "absent",
+      "query": "飞机售票退改签",
+      "expected": [],
+      "hits": [],
+      "recall": null,
+      "reciprocalRank": 0,
+      "noEvidenceCorrect": true,
+      "elapsedMs": 0
+    },
+    {
+      "id": "restricted",
+      "query": "石榴钟楼",
+      "expected": [],
+      "hits": [],
+      "recall": null,
+      "reciprocalRank": 0,
+      "noEvidenceCorrect": true,
+      "elapsedMs": 0
+    },
+    {
+      "id": "unrelated",
+      "query": "海底潜艇燃料",
+      "expected": [],
+      "hits": [],
+      "recall": null,
+      "reciprocalRank": 0,
+      "noEvidenceCorrect": true,
+      "elapsedMs": 0
+    }
+  ]
+}

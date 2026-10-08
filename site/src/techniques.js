@@ -32,10 +32,12 @@ export function initTechniques({api,el,btn,vault}){
 
   function input(label,value='',multiline=false){const wrap=el('label','',label),field=el(multiline?'textarea':'input');field.value=value;if(multiline)field.rows=5;wrap.append(field);return {wrap,field};}
   function select(values,value){const s=el('select');for(const [key,label]of Object.entries(values))s.append(new Option(label,key));s.value=value;return s;}
-  function edit(card){
+  document.addEventListener('ziwei:ai-technique-draft',e=>{if(!viewer.core)return;const seed=e.detail;if(!seed||typeof seed.text!=='string'||seed.text.length>12000)return;if(editor.querySelector('form')&&!confirm('打开新的 AI 草稿会替换当前未保存的编辑内容，是否继续？'))return;edit(undefined,seed);});
+  function edit(card,seed){
     aiPanel?.dispose();aiPanel=null;
     document.querySelector('#rules').dataset.editorKind='authored';document.dispatchEvent(new CustomEvent('ziwei:rule-draft',{detail:{active:true}}));location.hash='rules';
-    editing=card;const reviewing=viewer.core&&card?.status==='pending';editor.replaceChildren();const form=el('form','tech-editor'),title=input('标题（必填）',card?.payload.title),topic=input('主题',card?.payload.topic),text=input('中文技法原文（必填）',card?.payload.text,true),outcome=input('符合条件时的提示（可留空，发布前补充）',card?.payload.outcome);
+    editing=card;const reviewing=viewer.core&&card?.status==='pending';editor.replaceChildren();const form=el('form','tech-editor'),title=input('标题（必填）',card?.payload.title||seed?.title?.slice(0,160)),topic=input('主题',card?.payload.topic),text=input('中文技法原文（必填）',card?.payload.text||seed?.text,true),outcome=input('符合条件时的提示（可留空，发布前补充）',card?.payload.outcome);
+    if(seed)form.append(el('p','local-ai-warning','已带入公开原文与出处。AI 的结论未转换为运算规则；请核对原意、整理条件后保存并提交审核。'));
     title.field.maxLength=160;text.field.maxLength=12000;outcome.field.maxLength=2000;topic.field.maxLength=80;
     const level=select({public:'公开 · 审核后可供所有人使用',special:'特殊 · 审核后仅授权者使用',...(viewer.core?{private:'私密 · 只存本机'}:{})},card?.payload.level||'special');
     const levelLabel=el('label','','保存级别');levelLabel.append(level);

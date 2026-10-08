@@ -43,7 +43,7 @@ export async function requestQwen({env,db,id,messages,fetcher=fetch,day=beijingD
     SELECT ?,?,?,'reserved',? WHERE COALESCE((SELECT SUM(reserved_micro) FROM ai_usage WHERE day=?),0)+?<=?`).bind(id,day,RESERVATION,QWEN_MODEL,day,RESERVATION,DAILY_LIMIT).run();
   if(reserve.meta?.changes!==1)throw new HttpError(429,'已达到本站今日 AI 预算，或此任务已调用过。请使用本机 AI；若需重试，请明确新建任务。');
   let response;
-  try{response=await fetcher(endpoint,{method:'POST',redirect:'error',signal:AbortSignal.timeout(90000),headers:{Authorization:'Bearer '+env.DASHSCOPE_API_KEY,'Content-Type':'application/json'},body:JSON.stringify({model:QWEN_MODEL,messages,enable_thinking:false,enable_search:false,response_format:{type:'json_object'},max_tokens:1536,temperature:0})});}
+  try{response=await fetcher(endpoint,{method:'POST',redirect:'manual',signal:AbortSignal.timeout(90000),headers:{Authorization:'Bearer '+env.DASHSCOPE_API_KEY,'Content-Type':'application/json'},body:JSON.stringify({model:QWEN_MODEL,messages,enable_thinking:false,enable_search:false,response_format:{type:'json_object'},max_tokens:1536,temperature:0})});}
   catch{await db.prepare("UPDATE ai_usage SET status='uncertain' WHERE request_id=?").bind(id).run();throw new HttpError(502,'千问连接未完成；本次预留额度保留，不会自动重试。');}
   if(!response.ok){await response.body?.cancel();await db.prepare("UPDATE ai_usage SET status='failed' WHERE request_id=?").bind(id).run();throw new HttpError(502,'千问未接受请求，请在百炼控制台检查密钥权限、余额与模型服务状态。');}
   let result;try{result=JSON.parse(new TextDecoder().decode(await bodyBytes(response,50000)));}catch{throw new HttpError(502,'千问返回格式异常，本次不会自动重试。');}

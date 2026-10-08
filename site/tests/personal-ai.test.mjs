@@ -12,7 +12,7 @@ function fixture(){
  const db={prepare:s=>({bind:(...args)=>({first:async()=>sql.prepare(s).get(...args),run:async()=>({meta:{changes:sql.prepare(s).run(...args).changes}})})})};
  const connection={baseUrl:'https://api.deepseek.com/v1',model:'fictional-model',apiKey:'fictional-secret-never-real'};
  const viewer={id:'fictional-a',owner:false};let calls=0;
- const fetcher=async(url,options)=>{calls++;assert.equal(url,connection.baseUrl+'/chat/completions');assert.equal(options.redirect,'error');assert.equal(options.headers.Authorization,'Bearer '+connection.apiKey);return Response.json({choices:[{finish_reason:'stop',message:{content:'{"ok":true}'}}],usage:{prompt_tokens:10,completion_tokens:4}});};
+ const fetcher=async(url,options)=>{calls++;assert.equal(url,connection.baseUrl+'/chat/completions');assert.equal(options.redirect,'manual');assert.equal(options.headers.Authorization,'Bearer '+connection.apiKey);return Response.json({choices:[{finish_reason:'stop',message:{content:'{"ok":true}'}}],usage:{prompt_tokens:10,completion_tokens:4}});};
  const base={env:{},db,viewer,connection,fetcher,id:crypto.randomUUID(),messages:[{role:'user',content:'JSON connection test'}]};
  const ref={book_id:'fiction',page:120,start:0,end:11,source_hash:'hash',revision:0,source:'extracted'};
  return {sql,db,base,ref,get calls(){return calls;}};
@@ -34,6 +34,20 @@ test('network, provider and oversized errors never echo credentials or retry',as
 });
 test('verification requires consent and real model JSON, never returns supplied key',async()=>{
  const f=fixture();try{const data={id:crypto.randomUUID(),connection:f.base.connection,consent:true},ctx={path:'/api/ai/personal/verify',method:'POST',viewer:f.base.viewer,env:{},db:f.db};const call=()=>personalAiRoute({...ctx,request:new Request('https://fixture.invalid/api/ai/personal/verify',{method:'POST',body:JSON.stringify(data)})},{generate:p=>requestPersonalAi({...p,fetcher:f.base.fetcher})});const result=await call();assert.equal(result.ok,true);assert.equal(f.calls,1);assert.ok(!JSON.stringify(result).includes('secret'));data.consent=false;await assert.rejects(call(),e=>e.status===400);}finally{f.sql.close();}
+});
+test('edge-compatible requests refuse redirects without forwarding credentials or retrying',async()=>{
+ for(const status of [301,302,307,308]){const f=fixture();try{let calls=0;
+  await assert.rejects(requestPersonalAi({...f.base,fetcher:async(url,options)=>{calls++;if(!['follow','manual'].includes(options.redirect))throw Error('Unsupported edge redirect mode');assert.equal(options.redirect,'manual');return new Response(null,{status,headers:{Location:'https://untrusted.invalid/'}});}}),e=>e.status===502&&e.message.includes('重定向'));
+  assert.equal(calls,1);assert.equal(f.sql.prepare('SELECT status FROM personal_ai_usage').get().status,'failed');
+ }finally{f.sql.close();}}
+});
+test('model evaluation only accepts fixed fictional questions and checks original quotations',async()=>{
+ const f=fixture();try{let calls=0;const data={fixture:'literal',id:crypto.randomUUID(),connection:f.base.connection,consent:true};
+  const context={path:'/api/ai/personal/evaluate',method:'POST',viewer:f.base.viewer,env:{},db:f.db};
+  const call=()=>personalAiRoute({...context,request:new Request('https://fixture.invalid/',{method:'POST',body:JSON.stringify(data)})},{generate:async p=>{calls++;assert.ok(p.messages[1].content.includes('蓝色花盆'));assert.ok(!p.messages[1].content.includes('untrusted uploaded text'));return {raw:JSON.stringify({claims:[{text:'每天一次',source:1,quote:'蓝色花盆每天浇水一次'}],uncertainties:[]}),model:'fictional-model',usage:{inputTokens:1,outputTokens:1}};}});
+  data.question='untrusted uploaded text';const result=await call();assert.equal(result.checks.needsHumanReview,true);assert.equal(result.checks.expectedMarkersPresent,true);assert.equal(calls,1);
+  data.fixture='uploaded';await assert.rejects(call(),e=>e.status===400);assert.equal(calls,1);
+ }finally{f.sql.close();}
 });
 test('Agent chooses search then answers only from public server-rebuilt evidence',async()=>{
  const f=fixture();try{const data={callId:crypto.randomUUID(),goal:'花盆多久浇水',followups:[],queries:[],references:[],step:0,publicConfirmed:true,consent:true,connection:f.base.connection};let mode='search';

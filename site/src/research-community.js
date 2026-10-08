@@ -1,7 +1,7 @@
 import {mountScenario,scenarioComparison} from './scenario-workbench.js';
 import {initCommunity} from './community.js';
 export function initResearchCommunity({api,el,btn}){
-  let viewer={},generation=0,world=null,events=[],branches=[],reviews=[],runs=[],researchTab='state';
+  let viewer={},generation=0,world=null,draftSeed=null,events=[],branches=[],reviews=[],runs=[],researchTab='state';
   const $=s=>document.querySelector(s),worldRoot=$('#world');
   initCommunity({api,el,btn});
   const labels={context:'当前情境',resources:'可用资源',constraints:'约束与阻力',unknowns:'未知与待核实'};
@@ -16,12 +16,12 @@ export function initResearchCommunity({api,el,btn}){
   function guarded(f,s,work){f.addEventListener('submit',async e=>{e.preventDefault();const b=f.querySelector('button[type=submit]');if(b.disabled)return;b.disabled=true;try{await work(values(f));}catch(e){s.textContent=e.message;}finally{b.disabled=false;}});}
   function action(t,work,s=status){return btn(t,async()=>{try{await work();}catch(e){s.textContent=e.message;}});}
   const projects=el('div','research-projects'),editor=el('div','research-editor'),timeline=el('div','research-timeline'),comparison=el('div','research-comparison');
-  const newProject=action('新建个人研究',()=>{world=null;events=[];branches=[];reviews=[];runs=[];drawWorld();});
+  const newProject=action('新建个人研究',()=>{world=null;draftSeed=null;events=[];branches=[];reviews=[];runs=[];drawWorld();});
   worldRoot.append(heading('观察 · 分支 · 复盘','世界状态与现实事件','记录情境与观察，比较行动假设，再用实际结果复盘。个人研究仅本账户可见；推演使用你设定的假设规则，不代表事件发生概率。'),status,projects,newProject,editor);
   async function loadProjects(){const g=generation;if(!viewer.authenticated){projects.replaceChildren(el('p','','登录个人账户后保存研究记录。'));return;}
     const data=await api('/api/world/projects');if(g!==generation)return;projects.replaceChildren(...data.projects.map(p=>action(p.title,()=>openWorld(p.id))));if(!data.projects.length)projects.append(el('p','muted','还没有个人研究，点击新建开始。'));
   }
-  async function openWorld(id){const g=generation,data=await api('/api/world/projects/'+id);if(g!==generation)return;world=data.project;events=world.events.map(e=>({...e}));branches=data.branches;reviews=data.reviews;runs=data.runs||[];drawWorld();status.textContent='已载入个人研究。';}
+  async function openWorld(id){const g=generation,data=await api('/api/world/projects/'+id);if(g!==generation)return;draftSeed=null;world=data.project;events=world.events.map(e=>({...e}));branches=data.branches;reviews=data.reviews;runs=data.runs||[];drawWorld();status.textContent='已载入个人研究。';}
   function drawWorld(){editor.replaceChildren();if(!viewer.authenticated)return;
     const tabs=el('div','research-local-tabs'),statePane=el('section','research-section'),eventsPane=el('section','research-section'),branchPane=el('section','research-section');tabs.setAttribute('aria-label','个人研究步骤');
     const panes={state:statePane,events:eventsPane,branches:branchPane};const tabButtons=new Map();
@@ -29,7 +29,8 @@ export function initResearchCommunity({api,el,btn}){
     for(const [key,label]of [['state','世界状态'],['events','事件时间线'],['branches','分支推演与复盘']]){const b=btn(label,()=>showTab(key));tabButtons.set(key,b);tabs.append(b);}editor.append(tabs,statePane,eventsPane,branchPane);showTab(researchTab);
     const f=form();f.append(field('title','研究名称',{max:100,required:true}),...Object.entries(labels).map(([k,l])=>field(k,l,{area:true})),submit(world?'保存状态与时间线':'创建研究'));
     if(world){f.elements.title.value=world.title;for(const k of Object.keys(labels))f.elements[k].value=world.state[k];}
-    guarded(f,status,async v=>{const g=generation,p={title:v.title,state:Object.fromEntries(Object.keys(labels).map(k=>[k,v[k]])),events};const data=await api('/api/world/projects'+(world?'/'+world.id:''),{method:world?'PUT':'POST',body:JSON.stringify({...p,...(world?{revision:world.revision}:{})})});if(g!==generation)return;world=data.project;status.textContent='已保存，只有本账户可访问。';await loadProjects();drawWorld();});
+    else if(draftSeed){f.elements.title.value=draftSeed.title.slice(0,100);f.elements.context.value='AI 研究草稿（待核对）\n'+draftSeed.conclusion;f.elements.resources.value=draftSeed.text;f.elements.constraints.value='AI 结论不是已观察事实；保存后建立明确假设，再记录实际反馈并复盘。';f.elements.unknowns.value=draftSeed.unknowns;}
+    guarded(f,status,async v=>{const g=generation,p={title:v.title,state:Object.fromEntries(Object.keys(labels).map(k=>[k,v[k]])),events};const data=await api('/api/world/projects'+(world?'/'+world.id:''),{method:world?'PUT':'POST',body:JSON.stringify({...p,...(world?{revision:world.revision}:{})})});if(g!==generation)return;draftSeed=null;world=data.project;status.textContent='已保存，只有本账户可访问。';await loadProjects();drawWorld();});
     statePane.append(f);eventsPane.append(el('h2','','现实事件时间线'),el('p','muted','“已观察”与“计划”分别记录。添加或移除后，保存状态与时间线。'),timeline);drawTimeline();
     const ef=form('research-form research-inline');ef.append(field('date','日期',{type:'date',required:true}),select('kind','记录性质',[['observed','已观察'],['planned','计划']]),field('title','事件名称',{max:100,required:true}),field('detail','观察证据 / 计划内容',{area:true}),submit('加入未保存的时间线'));ef.elements.date.value=new Date().toISOString().slice(0,10);
     guarded(ef,status,async v=>{if(events.length>=200)throw Error('每份研究最多 200 条事件。');events.push({id:crypto.randomUUID(),...v});drawTimeline();ef.elements.title.value='';ef.elements.detail.value='';status.textContent='事件尚未保存，请点击保存状态与时间线。';});eventsPane.append(ef,btn('保存状态与时间线',()=>{if(!f.checkValidity()){showTab('state');f.reportValidity();return;}f.requestSubmit();},'book-primary'));
@@ -48,10 +49,16 @@ export function initResearchCommunity({api,el,btn}){
       const rf=form();rf.classList.add('research-review-form');rf.append(select('runId','复盘对应的已保存推演',[['','手工分支（未关联自动推演）'],...runs.filter(r=>r.branchId===b.id).map(r=>[r.id,r.ruleSet.name+' V'+r.ruleSet.version+' · '+r.inputHash.slice(0,8)])]),field('date','复盘日期',{type:'date',required:true}),select('outcome','与原预期比较',[['unclear','证据不足'],['supported','与预期一致'],['contradicted','与预期相反']]),field('result','实际结果与证据',{area:true,max:4000,required:true}),field('learning','修正 / 下一步',{area:true,max:4000}),submit('追加复盘记录'));rf.elements.date.value=new Date().toISOString().slice(0,10);
       guarded(rf,status,async v=>{const g=generation;await api('/api/world/branches/'+b.id+'/reviews',{method:'POST',body:JSON.stringify(v)});if(g!==generation)return;await openWorld(world.id);status.textContent='复盘已追加，保留原假设与基线。';});card.append(rf);comparison.append(card);}
   }
-  function clear(){generation++;world=null;events=[];branches=[];reviews=[];runs=[];projects.replaceChildren();editor.replaceChildren();status.textContent='';}
+  function clear(){generation++;world=null;draftSeed=null;events=[];branches=[];reviews=[];runs=[];projects.replaceChildren();editor.replaceChildren();status.textContent='';}
   async function enter(view){if(view!=='world')return;try{await loadProjects();drawWorld();}catch(e){status.textContent=e.message;}}
   document.addEventListener('ziwei:session',e=>{clear();viewer=e.detail;newProject.hidden=!viewer.authenticated;enter(location.hash.slice(1));});
   document.addEventListener('ziwei:logout',()=>{clear();viewer={};newProject.hidden=true;});
   document.addEventListener('ziwei:view',e=>enter(e.detail));
   document.addEventListener('ziwei:open-research',async e=>{if(!viewer.authenticated)return;try{researchTab='branches';await loadProjects();await openWorld(e.detail.id);}catch(error){status.textContent=error.message;}});
+  document.addEventListener('ziwei:ai-research-draft',e=>{
+    if(!viewer.authenticated)return;const seed=e.detail;
+    if(!seed||!['title','text','conclusion','unknowns'].every(k=>typeof seed[k]==='string'&&seed[k].length<=1800))return;
+    if(editor.querySelector('form')&&!confirm('带入新的 AI 研究会替换当前表单中未保存的内容，已保存记录不受影响。是否继续？'))return;
+    world=null;draftSeed=seed;events=[];branches=[];reviews=[];runs=[];researchTab='state';location.hash='world';drawWorld();editor.scrollIntoView({block:'start'});status.textContent='AI 草稿已带入，尚未保存。请核对后点击创建研究，再建立分支与复盘。';
+  });
 }

@@ -2,6 +2,7 @@ import {HttpError,jsonBody,bodyBytes,digest} from './security.js';
 import {AI_PROVIDERS,canonicalBase,validateConnection} from '../src/ai-provider-catalog.mjs';
 import {messagesFor,validateOutput} from '../src/local-ai-contracts.mjs';
 import {publicAgentEvidence} from './research-agent.mjs';
+import {EVALUATION_VERSION,evaluationInput,evaluationChecks} from '../src/ai-evaluation-fixtures.mjs';
 export function allowedEndpoints(env){
   // Operator-controlled, exact base paths; user input can never extend this list.
   return String(env.AI_ALLOWED_BASE_URLS||'').split(',').filter(Boolean).map(x=>canonicalBase(x.trim()));
@@ -20,8 +21,10 @@ export async function requestPersonalAi({env={},db,viewer,connection,id,messages
   if(config.baseUrl.includes('dashscope'))payload.enable_thinking=false;
   if(config.baseUrl==='https://api.deepseek.com/v1')payload.thinking={type:'disabled'};
   let response;
-  try{response=await fetcher(config.baseUrl+'/chat/completions',{method:'POST',headers:{Authorization:'Bearer '+config.apiKey,'Content-Type':'application/json'},body:JSON.stringify(payload),redirect:'error',signal:AbortSignal.timeout(90000)});}
-  catch{await update('uncertain');throw new HttpError(502,'连接超时或网络不可用。请求可能已经计费，本次不会自动重试。');}
+  // Workerd accepts manual/follow only. Never follow a redirect carrying a user's key.
+  try{response=await fetcher(config.baseUrl+'/chat/completions',{method:'POST',headers:{Authorization:'Bearer '+config.apiKey,'Content-Type':'application/json'},body:JSON.stringify(payload),redirect:'manual',signal:AbortSignal.timeout(90000)});}
+  catch(error){await update('uncertain');const reason=error?.name==='TimeoutError'||error?.name==='AbortError'?'等待服务商响应超时（90 秒）。':'本站服务器未能连接服务商（请求未取得响应）。';throw new HttpError(502,reason+' 请求可能已经计费，本次不会自动重试。');}
+  if(response.status>=300&&response.status<400){await response.body?.cancel();await update('failed');throw new HttpError(502,'接口返回了重定向。为保护密钥已停止，请核对服务商的正式接口地址；未自动重试。');}
   if(!response.ok){
     const status=response.status;await response.body?.cancel();await update('failed');
     const text=status===401?'密钥无效或已过期。':status===403?'密钥没有该模型或该区域的调用权限。':status===402||status===429?'服务商额度不足或请求受限，请查看其控制台。':status===404?'找不到接口或模型，请检查服务地址和模型 ID。':status===400?'该模型不接受当前 JSON 对话参数，请选用支持 JSON 输出的文本模型。':'服务商暂时无法完成请求。';
@@ -39,9 +42,15 @@ export async function personalAiRoute(context,{generate=requestPersonalAi}={}){
   if(!path.startsWith('/api/ai/personal/'))return null;
   if(!viewer.id)throw new HttpError(401,'请先登录个人账户。');
   if(path==='/api/ai/personal/providers'&&method==='GET')return {providers:AI_PROVIDERS,additionalBaseUrls:allowedEndpoints(env)};
-  if(method!=='POST'||!['/api/ai/personal/verify','/api/ai/personal/answer'].includes(path))throw new HttpError(404,'不存在此个人 AI 操作。');
+  if(method!=='POST'||!['/api/ai/personal/verify','/api/ai/personal/answer','/api/ai/personal/evaluate'].includes(path))throw new HttpError(404,'不存在此个人 AI 操作。');
   const data=await jsonBody(request,18000);
   if(data?.consent!==true)throw new HttpError(400,'请确认本次将调用自己的 API，可能产生服务商费用。');
+  if(path.endsWith('/evaluate')){
+    let fixture,input;try{({fixture,input}=evaluationInput(data.fixture));}catch(e){throw new HttpError(400,e.message);}
+    const started=Date.now(),result=await generate({env,db,viewer,connection:data.connection,id:data.id,messages:messagesFor(input)});
+    let checked;try{checked=validateOutput(input,result.raw);}catch{throw new HttpError(502,'验收未通过：模型回答的 JSON 格式或原文引用不正确。');}
+    return {version:EVALUATION_VERSION,fixture:fixture.id,result:checked,model:result.model,usage:result.usage,elapsedMs:Date.now()-started,checks:evaluationChecks(fixture,checked),at:new Date().toISOString()};
+  }
   if(path.endsWith('/verify')){
     const result=await generate({env,db,viewer,connection:data.connection,id:data.id,messages:[{role:'system',content:'Connection check. Return exactly this JSON object: {"ok":true}. No other text.'},{role:'user',content:'Return the connection-check JSON.'}]});
     let value;try{value=JSON.parse(result.raw);}catch{}
