@@ -3,6 +3,7 @@ import {attachmentRoute} from './community-attachments.mjs';
 import {activityHistoryRoute} from './activity-history.mjs';
 import {scenarioRoute} from './scenario-runs.js';
 import {searchLibrary} from './library-search.mjs';
+import {bookReadiness,bookCorpusBatch,searchEvidence} from './library-evidence.mjs';
 import {deleteBook,activeBookGuard} from './book-deletion.mjs';
 import * as OpenCC from 'opencc-js';
 import { now, digest, randomToken, identity, assertOrigin, HttpError, bodyBytes, jsonBody, safeText, positiveInt, onlineLevel } from './security.js';
@@ -147,6 +148,11 @@ async function route(request, env) {
     const query = safeText(url.searchParams.get('q') || '', 160, false);
     return json(await searchLibrary({db,url,guard:visibility(viewer),normalize,query}));
   }
+  if(path==='/api/evidence/search'&&method==='GET'){
+    const query=safeText(url.searchParams.get('q')||'',160,false);
+    if(!normalize(query))throw new HttpError(400,'请先输入要查阅的问题或关键词。');
+    return json(await searchEvidence({db,url,guard:visibility(viewer),normalize,query}));
+  }
   if (path === '/api/unlock' && method === 'POST') {
     const { key } = await jsonBody(request, 4096);
     if (typeof key !== 'string' || !/^[a-f0-9-]{36}\.[a-f0-9]{64}$/.test(key)) throw new HttpError(403, '密钥无效、已到期或已被撤销。');
@@ -166,6 +172,8 @@ async function route(request, env) {
   const [, id, action = ''] = match; const writing = !['GET','HEAD'].includes(method);
   if(!action&&method==='DELETE')return json(await deleteBook({db,bucket:env.BUCKET,viewer,request,id}));
   const book = await bookFor(db, id, viewer, writing);
+  if(action==='readiness'&&method==='GET')return json(await bookReadiness(db,book));
+  if(action==='corpus'&&method==='GET')return json(await bookCorpusBatch(db,book,url));
   const review = await reviewRoute({ action, method, request, db, book, viewer, normalize });
   if (review !== null) return json(review);
   const rule=await ruleRoute({action,method,request,db,book,viewer,fold:convert});

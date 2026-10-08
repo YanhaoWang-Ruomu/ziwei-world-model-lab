@@ -34,6 +34,13 @@ async function build() {
   const models=path.join(root,'vendor-models');
   fs.cpSync(models,path.join(vendor,'tessdata'),{recursive:true});
   const browserBuild=await require('esbuild').build({entryPoints:[path.join(source,'cosmos.js')],outfile:path.join(client,'cosmos.js'),bundle:true,format:'esm',platform:'browser',target:'es2022',minify:true,metafile:true});
+  await require('esbuild').build({entryPoints:[path.join(source,'semantic-worker.mjs')],outfile:path.join(client,'semantic-worker.mjs'),bundle:true,format:'esm',platform:'browser',target:'es2022',minify:true});
+  const transformerRoot=fs.realpathSync(path.join(root,'node_modules','@huggingface','transformers'));
+  const onnxRoot=path.resolve(path.dirname(require.resolve('onnxruntime-web',{paths:[transformerRoot]})),'..');
+  const onnxVendor=path.join(vendor,'onnx');fs.mkdirSync(onnxVendor,{recursive:true});
+  for(const name of fs.readdirSync(path.join(onnxRoot,'dist')).filter(n=>/^ort-wasm.*\.(?:mjs|wasm)$/.test(n)))fs.copyFileSync(path.join(onnxRoot,'dist',name),path.join(onnxVendor,name));
+  fs.copyFileSync(path.join(transformerRoot,'LICENSE'),path.join(vendor,'transformers-LICENSE'));
+  fs.copyFileSync(path.join(root,'licenses','onnxruntime-LICENSE'),path.join(onnxVendor,'LICENSE'));
   if(Object.keys(browserBuild.metafile.inputs).some(file=>path.resolve(root,file).startsWith(path.join(root,'server')+path.sep)))throw Error('Server-only chart logic entered the public browser bundle.');
   copy('iztro','LICENSE',path.join(vendor,'iztro-LICENSE'));
   // This package distributes its MIT notice in the source header.

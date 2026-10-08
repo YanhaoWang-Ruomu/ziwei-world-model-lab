@@ -15,6 +15,7 @@ import {initPrivateLibrary} from './private-vault.mjs';
 import {initTechniques} from './techniques.js';
 import {highlightText} from './search-highlights.mjs';
 import {mountImageHighlights} from './page-image-highlights.mjs';
+import {initEvidenceReader} from './library-evidence.js';
 const $ = s => document.querySelector(s);
 const normalize = window.ZiweiBookSearch.normalize;
 let books = [], viewer = {}, level = 'public', offset = 0, searchGeneration = 0, detailGeneration = 0;
@@ -43,6 +44,11 @@ lookupBook.addEventListener('change',()=>{const b=books.find(b=>b.id===lookupBoo
 $('#book-filter').addEventListener('change',()=>{if($('#book-filter').value!=='all'){lookupBook.value=$('#book-filter').value;lookupBook.dispatchEvent(new Event('change'));}});
 pageLookup.addEventListener('submit',event=>{event.preventDefault();if(!lookupBook.value||!lookupPage.reportValidity())return;++searchGeneration;$('#book-search-status').textContent='正在按页查看';lookupStatus.textContent='按 PDF 文件页序查看，可能与书中印刷页码不同。';showPage(lookupBook.value,Number(lookupPage.value));});
 const searchCoverage=el('p','book-search-coverage');searchCoverage.setAttribute('role','status');pageLookup.after(searchCoverage);
+const evidenceReader=initEvidenceReader({api,el,btn,anchor:searchCoverage,
+  scope:()=>({query:$('#book-query').value,book:$('#book-filter').value,level}),
+  openSource:async source=>{activeQuery=source.quote?.slice(0,100)||$('#book-query').value;activeSimilar=false;await showPage(source.book_id,source.page);$('#book-detail').scrollIntoView({behavior:'smooth',block:'start'});}});
+$('#book-filter').addEventListener('change',()=>evidenceReader.reset());
+document.addEventListener('ziwei:open-book-page',async event=>{const {id,page,bookLevel}=event.detail;location.hash=bookLevel==='special'?'#special':'#library';await enterLibrary(bookLevel||'public');await showPage(id,page);});
 const storage=initStorage({api,el,btn});
 function pageLabel(book,n) { return `${book.kind==='pdf'?'PDF 页':'文章段'} ${n}`; }
 function snippet(hit) {
@@ -96,7 +102,7 @@ async function search(reset=true) {
     data.hits.forEach(hit=>{
       const card=btn('',()=>showPage(hit.book_id,hit.page),'book-result');card.dataset.pageKey=`${hit.book_id}:${hit.page}`;
       const title=el('strong'),excerpt=el('span','book-result-quote');highlightText(title,hit.title,activeQuery,normalize,{similar:activeSimilar});highlightText(excerpt,snippet(hit),activeQuery,normalize,{similar:activeSimilar});
-      card.append(el('span','book-match',activeQuery.trim()?`${hit.match_label || '文字匹配'} · 相关度 ${hit.score ?? 100}`:'全文提取或识别文字'),title,excerpt,el('small','',pageLabel(hit,hit.page)));
+      card.append(el('span','book-match',activeQuery.trim()?`${hit.match_label || '文字匹配'}${data.match==='related'?' · 综合排序':` · 相关度 ${hit.score ?? 100}`}`:'全文提取或识别文字'),title,excerpt,el('small','',pageLabel(hit,hit.page)));
       $('#book-results').append(card);
     });
     if(offset>0)$('#result-pagination').append(btn('上一组',()=>{offset=Math.max(0,offset-20);search(false);}));
@@ -144,6 +150,7 @@ async function showPage(id,n) {
   } catch(e) {if(generation===detailGeneration)detail.replaceChildren(el('p','book-empty-copy',e.message),btn('重试',()=>showPage(id,n)));}
 }
 async function enterLibrary(next,scroll=false,source) {
+  evidenceReader.reset();
   disposeImageHighlights();
   level=next==='special'&&viewer.role!=='public'?'special':'public';++searchGeneration;++detailGeneration;
   searchCoverage.textContent='';lookupStatus.textContent='';
@@ -196,6 +203,7 @@ const privateVault=initPrivateLibrary({el,btn});
 initTechniques({api,el,btn,vault:privateVault});
 initWorkspaceSections({api,el,btn});
 async function applySession(next){
+  evidenceReader.reset();
   ++searchGeneration;++detailGeneration;ruleWorkbench.clear();modelWorkbench.clear();submissions.clear();
   pageLookup.hidden=true;lookupBook.replaceChildren();lookupStatus.textContent='';searchCoverage.textContent='';
   $('#book-detail').replaceChildren();$('#book-results').replaceChildren();$('#manage-books').replaceChildren();

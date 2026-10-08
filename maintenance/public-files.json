@@ -267,7 +267,16 @@
     "vendor-models/chi_tra.traineddata",
     "vendor-models/LICENSE",
     "vendor-models/README.md",
-    "wrangler.jsonc"
+    "wrangler.jsonc",
+    "server/library-evidence.mjs",
+    "src/evidence-ranking.mjs",
+    "src/library-evidence.js",
+    "src/local-semantic.mjs",
+    "src/semantic-worker.mjs",
+    "tests/library-evidence.test.mjs",
+    "tests/library-evidence-ui.test.mjs",
+    "tests/library-evidence.http.mjs",
+    "licenses/onnxruntime-LICENSE"
   ],
   "desktop": [
     "README.md",

@@ -1,4 +1,24 @@
 .book-library { max-width: 1320px; padding: 46px 0 54px; margin: 0 auto; scroll-margin-top: 18px; }
+.library-evidence { margin:20px 0 28px; padding:20px; border:1px solid var(--line,#c8b98d); border-radius:10px; background:linear-gradient(125deg,rgba(199,170,104,.09),rgba(250,243,224,.4)); box-shadow:inset 0 1px rgba(255,255,255,.65); }
+.library-evidence > summary { cursor:pointer; font-weight:600; color:var(--jade-dark); padding:3px 0; }
+.library-evidence-controls { display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin:18px 0 8px; }
+.book-library .library-semantic-toggle { display:flex; flex:1 1 270px; min-width:0; max-width:100%; gap:8px; align-items:center; font-size:14px; }
+.book-library .library-semantic-toggle input[type='checkbox'] { flex:0 0 18px; width:18px !important; height:18px; min-width:18px; max-width:18px; margin:0; padding:0; accent-color:var(--jade-dark); }
+.book-library .library-semantic-toggle span { min-width:0; white-space:normal; font-size:14px; line-height:1.6; }
+.library-evidence-status { font-size:14px; line-height:1.8; }
+.library-evidence-results { display:grid; gap:14px; }
+.library-citation { border:1px solid var(--line,#c8b98d); border-radius:8px; padding:18px; min-width:0; background:rgba(255,252,242,.56); }
+.library-citation h3 { font-size:16px; font-weight:600; line-height:1.6; overflow-wrap:anywhere; margin:0 0 12px; }
+.library-citation blockquote { margin:0; white-space:pre-wrap; font-size:16px; line-height:1.95; overflow-wrap:anywhere; }
+.library-health { margin:16px 0; padding:16px; border:1px solid var(--line,#c8b98d); border-radius:8px; }
+.library-health-facts { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; }
+.library-health-facts strong,.library-health-facts span { display:block; }
+.library-health-facts strong { font-size:25px; font-weight:500; }
+.library-health-facts span { margin-top:6px; font-size:13px; color:var(--muted); }
+.library-health-issues { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-top:12px; max-height:180px; overflow:auto; }
+.library-health-issues > span { font-size:14px; }
+.library-health-issues button { padding:6px 10px; }
+@media(max-width:650px) { .library-evidence {padding:16px 12px}.library-health-facts{grid-template-columns:repeat(2,minmax(0,1fr))}.library-citation{padding:14px}.library-evidence-controls>button{flex:1;min-width:100px}.library-semantic-toggle{width:100%} }
 [hidden] { display: none !important; }
 .library-tabs { display:flex; gap:10px; margin:24px 0 16px; }
 .library-tabs > * { flex:1; text-align:left; background:#e9e9e0; border:1px solid #bdc5bb; border-radius:8px; padding:14px 18px; color:var(--ink); text-decoration:none; font-size:17px; cursor:pointer; }

@@ -1,5 +1,6 @@
 import {api,el,btn,message,refresh} from './library.js';
 import {materialDeleteControl} from './material-delete.mjs';
+import {renderReadiness} from './library-evidence.js';
 export function renderManagement(books,viewer) {
   const host=document.querySelector('#manage-books');host.replaceChildren();if(!viewer.owner)return;
   host.append(el('h3','','材料与授权'));
@@ -9,6 +10,12 @@ export function renderManagement(books,viewer) {
     if(book.status==='deleting'){box.append(el('p','','文件清理未完成，材料已停止展示。'),deletion);host.append(box);return;}
     const change=el('select');change.setAttribute('aria-label',`${book.title} 的级别`);change.append(new Option('公开','public'),new Option('特殊','special'));change.value=book.level;
     const msg=el('p');msg.setAttribute('role','status');
+    const health=el('div','library-health');health.hidden=true;
+    const check=btn('检查页数与识别完整性',async()=>{check.disabled=true;msg.textContent='正在检查…';try{
+      const data=await api(`/api/books/${book.id}/readiness`);if(!box.isConnected)return;
+      renderReadiness(health,data,{el,btn,openPage:(id,page)=>document.dispatchEvent(new CustomEvent('ziwei:open-book-page',{detail:{id,page,bookLevel:book.level}}))});health.hidden=false;msg.textContent='检查完成。';
+    }catch(e){message(msg,e);}finally{check.disabled=false;}});
+    box.append(check,health);
     box.append(change,btn('保存级别',async()=>{try{await api(`/api/books/${book.id}`,{method:'PATCH',body:JSON.stringify({level:change.value})});await refresh();}catch(e){message(msg,e);}}),el('p','book-quote-note','改为特殊后，新的访问需要授权；已经被他人保存的公开副本无法收回。'));
     if(book.status!=='ready')box.append(btn('继续识别这份材料',()=>document.dispatchEvent(new CustomEvent('ziwei:resume-material',{detail:book}))));
     if(book.level==='special') {
