@@ -285,7 +285,19 @@
     "licenses/onnxruntime-LICENSE",
     "scripts/publish-installers.mjs",
     "server/downloads-core.mjs",
-    "tests/downloads.test.mjs"
+    "tests/downloads.test.mjs",
+    "docs/ai-assistants.md",
+    "drizzle/0016_ai_usage.sql",
+    "drizzle/meta/0016_snapshot.json",
+    "scripts/configure-qwen.ps1",
+    "server/qwen-ai.mjs",
+    "src/local-ai-contracts.mjs",
+    "src/local-ai-runtime.mjs",
+    "src/local-ai-worker.mjs",
+    "src/local-ai.js",
+    "src/local-ai.css",
+    "tests/local-ai.test.mjs",
+    "tests/qwen-ai.test.mjs"
   ],
   "desktop": [
     "README.md",

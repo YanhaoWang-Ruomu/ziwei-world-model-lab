@@ -38,6 +38,7 @@ async function build() {
   fs.cpSync(models,path.join(vendor,'tessdata'),{recursive:true});
   const browserBuild=await require('esbuild').build({entryPoints:[path.join(source,'cosmos.js')],outfile:path.join(client,'cosmos.js'),bundle:true,format:'esm',platform:'browser',target:'es2022',minify:true,metafile:true});
   await require('esbuild').build({entryPoints:[path.join(source,'semantic-worker.mjs')],outfile:path.join(client,'semantic-worker.mjs'),bundle:true,format:'esm',platform:'browser',target:'es2022',minify:true});
+  await require('esbuild').build({entryPoints:[path.join(source,'local-ai-worker.mjs')],outfile:path.join(client,'local-ai-worker.mjs'),bundle:true,format:'esm',platform:'browser',target:'es2022',minify:true});
   const transformerRoot=fs.realpathSync(path.join(root,'node_modules','@huggingface','transformers'));
   const onnxRoot=path.resolve(path.dirname(require.resolve('onnxruntime-web',{paths:[transformerRoot]})),'..');
   const onnxVendor=path.join(vendor,'onnx');fs.mkdirSync(onnxVendor,{recursive:true});

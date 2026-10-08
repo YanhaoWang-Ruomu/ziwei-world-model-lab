@@ -3,8 +3,9 @@ export const toBase64=bytes=>{let s='';for(let i=0;i<bytes.length;i+=8192)s+=Str
 export const fromBase64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 export async function fingerprint(value){return [...new Uint8Array(await crypto.subtle.digest('SHA-256',typeof value==='string'?enc.encode(value):value))].map(n=>n.toString(16).padStart(2,'0')).join('');}
 async function derive(password,salt){const raw=await crypto.subtle.importKey('raw',enc.encode(password),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',hash:'SHA-256',salt,iterations:250000},raw,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);}
-function database(){return new Promise((resolve,reject)=>{const r=indexedDB.open('ziwei-private-vault',1);r.onupgradeneeded=()=>r.result.createObjectStore('records',{keyPath:'id'});r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(Error('无法打开本机保存空间。'));});}
-function indexedStore(){
+function openDatabase(name){return new Promise((resolve,reject)=>{const r=indexedDB.open(name,1);r.onupgradeneeded=()=>r.result.createObjectStore('records',{keyPath:'id'});r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(Error('无法打开本机保存空间。'));});}
+function indexedStore(name='ziwei-private-vault'){
+  const database=()=>openDatabase(name);
   async function one(mode,action){const db=await database();try{return await new Promise((resolve,reject)=>{const tx=db.transaction('records',mode),r=action(tx.objectStore('records'));let result;r.onsuccess=()=>result=r.result;tx.oncomplete=()=>resolve(result);tx.onerror=tx.onabort=()=>reject(Error('本机保存失败，请检查剩余空间。'));});}finally{db.close();}}
   return {get:id=>one('readonly',s=>s.get(id)),put:value=>one('readwrite',s=>s.put(value)),remove:id=>one('readwrite',s=>s.delete(id)),
     async create(value){try{await one('readwrite',s=>s.add(value));return true;}catch(e){if(await one('readonly',s=>s.get(value.id)))return false;throw e;}},
@@ -13,9 +14,11 @@ function indexedStore(){
       r.onsuccess=()=>{const c=r.result;if(!c)return;const v=c.value;if(v.owner===owner&&(!catalog||!v.kind||['book','technique'].includes(v.kind))&&(parent===undefined||v.parent===parent)&&(!kind||v.kind===kind))out.push(metadata?{id:v.id,iv:v.iv,check:v.check,kind:v.kind,parent:v.parent,size:v.data?.length||0}:v);c.continue();};tx.oncomplete=()=>resolve(out);tx.onerror=tx.onabort=()=>reject(Error('本机读取未完成。'));});}finally{db.close();}}
   };
 }
-export function createVault({storage=indexedStore()}={}){
+export function createVault({storage,namespace='ziwei-private-vault',lockEvent='ziwei:vault-locked'}={}){
+  if(!['ziwei-private-vault','ziwei-local-ai'].includes(namespace))throw Error('Unknown local store');
+  storage??=indexedStore(namespace);
   let key=null,owner='',epoch=0;
-  const lock=()=>{key=null;epoch++;globalThis.document?.dispatchEvent(new Event('ziwei:vault-locked'));};
+  const lock=()=>{key=null;epoch++;globalThis.document?.dispatchEvent(new Event(lockEvent));};
   const requireOpen=()=>{if(!key)throw Error('请先解锁本机私密书库。');};
   async function open(user,password){lock();const ticket=epoch,account=toBase64(new Uint8Array(await crypto.subtle.digest('SHA-256',enc.encode(user))));const header=await storage.get(account+':header');
     if(!header&&password.length<12)throw Error('新书库的解锁密码至少 12 位，请妥善保存。');

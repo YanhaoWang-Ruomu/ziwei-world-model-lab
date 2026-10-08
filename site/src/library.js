@@ -1,6 +1,7 @@
 import {initWorkspaceSections} from './workspace-sections.mjs';
 import {configurePlatformLogin} from './platform-login.mjs';
 import {initResearchCommunity} from './research-community.js';
+import {initLocalAi} from './local-ai.js';
 import { importMaterial, pauseImport } from './upload.js';
 import { renderManagement } from './management.js';
 import { renderReview } from './review.js';
@@ -198,6 +199,7 @@ modelWorkbench=initModel({api,el,btn});
 submissions=initSubmissions({api,el,btn,ruleWorkbench,openSource:openCardSource,onPublished:async()=>{await cardLibrary.refresh(viewer);await modelWorkbench.refresh(viewer);}});
 members=initMembers({api,el,btn});
 initResearchCommunity({api,el,btn});
+initLocalAi({api,el,btn});
 workspace=initWorkspace({api,onSession:applySession});
 const personalAccount=initPersonalAccount({api,onSession:applySession});
 const privateVault=initPrivateLibrary({el,btn});

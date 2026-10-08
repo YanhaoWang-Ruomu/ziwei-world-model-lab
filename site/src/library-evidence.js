@@ -1,5 +1,6 @@
 import {createLocalSemantic} from './local-semantic.mjs';
 import {fuseEvidence} from './evidence-ranking.mjs';
+import {createAiPanel} from './local-ai.js';
 
 export function renderReadiness(host,data,{el,btn,openPage}) {
   host.replaceChildren();
@@ -28,7 +29,7 @@ export function initEvidenceReader({api,el,btn,scope,openSource,anchor}) {
   const note=el('p','book-context-note','首次开启需下载约 160 MB 模型及运行文件，建议使用 Wi-Fi。语义计算在本机运行，材料文本不发往模型提供商；关闭页面后清除本次文本索引。');
   const status=el('p','library-evidence-status');status.setAttribute('role','status');status.setAttribute('aria-live','polite');
   const results=el('div','library-evidence-results'),health=el('div','library-health');health.hidden=true;
-  let generation=0,controller=null;
+  let generation=0,controller=null,aiPanel=null;
   const semantic=createLocalSemantic({api,onProgress:text=>{status.textContent=text;}});
   const run=btn('整理原文依据',start,'book-primary'),cancel=btn('停止',()=>reset('已停止。可继续查找原文。'));
   cancel.hidden=true;
@@ -41,10 +42,12 @@ export function initEvidenceReader({api,el,btn,scope,openSource,anchor}) {
   });
   controls.append(run,cancel,inspect,toggleLabel);root.append(lead,controls,note,status,health,results);anchor.after(root);
   function reset(text=''){
+    aiPanel?.dispose();aiPanel=null;
     generation++;controller?.abort();controller=null;semantic.clear();results.replaceChildren();health.replaceChildren();health.hidden=true;
     run.disabled=false;inspect.disabled=false;cancel.hidden=true;status.textContent=text;
   }
   function show(citations,coverage,question){
+    aiPanel?.dispose();aiPanel=null;
     results.replaceChildren();
     results.append(el('p','book-context-note',`本次查阅：${question}`));
     if(!citations.length){results.append(el('p','','没有找到相关原文。可以缩短关键词，或先检查本书页数与提取文字。'));return;}
@@ -57,10 +60,12 @@ export function initEvidenceReader({api,el,btn,scope,openSource,anchor}) {
       box.append(el('p','book-context-note',`${labels[c.source]||'原文'} · ${c.method||'相关原文'}`),btn('打开原页核对',()=>openSource(c)));
       results.append(box);
     });
+    aiPanel=createAiPanel({el,btn,getInput:()=>({kind:'answer',question,citations})});results.append(aiPanel.root);
   }
   async function start(){
     const current=scope();if(!current.query.trim()){status.textContent='请先在上方输入问题或关键词。';return;}
     if(toggle.checked&&current.book==='all'){status.textContent='本机语义检索一次处理一本材料，请先在上方选择。';return;}
+    aiPanel?.dispose();aiPanel=null;
     // Preserve a same-book embedding cache between searches; session/scope resets always clear it.
     generation++;controller?.abort();controller=new AbortController();const token=generation,signal=controller.signal;
     run.disabled=true;inspect.disabled=true;cancel.hidden=false;results.replaceChildren();health.hidden=true;status.textContent='正在检索可访问的原文…';

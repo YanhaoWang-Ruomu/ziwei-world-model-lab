@@ -4,6 +4,7 @@ import {activityHistoryRoute} from './activity-history.mjs';
 import {scenarioRoute} from './scenario-runs.js';
 import {searchLibrary} from './library-search.mjs';
 import {bookReadiness,bookCorpusBatch,searchEvidence} from './library-evidence.mjs';
+import {qwenRoute} from './qwen-ai.mjs';
 import {deleteBook,activeBookGuard} from './book-deletion.mjs';
 import * as OpenCC from 'opencc-js';
 import { now, digest, randomToken, identity, assertOrigin, HttpError, bodyBytes, jsonBody, safeText, positiveInt, onlineLevel } from './security.js';
@@ -93,6 +94,7 @@ async function route(request, env) {
     return response;
   }
   const context={path,method,request,db,viewer,env,guard:visibility(viewer),bookFor,normalize,fold:convert,url};
+  const ai=await qwenRoute(context);if(ai!==null)return json(ai);
   const activity=await activityHistoryRoute(context);if(activity!==null)return json(activity);
   const attachment=await attachmentRoute(context);if(attachment!==null)return attachment instanceof Response?attachment:json(attachment);
   const scenario=await scenarioRoute(context);if(scenario!==null)return json(scenario);

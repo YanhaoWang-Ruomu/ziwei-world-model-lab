@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "38fff4afba814fe51b1847fb60f8fd25e542d5b3",
+  "sourceCommit": "9407461e08c466ab435dc4369e34371659794bca",
   "files": [
     {
       "path": "site/db/schema.ts",
-      "sha256": "47b137f83686ff714402560b666b571014c019fd5dd472753104f941374f75fa"
+      "sha256": "1a95769a1657c35b7ce88abf6903c704e9abfe6e9cca1cbfbb3d5fdace76f702"
     },
     {
       "path": "site/docs/community-local-acceptance.md",
@@ -84,7 +84,7 @@
     },
     {
       "path": "site/drizzle/meta/_journal.json",
-      "sha256": "fc5f68a8cce840db63982843ccd51d796c39b19bcec43a8dba89bdaff583c61e"
+      "sha256": "580ba460cc2023120aba5794dabcd1fb7d456756ac05e1ef646e7dc2348ecb7a"
     },
     {
       "path": "site/drizzle/meta/0000_snapshot.json",
@@ -164,7 +164,7 @@
     },
     {
       "path": "site/scripts/build.js",
-      "sha256": "f52df1d9ef534438e62174d6f815318b70343b251c5ef1974eb6888d438e2cd7"
+      "sha256": "a6da0017389535e6ba8417d0dc38a03995200f1e9606a6e233a405762381abe9"
     },
     {
       "path": "site/scripts/cloudflare-check.mjs",
@@ -284,7 +284,7 @@
     },
     {
       "path": "site/server/worker.js",
-      "sha256": "f56477083178739986050b44faf1e39bdb5df9a5a7717dc2406b80b6c4d28894"
+      "sha256": "4ef4c5e5884784ef8819d4e59eadda70a377feeb80ef98ab7077b2af945cfcf1"
     },
     {
       "path": "site/server/world-community.js",
@@ -492,7 +492,7 @@
     },
     {
       "path": "site/src/index.html",
-      "sha256": "94d72307f36601caf6186a826e9ee576ea14b77a471cd561f5a851062996848f"
+      "sha256": "ef6c147802ccbbc2a02336490c31b817180801bed7e088709c175be247bc90ec"
     },
     {
       "path": "site/src/journey-motion.mjs",
@@ -512,7 +512,7 @@
     },
     {
       "path": "site/src/library.js",
-      "sha256": "dd28951ef5f041913a6635506dbde884f094ab83287020b4ebd192caa34051d0"
+      "sha256": "f51a2df8fa9aad77b520f0b2ce3232c35e60a725471a12db861f63022456281a"
     },
     {
       "path": "site/src/living-landscape.mjs",
@@ -836,7 +836,7 @@
     },
     {
       "path": "site/src/techniques.js",
-      "sha256": "a038c5099a53097cd61f944ba46bd0e290e5c0187a379be83e35b2d5ee5ae920"
+      "sha256": "f038f145d473010473a512c811aaad91a923b04dd912c0c7c9d5bb79e60a1f10"
     },
     {
       "path": "site/src/terrain-profile.mjs",
@@ -856,7 +856,7 @@
     },
     {
       "path": "site/src/vault-storage.mjs",
-      "sha256": "84c0634704977f341f977e431300e1e8b4c5ff7fbfff6d15375ea8554d63a41c"
+      "sha256": "3f1921183097abc83b547d104920a396427e5c72bc3b46caa666d97cd150af10"
     },
     {
       "path": "site/src/wheel-chart.mjs",
@@ -1104,7 +1104,7 @@
     },
     {
       "path": "site/src/library-evidence.js",
-      "sha256": "0baa174d5c367564f6d54a5cc8dbfdcc0224ffd044db7db9fda9626d09278b2b"
+      "sha256": "3754059e868e9053a3b085af6a60d2655b2f109afe484fbc95edd1fba469a758"
     },
     {
       "path": "site/src/local-semantic.mjs",
@@ -1141,6 +1141,54 @@
     {
       "path": "site/tests/downloads.test.mjs",
       "sha256": "1a8e3e7d53d4b7e6aa2a9940d363cc3d68065ac57a8f6cfb05f882dd1c88fef4"
+    },
+    {
+      "path": "site/docs/ai-assistants.md",
+      "sha256": "96124d18c90f9c3ccd0de6bce5d8a63406f259726f0442e6875a87a86a0ce177"
+    },
+    {
+      "path": "site/drizzle/0016_ai_usage.sql",
+      "sha256": "7a856ccaa97a8d2d8ad639bc0b192dab5f6dd80f2d5e9ba966bab4c1258e6022"
+    },
+    {
+      "path": "site/drizzle/meta/0016_snapshot.json",
+      "sha256": "cd05a318857b174c218febc7a9f9539f57616a2f4ed32a7a105b3c86209b43bd"
+    },
+    {
+      "path": "site/scripts/configure-qwen.ps1",
+      "sha256": "27e01fabd242b5a05ad19b8fd33a17821a681efe5a10fad7f3d75e1dbffecff5"
+    },
+    {
+      "path": "site/server/qwen-ai.mjs",
+      "sha256": "8578b62c0e8f1026fc6a0e6883d8e1490349b7070a0bb237d4f41b7684f2d500"
+    },
+    {
+      "path": "site/src/local-ai-contracts.mjs",
+      "sha256": "c50bb3929eaaf042fd773f64828aae36cb928dc769f48fa79039be72b68991e9"
+    },
+    {
+      "path": "site/src/local-ai-runtime.mjs",
+      "sha256": "39c5732861c60b34ff956130926bd006da90dd7ccde394ace2baf6e47af6c21a"
+    },
+    {
+      "path": "site/src/local-ai-worker.mjs",
+      "sha256": "d266a3c4ac07774b730fbe1c77525bce7ce10123d9c57a59c12773207b32d367"
+    },
+    {
+      "path": "site/src/local-ai.js",
+      "sha256": "c40556a2194354abd14bd1207f0eca23b0a1b06605529487d81d387f45d014ca"
+    },
+    {
+      "path": "site/src/local-ai.css",
+      "sha256": "4af000247d11be6fbff7cb9ca3e2e31c77a6f78f14d1791d9fa46fa056bd120a"
+    },
+    {
+      "path": "site/tests/local-ai.test.mjs",
+      "sha256": "3d844b3f46228088886a904a57e3aff839486615d074f897849e7ea388a2b1da"
+    },
+    {
+      "path": "site/tests/qwen-ai.test.mjs",
+      "sha256": "c5f41689832ab0cf12ec96c1e6df8890e8fa7cddb0986ebe20a9917ba3aee9a5"
     },
     {
       "path": "desktop/README.md",

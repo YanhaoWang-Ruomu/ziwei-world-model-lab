@@ -181,6 +181,10 @@ export const authoredTechniques=sqliteTable('authored_techniques',{
   publishedPayload:text('published_payload'),publishedRevision:integer('published_revision'),
   releaseVersion:integer('release_version').notNull().default(0),lastActor:text('last_actor'),
 });
+export const aiUsage=sqliteTable('ai_usage',{
+  requestId:text('request_id').primaryKey(),day:text('day').notNull(),reservedMicro:integer('reserved_micro').notNull(),
+  status:text('status').notNull(),model:text('model').notNull(),inputTokens:integer('input_tokens'),outputTokens:integer('output_tokens'),
+},t=>[index('idx_ai_usage_day').on(t.day)]);
 export const techniqueHistory=sqliteTable('technique_history',{
   id:integer('id').primaryKey({autoIncrement:true}),techniqueId:text('technique_id').notNull(),
   revision:integer('revision').notNull(),releaseVersion:integer('release_version').notNull(),

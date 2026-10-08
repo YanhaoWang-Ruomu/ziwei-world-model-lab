@@ -1,9 +1,10 @@
 import {SCOPES,PALACES,STARS,BRANCHES,RELATIONS,conditionScopes,parseTechnique,validateTechnique,describeCondition,evaluateTechnique,techniqueLogic} from './technique-engine.mjs';
 import {initTechniqueHistory} from './technique-history.js';
 import {scanRange} from './technique-periods.mjs';
+import {createAiPanel} from './local-ai.js';
 export function initTechniques({api,el,btn,vault}){
   initTechniqueHistory({api,el,btn});
-  let viewer={},cards=[],ownCards=[],editing=null,epoch=0,refreshRun=0,scanController=null,previewingPeriod=false;
+  let viewer={},cards=[],ownCards=[],editing=null,epoch=0,refreshRun=0,scanController=null,previewingPeriod=false,aiPanel=null;
   const fold=window.OpenCC.Converter({from:'t',to:'cn'}),names={draft:'草稿',pending:'待审核',approved:'已发布',rejected:'已退回',local:'本机私密'};
   const editor=document.querySelector('#authored-editor'),catalog=document.querySelector('#authored-catalog'),status=document.querySelector('#authored-count'),query=document.querySelector('#cards-query');
   const add=btn('新增中文技法',()=>edit(),'book-primary');document.querySelector('#cards-title').closest('.library-heading').append(add);
@@ -32,6 +33,7 @@ export function initTechniques({api,el,btn,vault}){
   function input(label,value='',multiline=false){const wrap=el('label','',label),field=el(multiline?'textarea':'input');field.value=value;if(multiline)field.rows=5;wrap.append(field);return {wrap,field};}
   function select(values,value){const s=el('select');for(const [key,label]of Object.entries(values))s.append(new Option(label,key));s.value=value;return s;}
   function edit(card){
+    aiPanel?.dispose();aiPanel=null;
     document.querySelector('#rules').dataset.editorKind='authored';document.dispatchEvent(new CustomEvent('ziwei:rule-draft',{detail:{active:true}}));location.hash='rules';
     editing=card;const reviewing=viewer.core&&card?.status==='pending';editor.replaceChildren();const form=el('form','tech-editor'),title=input('标题（必填）',card?.payload.title),topic=input('主题',card?.payload.topic),text=input('中文技法原文（必填）',card?.payload.text,true),outcome=input('符合条件时的提示（可留空，发布前补充）',card?.payload.outcome);
     title.field.maxLength=160;text.field.maxLength=12000;outcome.field.maxLength=2000;topic.field.maxLength=80;
@@ -63,6 +65,7 @@ export function initTechniques({api,el,btn,vault}){
     const parse=btn('识别中文并整理条件',()=>{rule=parseTechnique(text.field.value,fold);changed();draw();notice.textContent=`识别 ${rule.conditions.length} 条条件，${rule.unresolved.length} 段需要你补充。`;});
     form.append(title.wrap,topic.wrap,levelLabel,text.wrap,el('p','muted','中文支持明确条件句，例如“流年天同在夫妻宫化禄”或“流年天同在子或午位”；每行一条，可用“排除：”开头。也可手动选择两层对照。宫位、星曜、四化可不限制，地支可多选；同一侧所选条件需要同时满足。星曜位置沿用本命，各层宫名及四化随运限变化；不混用流鸾、流昌等流曜。复杂或模糊文字保留待确认。使用本机解析，不调用付费 AI。'),parse,box,outcome.wrap,confirmLabel);
     const read=()=>({title:title.field.value.trim(),topic:topic.field.value.trim(),text:text.field.value.trim(),outcome:outcome.field.value.trim(),level:level.value,rule});
+    if(viewer.core){aiPanel=createAiPanel({el,btn,getInput:()=>({kind:'technique',text:text.field.value.trim()}),onApply:result=>{rule=structuredClone(result.rule);changed();draw();notice.textContent='AI 候选条件已带入，请逐句核对原文、组合关系和例外。';}});parse.after(aiPanel.root);text.field.addEventListener('input',()=>aiPanel?.reset());}
     async function save(submit){
       if(editing?.status==='pending'&&!reviewing)throw Error('这张技法已提交审核，无需重复提交。可在审核中心查看进度。');
       if(!form.reportValidity())return;const generation=epoch,payload=read();
@@ -82,6 +85,7 @@ export function initTechniques({api,el,btn,vault}){
     async function perform(submit){const buttons=[...form.querySelectorAll('button')];buttons.forEach(b=>b.disabled=true);try{await save(submit);}catch(e){notice.textContent=e.message;}finally{buttons.forEach(b=>b.disabled=false);}}
     form.append(btn(reviewing?'保存审核整理':'保存草稿',()=>perform(false),'book-primary'));if(!reviewing)form.append(btn('提交审核',()=>perform(true)));else form.append(btn('返回审核中心',()=>{location.hash='review';}));form.append(btn('收起',()=>{editor.replaceChildren();document.dispatchEvent(new CustomEvent('ziwei:rule-draft',{detail:{active:false}}));location.hash='cards';}),notice);form.addEventListener('submit',e=>e.preventDefault());form.addEventListener('input',e=>{if(e.target!==confirmed)changed();});draw();editor.append(form);form.scrollIntoView({block:'start'});
   }
+  for(const event of ['ziwei:session','ziwei:logout','ziwei:vault-locked'])document.addEventListener(event,()=>{aiPanel?.dispose();aiPanel=null;});
   function cardElement(card,review=false){const p=card.payload,item=el('article','tech-card');item.append(el('span','catalog-origin',card.local?'本机私密':'自编技法'),el('small','muted',`${names[card.status]} · ${p.level==='public'?'公开':card.local?'本机私密':'特殊'} · ${p.topic||'未分类'}`),el('h3','',p.title));
     if(card.status==='approved')item.append(el('p','muted',p.publicationMode==='reference'?'原文参考卡片 · 已入库，尚不参与自动筛选年月':'可运算卡片 · 可用于条件匹配'));
     if(viewer.core){const detail=el('details');detail.append(el('summary','','展开原文与规则'),el('p','raw-page-text',p.text||''));if(p.rule)detail.append(el('p','muted',techniqueLogic(p.rule)));for(const c of p.rule?.conditions||[])detail.append(el('p','',describeCondition(c)));detail.append(el('p','',`符合时：${p.outcome||''}`));item.append(detail);if(card.note)item.append(el('p','',`审核意见：${card.note}`));}else item.append(el('p','muted','原文与运算规则仅核心及创建者账户可查看。'));
