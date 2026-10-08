@@ -23,7 +23,7 @@ export function requireCards(viewer) {
 export function sessionView(viewer) {
   return {authenticated:Boolean(viewer.id),owner:viewer.core,core:viewer.core,founder:viewer.founder,
     role:viewer.role,maxRole:viewer.maxRole,availableRoles:['public','special','core'].slice(0,['public','special','core'].indexOf(viewer.maxRole)+1),userId:viewer.id,username:viewer.username||'',authType:viewer.authType||'',specialAuthenticated:viewer.specialAuthenticated,
-    sharedAccount:Boolean(viewer.specialAuthenticated&&!viewer.id),
+    sharedAccount:Boolean(viewer.specialAuthenticated&&!viewer.id),platformLoginAvailable:viewer.platformLoginAvailable!==false,
     capabilities:{model:true,books:true,cards:viewer.role!=='public',submit:viewer.role!=='public',review:viewer.core,manage:viewer.core,manageCore:viewer.founder}};
 }
 export async function coreRoute({path,method,request,viewer,db}) {

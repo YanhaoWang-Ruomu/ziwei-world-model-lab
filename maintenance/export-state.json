@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "550a64d38a2873e07f792dcfd9a6d712943e4b2e",
+  "sourceCommit": "38fff4afba814fe51b1847fb60f8fd25e542d5b3",
   "files": [
     {
       "path": "site/db/schema.ts",
@@ -167,6 +167,10 @@
       "sha256": "f52df1d9ef534438e62174d6f815318b70343b251c5ef1974eb6888d438e2cd7"
     },
     {
+      "path": "site/scripts/cloudflare-check.mjs",
+      "sha256": "f6b127b0577a1efe4fe2506f74b3c7298d98dc7fb6a0719669ddc63707a63b60"
+    },
+    {
       "path": "site/scripts/preview.mjs",
       "sha256": "fbc5dc3cd698dd998ebb7fce4a864c34446eb58e379009e0b104261014ff63f2"
     },
@@ -176,7 +180,7 @@
     },
     {
       "path": "site/server/accounts.js",
-      "sha256": "36cc06d785396f5503b2c98a0c19b4be5df8ab098f8f53cf62ba3c30848d4ecf"
+      "sha256": "09269c1f0066003879af76dba47f9e690a2a6cc9e8b12bac6f746460f5283e31"
     },
     {
       "path": "site/server/activity-history.mjs",
@@ -189,6 +193,14 @@
     {
       "path": "site/server/cards.js",
       "sha256": "75d735a047d8482f87f9841e2c7394bb5c83802ac52dd18f85ebed95c7b25d0f"
+    },
+    {
+      "path": "site/server/cloudflare-adapter.mjs",
+      "sha256": "8d47d0ee3fdf07e3dfda47f00ddc5a17c95fe7c593e3f6b722a8f60fced14375"
+    },
+    {
+      "path": "site/server/cloudflare-worker.mjs",
+      "sha256": "77f089b857c882d0a658b30afa24440412fdadd0e582658b7e2265c5ab27afce"
     },
     {
       "path": "site/server/chart-case-transfer.mjs",
@@ -228,7 +240,7 @@
     },
     {
       "path": "site/server/roles.js",
-      "sha256": "6ef62a22086eaf5235cf0bf79d0efdd1c7e803d4123b04b40c671767f1eae063"
+      "sha256": "da03c2721b990f404f6eb21fb2644c52fe98349ab478b55d89913b938e5811ac"
     },
     {
       "path": "site/server/rules.js",
@@ -240,7 +252,7 @@
     },
     {
       "path": "site/server/security.js",
-      "sha256": "bd79f379f7a15f3164f15836e6492e8ad2b908a096aee666179ad0b684509c6a"
+      "sha256": "9ce225c11a9ea2c3b4c41d0e9edf52fe084797299fde0354bdacf676bd3e6b4f"
     },
     {
       "path": "site/server/special-access.js",
@@ -272,7 +284,7 @@
     },
     {
       "path": "site/server/worker.js",
-      "sha256": "cf9316b122c8584c9c4f7e0996d0704f870cb2e6051c2d63fe6c043472c92c39"
+      "sha256": "f56477083178739986050b44faf1e39bdb5df9a5a7717dc2406b80b6c4d28894"
     },
     {
       "path": "site/server/world-community.js",
@@ -500,7 +512,7 @@
     },
     {
       "path": "site/src/library.js",
-      "sha256": "508aac89fbdb298b45d60e6977cc74dfca017ca93209304e4431be5067dc916a"
+      "sha256": "dd28951ef5f041913a6635506dbde884f094ab83287020b4ebd192caa34051d0"
     },
     {
       "path": "site/src/living-landscape.mjs",
@@ -561,6 +573,10 @@
     {
       "path": "site/src/personal-account.js",
       "sha256": "2a677763412f3c368fc34720cf1bcfc00498243cce6011d4188d4000547673c1"
+    },
+    {
+      "path": "site/src/platform-login.mjs",
+      "sha256": "e2317b6cb5f3d9f82d000ee8b9606ede64a2c21a71414348c43828cab00d84fb"
     },
     {
       "path": "site/src/private-vault.mjs",
@@ -879,6 +895,10 @@
       "sha256": "f1d41e7572f76bffe41a3e789ea3f79fc5634e1d8dfa1e97fa32250240062c0e"
     },
     {
+      "path": "site/tests/cloudflare-hosting.test.mjs",
+      "sha256": "222c784868e19f4370f49feda07eafcaccb97016669579c0d04fe0b39eb537cb"
+    },
+    {
       "path": "site/tests/activity-history.test.mjs",
       "sha256": "422f3db603bc51c76b88894bc6f9de975eb79b47f0ba6a31493a6c9576c5fc39"
     },
@@ -1069,6 +1089,10 @@
     {
       "path": "site/wrangler.jsonc",
       "sha256": "feba3f3df9dc1b5f7a9023df7cf17e4313c4f77cfc7aa509214e2daee178d26e"
+    },
+    {
+      "path": "site/wrangler.cloudflare.example.json",
+      "sha256": "2917bbfa69fb51eca84e8f5b2be6d6f51ff62f15c1eed89ce0b6e7121be9af60"
     },
     {
       "path": "site/server/library-evidence.mjs",

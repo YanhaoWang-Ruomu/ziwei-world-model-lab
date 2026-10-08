@@ -19,13 +19,17 @@ async function limit(request,db,kind,key){
   const results=await db.batch(limits.map(l=>db.prepare('INSERT INTO login_attempts(bucket,attempts,expires_at) VALUES (?,1,?) ON CONFLICT(bucket) DO UPDATE SET attempts=CASE WHEN expires_at<=? THEN 1 ELSE attempts+1 END,expires_at=CASE WHEN expires_at<=? THEN excluded.expires_at ELSE expires_at END RETURNING attempts').bind(l.key,t+l.seconds,t,t)));
   if(results.some((r,i)=>r.results[0].attempts>limits[i].count))throw new HttpError(429,'尝试次数较多，请 15 分钟后再试。');
 }
-export async function accountIdentity(request,db,platform){
+export async function accountIdentity(request,db,platform,env={}){
+  const standalone=env.AUTH_MODE==='standalone';
+  if(standalone)platform={id:'',owner:false};
   const hasCookie=(request.headers.get('cookie')||'').includes(cookieName+'=');
   const token=cookieToken(request);
   if(!hasCookie)return {...platform,platformId:platform.id,authType:platform.id?'chatgpt':''};
   const account=token?await db.prepare('SELECT a.id,a.username FROM personal_accounts a JOIN personal_sessions s ON s.user_id=a.id WHERE s.hash=? AND s.expires_at>?').bind(await digest(token),now()).first():null;
   // A selected local account never inherits the privileges of a platform session.
-  return {id:account?.id||'',owner:false,platformId:platform.id,authType:account?'password':'',username:account?.username||''};
+  // The standalone founder is an exact account ID, set by the hosting administrator.
+  const owner=Boolean(standalone&&account?.id&&/^local:[a-f0-9-]{36}$/.test(env.FOUNDER_ACCOUNT_ID||'')&&account.id===env.FOUNDER_ACCOUNT_ID);
+  return {id:account?.id||'',owner,platformId:platform.id,authType:account?'password':'',username:account?.username||''};
 }
 export async function logoutAccount(request,db){
   const token=cookieToken(request);if(token)await db.prepare('DELETE FROM personal_sessions WHERE hash=?').bind(await digest(token)).run();

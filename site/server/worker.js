@@ -31,7 +31,8 @@ function database(env) {
   return env.DB;
 }
 async function access(request, env) {
-  const viewer = await accountIdentity(request,database(env),identity(request, env));
+  const viewer = await accountIdentity(request,database(env),identity(request, env),env);
+  viewer.platformLoginAvailable=env.AUTH_MODE!=='standalone';
   viewer.importer = false;
   viewer.importBooks = (env.PUBLIC_IMPORT_BOOK_IDS || '').split(',');
   const token = request.headers.get('authorization')?.match(/^Bearer ([a-f0-9]{64})$/)?.[1];

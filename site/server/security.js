@@ -7,6 +7,8 @@ export function randomToken() {
   return [...crypto.getRandomValues(new Uint8Array(32))].map(x => x.toString(16).padStart(2, '0')).join('');
 }
 export function identity(request, env) {
+  // Only the Sites gateway authenticates these headers. Standalone hosting must ignore them.
+  if (env.AUTH_MODE === 'standalone') return { id: '', owner: false };
   const id = request.headers.get('oai-authenticated-user-id') || '';
   const email = request.headers.get('oai-authenticated-user-email') || '';
   return { id, owner: Boolean(id && email && env.OWNER_EMAIL && email.toLowerCase() === env.OWNER_EMAIL.toLowerCase()) };
