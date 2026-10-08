@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "948bdcf611b00157c7f36227400e186bba0b62d4",
+  "sourceCommit": "e16c71cf39ad6972921236c201617cdbd03b4780",
   "files": [
     {
       "path": "site/db/schema.ts",
@@ -164,7 +164,7 @@
     },
     {
       "path": "site/scripts/build.js",
-      "sha256": "5027d56345a051c0f8b23eeec587937083e7d6d989082b014195f8c056172854"
+      "sha256": "04f901d5608f12bc1e174bcb0ebc6b63a145cc13bece655351b64dcc5b2d9edf"
     },
     {
       "path": "site/scripts/preview.mjs",

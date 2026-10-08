@@ -38,7 +38,11 @@ async function build() {
   const transformerRoot=fs.realpathSync(path.join(root,'node_modules','@huggingface','transformers'));
   const onnxRoot=path.resolve(path.dirname(require.resolve('onnxruntime-web',{paths:[transformerRoot]})),'..');
   const onnxVendor=path.join(vendor,'onnx');fs.mkdirSync(onnxVendor,{recursive:true});
-  for(const name of fs.readdirSync(path.join(onnxRoot,'dist')).filter(n=>/^ort-wasm.*\.(?:mjs|wasm)$/.test(n)))fs.copyFileSync(path.join(onnxRoot,'dist',name),path.join(onnxVendor,name));
+  // Transformers 3.8.1's browser bundle imports the JSEP runtime even for WASM-only inference.
+  // Ship that exact pair; the unused second runtime adds 10 MiB to every deployment.
+  const onnxAssets=['ort-wasm-simd-threaded.jsep.mjs','ort-wasm-simd-threaded.jsep.wasm'];
+  for(const name of fs.readdirSync(onnxVendor).filter(n=>/^ort-wasm.*\.(?:mjs|wasm)$/.test(n)&&!onnxAssets.includes(n)))fs.unlinkSync(path.join(onnxVendor,name));
+  for(const name of onnxAssets)fs.copyFileSync(path.join(onnxRoot,'dist',name),path.join(onnxVendor,name));
   fs.copyFileSync(path.join(transformerRoot,'LICENSE'),path.join(vendor,'transformers-LICENSE'));
   fs.copyFileSync(path.join(root,'licenses','onnxruntime-LICENSE'),path.join(onnxVendor,'LICENSE'));
   if(Object.keys(browserBuild.metafile.inputs).some(file=>path.resolve(root,file).startsWith(path.join(root,'server')+path.sep)))throw Error('Server-only chart logic entered the public browser bundle.');
