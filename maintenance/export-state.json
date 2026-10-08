@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "7223bca37700dafaa2bd64548d126ebb99531959",
+  "sourceCommit": "948bdcf611b00157c7f36227400e186bba0b62d4",
   "files": [
     {
       "path": "site/db/schema.ts",
@@ -1080,7 +1080,7 @@
     },
     {
       "path": "site/src/library-evidence.js",
-      "sha256": "0aaba4c32d49afb48c5b81aa0dcf560449a4b3c5bd366ab664558cb6e6d07d3d"
+      "sha256": "0baa174d5c367564f6d54a5cc8dbfdcc0224ffd044db7db9fda9626d09278b2b"
     },
     {
       "path": "site/src/local-semantic.mjs",

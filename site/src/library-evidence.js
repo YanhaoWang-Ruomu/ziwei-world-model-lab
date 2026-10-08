@@ -44,8 +44,9 @@ export function initEvidenceReader({api,el,btn,scope,openSource,anchor}) {
     generation++;controller?.abort();controller=null;semantic.clear();results.replaceChildren();health.replaceChildren();health.hidden=true;
     run.disabled=false;inspect.disabled=false;cancel.hidden=true;status.textContent=text;
   }
-  function show(citations,coverage){
+  function show(citations,coverage,question){
     results.replaceChildren();
+    results.append(el('p','book-context-note',`本次查阅：${question}`));
     if(!citations.length){results.append(el('p','','没有找到相关原文。可以缩短关键词，或先检查本书页数与提取文字。'));return;}
     const count=coverage?`已检查 ${coverage.saved_pages} / ${coverage.expected_pages} 页（段）。`:'';
     results.append(el('p','book-context-note',`${count}以下是原文摘录，不是自动推断的结论。${coverage?.missing_pages||coverage?.empty_pages?'当前材料存在缺页或无文字页，结果可能不完整。':''}`));
@@ -66,11 +67,11 @@ export function initEvidenceReader({api,el,btn,scope,openSource,anchor}) {
     try{
       const params=new URLSearchParams({q:current.query,book:current.book,level:current.level});
       const data=await api(`/api/evidence/search?${params}`,{signal});if(token!==generation)return;
-      show(data.citations.slice(0,6),data.coverage);
+      show(data.citations.slice(0,6),data.coverage,current.query);
       if(toggle.checked){
         try{
           const semanticHits=await semantic.search(current.book,current.query,{signal});if(token!==generation)return;
-          show(fuseEvidence(data.citations,semanticHits),data.coverage);status.textContent='查阅完成 · 已结合关键词与本机语义排序。请打开原页核对。';
+          show(fuseEvidence(data.citations,semanticHits),data.coverage,current.query);status.textContent='查阅完成 · 已结合关键词与本机语义排序。请打开原页核对。';
         }catch(e){
           if(token!==generation)return;
           if([401,403,404,410].includes(e.status)){reset('材料权限或状态已变化，请重新选择可访问材料。');return;}
