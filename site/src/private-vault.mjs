@@ -4,6 +4,7 @@ import {createVault} from './vault-storage.mjs';
 import {saveBookSource,readBookSource,recognizeBookPages} from './vault-books.mjs';
 import {highlightText} from './search-highlights.mjs';
 import {mountImageHighlights} from './page-image-highlights.mjs';
+import {vaultPasswordReset} from './vault-password-reset.mjs';
 export {createVault} from './vault-storage.mjs';
 
 export function initPrivateLibrary({el,btn}){
@@ -97,6 +98,8 @@ export function initPrivateLibrary({el,btn}){
   tools.append(save,pause,backup,el('label','','恢复：一次选齐全部分卷（兼容旧版单文件备份）'),restore,btn('锁定书库',()=>{vault.lock();backupIterator=null;backup.textContent='开始分卷备份';refresh();}),query);
   auth.addEventListener('submit',async e=>{e.preventDefault();unlock.disabled=true;try{if(!viewer.core||!viewer.userId)throw Error('请先使用自己的核心账户登录。');await vault.open(viewer.userId,password.value);password.value='';navigator.storage?.persist?.().catch(()=>{});status.textContent='已解锁本机书库。';await refresh();}catch(e){status.textContent=e.message;}finally{unlock.disabled=false;}});
   query.addEventListener('input',safe(refresh));tools.hidden=true;root.append(auth,tools,status,list,reader);
-  document.addEventListener('ziwei:session',e=>{viewer=e.detail;vault.lock();backupIterator=null;backup.textContent='开始分卷备份';clearReader();refresh();});document.addEventListener('ziwei:logout',()=>{vault.lock();clearReader();refresh();});
+  document.addEventListener('ziwei:session',e=>{viewer=e.detail;vault.lock();backupIterator=null;backup.textContent='开始分卷备份';clearReader();refresh();});document.addEventListener('ziwei:logout',()=>{viewer={};vault.lock();clearReader();refresh();});
+  root.append(vaultPasswordReset({vault,title:'本机书库',getViewer:()=>viewer,requiresCore:true,el,btn,onReset:async()=>{password.value='';backupIterator=null;clearReader();await refresh();},onRestored:refresh}));
+  document.addEventListener('ziwei:local-password-reset',e=>{if(e.detail?.namespace!=='ziwei-private-vault')return;clearReader();refresh();});
   return vault;
 }

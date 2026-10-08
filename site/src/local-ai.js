@@ -1,6 +1,7 @@
 import {MODEL,messagesFor,validateOutput,verifySources} from './local-ai-contracts.mjs';
 import {createLocalGenerator} from './local-ai-runtime.mjs';
 import {createVault} from './vault-storage.mjs';
+import {vaultPasswordReset} from './vault-password-reset.mjs';
 import {callPersonalAi,personalAiStatus} from './personal-ai.js';
 
 const vault=createVault({namespace:'ziwei-local-ai',lockEvent:'ziwei:ai-locked'}),generator=createLocalGenerator();
@@ -155,6 +156,9 @@ export function initLocalAi({api:request,el,btn}){
   window.addEventListener('pagehide',clear);
   document.addEventListener('ziwei:ai-journal',()=>{refreshNotebook().catch(()=>{message.textContent='本机记录未能读取，请重新解锁。';});});
   document.addEventListener('ziwei:ai-locked',()=>{auth.hidden=false;});
+  document.addEventListener('ziwei:logout',()=>{viewer={};});
+  root.append(vaultPasswordReset({vault,title:'本机 AI 研究册',getViewer:()=>viewer,el,btn,onReset:async()=>{password.value='';clear();await refreshNotebook();},onRestored:refreshNotebook}));
+  document.addEventListener('ziwei:local-password-reset',e=>{if(e.detail?.namespace!=='ziwei-local-ai')return;list.replaceChildren();detail.replaceChildren();compare.replaceChildren();selected=[];document.dispatchEvent(new Event('ziwei:ai-cleared'));});
   refreshNotebook();
   return {root};
 }

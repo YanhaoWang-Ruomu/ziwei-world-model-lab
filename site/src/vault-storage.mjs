@@ -8,6 +8,15 @@ function indexedStore(name='ziwei-private-vault'){
   const database=()=>openDatabase(name);
   async function one(mode,action){const db=await database();try{return await new Promise((resolve,reject)=>{const tx=db.transaction('records',mode),r=action(tx.objectStore('records'));let result;r.onsuccess=()=>result=r.result;tx.oncomplete=()=>resolve(result);tx.onerror=tx.onabort=()=>reject(Error('本机保存失败，请检查剩余空间。'));});}finally{db.close();}}
   return {get:id=>one('readonly',s=>s.get(id)),put:value=>one('readwrite',s=>s.put(value)),remove:id=>one('readwrite',s=>s.delete(id)),
+    async putIfHeader(value,expectedIv){const db=await database();try{await new Promise((resolve,reject)=>{const tx=db.transaction('records','readwrite'),s=tx.objectStore('records'),r=s.get(value.owner+':header');r.onsuccess=()=>{if(r.result?.iv!==expectedIv){tx.abort();return;}s.put(value);};tx.oncomplete=resolve;tx.onerror=tx.onabort=()=>reject(Error('加密空间已重置或保存失败，请重新解锁。'));});}finally{db.close();}},
+    async resetOwner(account,header,expectedIv,archive,current){const db=await database();try{await new Promise((resolve,reject)=>{
+      const tx=db.transaction('records','readwrite'),s=tx.objectStore('records'),r=s.get(account+':header');
+      r.onsuccess=()=>{if(!current()||r.result?.iv!==expectedIv){tx.abort();return;}
+        const cursor=s.openCursor(IDBKeyRange.bound(account+':',account+':\uffff'));
+        cursor.onsuccess=()=>{if(!current()){tx.abort();return;}const c=cursor.result;if(c){const row=c.value;if(row.owner===account&&row.kind!=='vault-archive'){s.put({...row,id:archive.archiveOwner+row.id.slice(account.length),owner:archive.archiveOwner});c.delete();}c.continue();}
+          else{s.put(header);if(expectedIv)s.put(archive);}};
+      };tx.oncomplete=resolve;tx.onerror=tx.onabort=()=>reject(Error('重置未完成，原加密空间保持不变。请检查空间或重新登录。'));
+    });}finally{db.close();}},
     async create(value){try{await one('readwrite',s=>s.add(value));return true;}catch(e){if(await one('readonly',s=>s.get(value.id)))return false;throw e;}},
     async publish(ids){const db=await database();try{await new Promise((resolve,reject)=>{const tx=db.transaction('records','readwrite'),s=tx.objectStore('records');for(const id of ids){const r=s.get(id);r.onsuccess=()=>{if(!r.result){tx.abort();return;}s.put({...r.result,kind:r.result.kind.replace(/^pending-/,'')});};}tx.oncomplete=resolve;tx.onerror=tx.onabort=()=>reject(Error('恢复尚未提交，请重新尝试。'));});}finally{db.close();}},
     async scan(owner,{metadata=false,catalog=false,parent,kind}={}){const db=await database();try{return await new Promise((resolve,reject)=>{const out=[],tx=db.transaction('records'),r=tx.objectStore('records').openCursor(IDBKeyRange.bound(owner+':',owner+':\uffff'));
@@ -17,19 +26,21 @@ function indexedStore(name='ziwei-private-vault'){
 export function createVault({storage,namespace='ziwei-private-vault',lockEvent='ziwei:vault-locked'}={}){
   if(!['ziwei-private-vault','ziwei-local-ai','ziwei-personal-ai'].includes(namespace))throw Error('Unknown local store');
   storage??=indexedStore(namespace);
-  let key=null,owner='',epoch=0;
+  let key=null,owner='',headerIv='',epoch=0;
   const lock=()=>{key=null;epoch++;globalThis.document?.dispatchEvent(new Event(lockEvent));};
+  const channel=typeof window!=='undefined'&&typeof BroadcastChannel==='function'?new BroadcastChannel(namespace+'-reset'):null;
+  if(channel)channel.onmessage=e=>{if(e.data?.owner===owner){lock();globalThis.document?.dispatchEvent(new CustomEvent('ziwei:local-password-reset',{detail:{namespace}}));}};
   const requireOpen=()=>{if(!key)throw Error('请先解锁本机私密书库。');};
   async function open(user,password){lock();const ticket=epoch,account=toBase64(new Uint8Array(await crypto.subtle.digest('SHA-256',enc.encode(user))));const header=await storage.get(account+':header');
     if(!header&&password.length<12)throw Error('新书库的解锁密码至少 12 位，请妥善保存。');
-    const salt=header?fromBase64(header.salt):crypto.getRandomValues(new Uint8Array(16)),next=await derive(password,salt);
+    let openedIv=header?.iv;const salt=header?fromBase64(header.salt):crypto.getRandomValues(new Uint8Array(16)),next=await derive(password,salt);
     if(header){try{const check=await crypto.subtle.decrypt({name:'AES-GCM',iv:fromBase64(header.iv)},next,fromBase64(header.check));if(dec.decode(check)!=='ziwei-vault-v1')throw Error();}catch{throw Error('书库解锁密码不正确。');}}
-    else{const iv=crypto.getRandomValues(new Uint8Array(12)),check=await crypto.subtle.encrypt({name:'AES-GCM',iv},next,enc.encode('ziwei-vault-v1'));if(ticket!==epoch)throw Error('账户已变化，请重新解锁。');const value={id:account+':header',owner:account,salt:toBase64(salt),iv:toBase64(iv),check:toBase64(new Uint8Array(check))};if(storage.create){if(!await storage.create(value)){if(ticket!==epoch)throw Error('账户已变化。');return open(user,password);}}else await storage.put(value);}
-    if(ticket!==epoch)throw Error('账户已变化，请重新解锁。');owner=account;key=next;
+    else{const iv=crypto.getRandomValues(new Uint8Array(12)),check=await crypto.subtle.encrypt({name:'AES-GCM',iv},next,enc.encode('ziwei-vault-v1'));if(ticket!==epoch)throw Error('账户已变化，请重新解锁。');const value={id:account+':header',owner:account,salt:toBase64(salt),iv:toBase64(iv),check:toBase64(new Uint8Array(check))};openedIv=value.iv;if(storage.create){if(!await storage.create(value)){if(ticket!==epoch)throw Error('账户已变化。');return open(user,password);}}else await storage.put(value);}
+    if(ticket!==epoch)throw Error('账户已变化，请重新解锁。');const latest=await storage.get(account+':header');if(ticket!==epoch||latest?.iv!==openedIv)throw Error('加密空间已变化，请重新解锁。');owner=account;headerIv=latest.iv;key=next;
   }
   async function decode(row,active=key){if(!row?.data)return null;return JSON.parse(dec.decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:fromBase64(row.iv)},active,fromBase64(row.data))));}
   async function put(value,{pending=false}={}){requireOpen();const ticket=epoch,account=owner,id=value.id||crypto.randomUUID(),iv=crypto.getRandomValues(new Uint8Array(12)),data=await crypto.subtle.encrypt({name:'AES-GCM',iv},key,enc.encode(JSON.stringify({...value,id})));
-    if(ticket!==epoch)throw Error('书库已锁定，保存已停止。');await storage.put({id:account+':'+id,owner:account,kind:(pending?'pending-':'')+(value.kind||'book'),parent:value.bookId||null,iv:toBase64(iv),data:toBase64(new Uint8Array(data))});return id;
+    if(ticket!==epoch)throw Error('书库已锁定，保存已停止。');const row={id:account+':'+id,owner:account,kind:(pending?'pending-':'')+(value.kind||'book'),parent:value.bookId||null,iv:toBase64(iv),data:toBase64(new Uint8Array(data))};if(storage.putIfHeader)await storage.putIfHeader(row,headerIv);else await storage.put(row);return id;
   }
   async function get(id){requireOpen();const ticket=epoch,value=await decode(await storage.get(owner+':'+id));if(ticket!==epoch)throw Error('书库已锁定。');return value;}
   async function list(options={}){if(!key)return [];const ticket=epoch,active=key,rows=await storage.scan(owner,{catalog:options.parent===undefined,...options}),out=[];for(const row of rows){const value=await decode(row,active);if(value)out.push(value);}return ticket===epoch?out:[];}
@@ -64,5 +75,18 @@ export function createVault({storage,namespace='ziwei-private-vault',lockEvent='
     if(ticket!==epoch)throw Error('书库已锁定，恢复未提交。');const keys=publish.map(id=>owner+':'+id);if(storage.publish)await storage.publish(keys);else for(const id of keys){const row=await storage.get(id);await storage.put({...row,kind:row.kind.replace(/^pending-/, '')});}
     return {volumes:total,records:restoredBooks};
   }
-  return {open,lock,put,get,list,remove,restore,restoreVolumes,backupVolumes,get generation(){return epoch;},get unlocked(){return Boolean(key);},async backup(){requireOpen();return {format:'ziwei-encrypted-vault-v1',records:await storage.scan(owner)};}};
+  const accountKey=async user=>{if(typeof user!=='string'||!user)throw Error('请先登录个人账户。');return toBase64(new Uint8Array(await crypto.subtle.digest('SHA-256',enc.encode(user))));};
+  async function resetPassword(user,password,confirmation,isCurrent=()=>true){
+    if(confirmation!=='重建加密空间')throw Error('请输入“重建加密空间”确认。');
+    if(typeof password!=='string'||password.length<12||password.length>128)throw Error('新解锁密码需要 12–128 位。');
+    if(!storage.resetOwner)throw Error('当前保存空间不支持安全重置。');
+    lock();const ticket=epoch,account=await accountKey(user),previous=await storage.get(account+':header'),salt=crypto.getRandomValues(new Uint8Array(16)),iv=crypto.getRandomValues(new Uint8Array(12)),next=await derive(password,salt),check=await crypto.subtle.encrypt({name:'AES-GCM',iv},next,enc.encode('ziwei-vault-v1'));
+    const id=crypto.randomUUID(),archive={id:account+':archive:'+id,owner:account,kind:'vault-archive',archiveOwner:account+'~archive~'+id,createdAt:new Date().toISOString()};
+    if(ticket!==epoch||!isCurrent())throw Error('账户已变化，未重置。');
+    await storage.resetOwner(account,{id:account+':header',owner:account,salt:toBase64(salt),iv:toBase64(iv),check:toBase64(new Uint8Array(check))},previous?.iv,archive,()=>ticket===epoch&&isCurrent());
+    channel?.postMessage({owner:account});globalThis.document?.dispatchEvent(new CustomEvent('ziwei:local-password-reset',{detail:{namespace}}));return {archived:Boolean(previous)};
+  }
+  async function archives(user){const account=await accountKey(user);return (await storage.scan(account,{kind:'vault-archive'})).map(r=>({id:r.id,createdAt:r.createdAt}));}
+  async function restoreArchive(user,id,password){requireOpen();const ticket=epoch,account=await accountKey(user);if(account!==owner||typeof id!=='string'||!id.startsWith(account+':archive:'))throw Error('无法读取其他账户的旧资料。');const archive=await storage.get(id);if(archive?.owner!==account||archive.kind!=='vault-archive'||!archive.archiveOwner.startsWith(account+'~archive~'))throw Error('旧资料记录不存在。');const records=await storage.scan(archive.archiveOwner);if(ticket!==epoch)throw Error('加密空间已锁定。');await restore({format:'ziwei-encrypted-vault-v1',records},password);}
+  return {open,lock,put,get,list,remove,restore,restoreVolumes,backupVolumes,resetPassword,archives,restoreArchive,get generation(){return epoch;},get unlocked(){return Boolean(key);},async backup(){requireOpen();return {format:'ziwei-encrypted-vault-v1',records:await storage.scan(owner)};}};
 }

@@ -1,6 +1,7 @@
 import {createVault} from './vault-storage.mjs';
 import {AI_PROVIDERS,validateConnection} from './ai-provider-catalog.mjs';
 import {READING_FIXTURES} from './ai-evaluation-fixtures.mjs';
+import {vaultPasswordReset} from './vault-password-reset.mjs';
 const vault=createVault({namespace:'ziwei-personal-ai',lockEvent:'ziwei:personal-ai-locked'});
 let viewer={},epoch=0,api,activeId='',allowed=[],refresh=()=>{},controllers=new Set();
 const changed=()=>document.dispatchEvent(new Event('ziwei:personal-ai-changed'));
@@ -73,5 +74,7 @@ export function initPersonalAi({api:request,el,btn}){
   refresh=async()=>{const ticket=epoch;auth.hidden=vault.unlocked;content.hidden=!vault.unlocked;list.replaceChildren();if(!vault.unlocked)return;const profiles=await vault.list({catalog:false,kind:'ai-connection'});if(ticket!==epoch)return;for(const p of profiles){const row=el('article','personal-ai-profile');row.append(el('strong','',p.name+(activeId===p.id?' · 当前使用':'')),el('p','muted',p.model+' · '+p.baseUrl),el('small','','上次验证：'+p.verifiedAt),btn('使用此配置',safe(async()=>{const token=await account();await vault.put({id:'preferences',kind:'ai-preferences',activeId:p.id});if(token!==epoch)return;activeId=p.id;await refresh();changed();})),btn('修改',safe(async()=>{const token=await account();const full=await vault.get(p.id);if(token!==epoch)return;editing=p.id;name.value=full.name;base.value=full.baseUrl;model.value=full.model;provider.value=AI_PROVIDERS.find(x=>x.baseUrl===full.baseUrl)?.id||'custom';key.value='';consent.checked=false;status.textContent='保留原地址时，密钥留空可沿用；修改地址必须重新填写密钥。';})),btn('删除配置',safe(async()=>{const token=await account();await vault.remove(p.id);if(token!==epoch)return;if(activeId===p.id){activeId='';await vault.put({id:'preferences',kind:'ai-preferences',activeId:''});}if(editing===p.id)reset();await refresh();changed();})));list.append(row);}if(!profiles.length)list.append(el('p','','尚未添加个人 API。'));};
   const clear=()=>{lock();reset();password.value='';status.textContent='';evaluationOutput.replaceChildren();evaluationConsent.checked=false;refresh();};
   document.addEventListener('ziwei:session',e=>{viewer=e.detail||{};clear();});document.addEventListener('ziwei:logout',()=>{viewer={};clear();});window.addEventListener('pagehide',clear);
+  root.append(vaultPasswordReset({vault,title:'AI 接口解锁',getViewer:()=>viewer,el,btn,onReset:async()=>{clear();await refresh();},onRestored:refresh}));
+  document.addEventListener('ziwei:local-password-reset',e=>{if(e.detail?.namespace!=='ziwei-personal-ai')return;evaluationOutput.replaceChildren();activeId='';refresh();changed();});
   reset();status.textContent='请先登录，再解锁本机 API 配置。';refresh();return {root};
 }

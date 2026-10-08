@@ -3,6 +3,7 @@
   "site": [
     "db/schema.ts",
     "docs/AI_ACCEPTANCE.md",
+    "docs/PASSWORD_RECOVERY.md",
     "docs/ai-assistants.md",
     "docs/community-local-acceptance.md",
     "docs/navigation-consolidation.md",
@@ -245,6 +246,7 @@
     "src/text-recognition.mjs",
     "src/upload.js",
     "src/vault-books.mjs",
+    "src/vault-password-reset.mjs",
     "src/vault-storage.mjs",
     "src/wheel-chart.mjs",
     "src/workspace-access.mjs",
@@ -296,6 +298,7 @@
     "tests/technique-groups.test.mjs",
     "tests/technique-periods.test.mjs",
     "tests/technique-research.test.mjs",
+    "tests/vault-password-reset.test.mjs",
     "tests/vault-recovery.test.mjs",
     "tests/workspace-access.test.mjs",
     "tests/workspace-consolidation.test.mjs",

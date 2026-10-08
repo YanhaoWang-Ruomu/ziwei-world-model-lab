@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "54d68bd336515339804a68a202af9ece4adb08fd",
+  "sourceCommit": "44ec819fdfb72dcb61d573b6fe3dbc4b2973181f",
   "files": [
     {
       "path": "site/db/schema.ts",
@@ -9,6 +9,10 @@
     {
       "path": "site/docs/AI_ACCEPTANCE.md",
       "sha256": "dc720059a3c4d98c1b06fae5a33293fc8ccdc2881d588349dd1b675e582a3021"
+    },
+    {
+      "path": "site/docs/PASSWORD_RECOVERY.md",
+      "sha256": "7a2d3dc7136dd7c89a5e1083f827b4f4d6996723d9233e4f764ee13631922090"
     },
     {
       "path": "site/docs/ai-assistants.md",
@@ -360,7 +364,7 @@
     },
     {
       "path": "site/src/account-security.mjs",
-      "sha256": "6174925476d805524ce54b6f6de0059dc8cda6d3c38462d242dd0a8dbc18efbd"
+      "sha256": "ce01d6c52a6c704a90b5f2ec3c057f609c43f50a0e847eab8f681ee181c2f785"
     },
     {
       "path": "site/src/activity-history.mjs",
@@ -624,7 +628,7 @@
     },
     {
       "path": "site/src/local-ai.js",
-      "sha256": "6927a1eb5ab2c21ee03f585df28a8ed269ef9c00d6afc3e6d8f46cda8e04e863"
+      "sha256": "6bda6df07ed6b7cdeefb4c341fc04358740e3f823ffa64a0479b19b21ff6d023"
     },
     {
       "path": "site/src/local-semantic.mjs",
@@ -684,7 +688,7 @@
     },
     {
       "path": "site/src/personal-ai.js",
-      "sha256": "73c91d2521590f9bbebf114a918e3e47789ac146695553fc27ee7cd272086f66"
+      "sha256": "f6eefef7999e421d0db86769dce494a183f36cd7bcd6319997386594e2b2931d"
     },
     {
       "path": "site/src/platform-login.mjs",
@@ -692,7 +696,7 @@
     },
     {
       "path": "site/src/private-vault.mjs",
-      "sha256": "427e44b557faff7a613e37426a6b06c5f7126d6d25712402bb35475a219be39f"
+      "sha256": "9b5c67b23fdccd7ebc6423e94c072116c99594b3c4ea3b6681706634eb4041d6"
     },
     {
       "path": "site/src/research-agent-contracts.mjs",
@@ -979,8 +983,12 @@
       "sha256": "f85f91b6d3015d10252ea6ed50bd6c52605dc4e6ee22d94821f437069668d117"
     },
     {
+      "path": "site/src/vault-password-reset.mjs",
+      "sha256": "e922523962a387ec3374d3f9544f162cfd53263b06fd987e00da197c697914e4"
+    },
+    {
       "path": "site/src/vault-storage.mjs",
-      "sha256": "c889b946ec8d1043141098b55e17429792640e1a9e162c66e62af0a6e8f84831"
+      "sha256": "b82455cf5272e82536fc593d69c99c90791d88b46584cc0e7d2fe3e61195b0a5"
     },
     {
       "path": "site/src/wheel-chart.mjs",
@@ -1181,6 +1189,10 @@
     {
       "path": "site/tests/technique-research.test.mjs",
       "sha256": "0e4a44336ebcaa12f6e65b297d94b9dc4fecf6bafa12e4b10549203b244a1a8a"
+    },
+    {
+      "path": "site/tests/vault-password-reset.test.mjs",
+      "sha256": "04380cf77c2d131514ab06ce24d165aa42c9731e226f636a5ec58b8522c39ac6"
     },
     {
       "path": "site/tests/vault-recovery.test.mjs",
