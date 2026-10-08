@@ -7,7 +7,7 @@ export function pageRanges(numbers) {
   for(const n of sorted){const last=ranges.at(-1);if(last&&last[1]+1===n)last[1]=n;else ranges.push([n,n]);}
   return ranges;
 }
-export async function bookReadiness(db,book) {
+export async function bookReadiness(db,book,url) {
   // The report returns metadata only, and is reached only after bookFor authorization.
   const {results}=await db.prepare(`SELECT page,image_ready,correction_status,
     length(trim(raw_text)) AS raw_length,
@@ -22,7 +22,15 @@ export async function bookReadiness(db,book) {
     if(book.kind==='pdf'&&!row.image_ready)images.push(n);
     if(row.correction_status!=='confirmed')unconfirmed.push(n);
   }
+  const first=Math.min(Math.max(1,expected),Math.max(1,Math.floor(Number(url?.searchParams.get('page'))||1)));
+  const pages=[];
+  for(let page=first;page<=Math.min(expected,first+24);page++){
+    const row=rows.get(page),hasText=Boolean(row&&(row.raw_length||row.corrected_length||row.reviewed_text));
+    pages.push({page,saved:Boolean(row),searchable:hasText,image_ready:book.kind==='pdf'?Boolean(row?.image_ready):null,
+      confirmed:row?.correction_status==='confirmed',text_source:row?.corrected_length?'confirmed':row?.raw_length?'extracted':row?.reviewed_text?'reviewed':null});
+  }
   return {book_id:book.id,expected_pages:expected,saved_pages:rows.size,text_pages:rows.size-empty.length,
+    pages,page_start:first,next_page:first+25<=expected?first+25:null,
     file_ready:Boolean(book.file_ready),complete:!missing.length&&!empty.length,
     // A complete scan is not a claim of OCR accuracy or manual review.
     missing_ranges:pageRanges(missing),empty_ranges:pageRanges(empty),image_missing_ranges:pageRanges(images),

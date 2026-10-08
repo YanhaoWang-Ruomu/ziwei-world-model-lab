@@ -24,11 +24,15 @@ export async function researchAgentRoute(context,{generate,search=searchEvidence
   const data=await jsonBody(request,16000);try{validateAgentInput(data);}catch(e){throw new HttpError(400,e.message);}
   if(data.connection){if(data.consent!==true)throw new HttpError(400,'请先确认使用个人 API。');}
   else if(!viewer.owner)throw new HttpError(403,'本站千问仅供核心账户使用；其他账户可配置自己的 API。');
+  if(data.bookId&&data.bookId!=='all'){
+    const book=await db.prepare("SELECT id FROM books WHERE id=? AND level='public' AND status<>'deleting'").bind(data.bookId).first();
+    if(!book)throw new HttpError(403,'所选材料不再公开，请重新选择。');
+  }
   const citations=await publicAgentEvidence(db,data.references);
   const result=await (generate||(data.connection?requestPersonalAi:requestQwen))({env:context.env,db,viewer,connection:data.connection,id:data.callId,messages:agentMessages(data,citations)});
   let decision;try{decision=parseAgentAction(result.raw,data,citations);}catch(e){throw new HttpError(502,e.message);}
   if(decision.action==='search'){
-    const url=new URL(request.url);url.pathname='/api/evidence/search';url.search=new URLSearchParams({q:decision.query,book:'all',level:'public'}).toString();
+    const url=new URL(request.url);url.pathname='/api/evidence/search';url.search=new URLSearchParams({q:decision.query,book:data.bookId||'all',level:'public'}).toString();
     const found=await search({...context,url,query:decision.query,guard:{sql:"b.level='public' AND b.status<>'deleting'",args:[]}});
     const evidence=mergeAgentEvidence(citations,found.citations);
     await publicAgentEvidence(db,evidence);

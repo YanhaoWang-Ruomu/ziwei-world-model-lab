@@ -1,4 +1,5 @@
 import {parseTechnique,SCOPES,STARS,PALACES,validateTechnique} from './technique-engine.mjs';
+import {bindConditionSource} from './technique-provenance.mjs';
 export const MODEL={id:'onnx-community/Qwen3-0.6B-ONNX',revision:'1e0a4a196ecabdf9a879664110574563d3f372d3',dtype:'q8',promptVersion:1};
 const text=(v,max)=>typeof v==='string'&&v.trim()&&v.length<=max;
 export function messagesFor(input){
@@ -41,7 +42,7 @@ export function validateOutput(input,raw,fold=x=>x){
     if(original.unresolved.length||candidate.unresolved.length||!candidate.conditions.length||JSON.stringify(original)!==JSON.stringify(candidate)){
       rule.unresolved.push(line.source);lines.push({...line,accepted:false});continue;
     }
-    rule.conditions.push(...candidate.conditions);lines.push({...line,accepted:true});
+    rule.conditions.push(...candidate.conditions.map(c=>bindConditionSource(c,input.text,line.source)));lines.push({...line,accepted:true});
   }
   // The complete original remains unresolved until a human confirms coverage and logical relationships.
   rule.unresolved=[...new Set([...rule.unresolved,input.text])];

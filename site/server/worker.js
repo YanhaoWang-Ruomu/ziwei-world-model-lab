@@ -179,7 +179,7 @@ async function route(request, env) {
   const [, id, action = ''] = match; const writing = !['GET','HEAD'].includes(method);
   if(!action&&method==='DELETE')return json(await deleteBook({db,bucket:env.BUCKET,viewer,request,id}));
   const book = await bookFor(db, id, viewer, writing);
-  if(action==='readiness'&&method==='GET')return json(await bookReadiness(db,book));
+    if(action==='readiness'&&method==='GET')return json(await bookReadiness(db,book,url));
   if(action==='corpus'&&method==='GET')return json(await bookCorpusBatch(db,book,url));
   const review = await reviewRoute({ action, method, request, db, book, viewer, normalize });
   if (review !== null) return json(review);

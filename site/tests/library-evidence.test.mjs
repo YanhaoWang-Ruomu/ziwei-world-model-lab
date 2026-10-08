@@ -40,6 +40,11 @@ test('readiness exposes exact missing, empty and missing-image ranges, without b
     assert.deepEqual(report.image_missing_ranges,[[119,120]]);assert.equal(report.text_pages,239);
     assert.equal(report.complete,false);assert.equal(JSON.stringify(report).includes('raw_text'),false);
     assert.deepEqual(pageRanges([4,1,2,2,6]),[[1,2],[4,4],[6,6]]);
+    const at120=await bookReadiness(db,book,new URL('http://localhost/?page=120'));
+    assert.equal(at120.pages[0].page,120);assert.equal(at120.pages.length,25);assert.equal(at120.pages[0].searchable,true);assert.equal(at120.pages[0].image_ready,false);assert.equal(at120.next_page,145);
+    const last=await bookReadiness(db,book,new URL('http://localhost/?page=239'));
+    assert.deepEqual(last.pages.map(p=>[p.page,p.saved,p.searchable]),[[239,true,false],[240,true,true],[241,false,false],[242,false,false]]);assert.equal(last.next_page,null);
+    assert.ok(!JSON.stringify(last).includes('花木'));
   }finally{sqlite.close();}
 });
 test('citations copy exact offsets from source, prefer confirmed edits and never include restricted pages',async()=>{

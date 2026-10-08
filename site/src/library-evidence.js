@@ -2,7 +2,7 @@ import {createLocalSemantic} from './local-semantic.mjs';
 import {fuseEvidence} from './evidence-ranking.mjs';
 import {createAiPanel} from './local-ai.js';
 
-export function renderReadiness(host,data,{el,btn,openPage}) {
+export function renderReadiness(host,data,{el,btn,openPage,inspectPage}) {
   host.replaceChildren();
   const facts=el('div','library-health-facts');
   for(const [label,value] of [['应有页数',data.expected_pages],['已保存',data.saved_pages],['有可检索文字',data.text_pages],['未整页确认',data.unconfirmed_pages]]){
@@ -18,6 +18,15 @@ export function renderReadiness(host,data,{el,btn,openPage}) {
     host.append(group);
   }
   if(data.out_of_range_pages)host.append(el('p','',`${data.out_of_range_pages} 个保存页号超出登记范围，需要管理人核对材料页数。`));
+  if(data.pages){
+    host.append(el('h3','','逐页检查'),el('p','book-context-note','关键词搜索直接查阅已保存文字；本机语义索引在开启语义检索后建立，关闭页面即清除。以下状态不代表 OCR 内容已准确识别。'));
+    if(inspectPage){const page=el('input');page.type='number';page.min='1';page.max=String(data.expected_pages);page.value=String(data.page_start);page.setAttribute('aria-label','检查起始页码');
+      host.append(page,btn('检查指定页',()=>{const n=Number(page.value);if(Number.isInteger(n)&&n>=1&&n<=data.expected_pages)inspectPage(n);else page.reportValidity();}));}
+    const table=el('table','research-compare'),head=el('tr');for(const title of ['页码','保存','文字检索','原页','校订'])head.append(el('th','',title));table.append(head);
+    for(const p of data.pages){const row=el('tr'),cell=el('td');cell.append(p.saved&&openPage?btn(String(p.page),()=>openPage(data.book_id,p.page)):document.createTextNode(String(p.page)));row.append(cell);
+      for(const value of [p.saved?'已保存':'缺页',p.searchable?'有文字':'无文字',p.image_ready===null?'不适用':p.image_ready?'已保存':'缺少影像',p.confirmed?'已确认':'待核对'])row.append(el('td','',value));table.append(row);}host.append(table);
+    if(inspectPage&&data.next_page)host.append(btn('后 25 页',()=>inspectPage(data.next_page)));
+  }
 }
 
 export function initEvidenceReader({api,el,btn,scope,openSource,anchor}) {
@@ -33,13 +42,14 @@ export function initEvidenceReader({api,el,btn,scope,openSource,anchor}) {
   const semantic=createLocalSemantic({api,onProgress:text=>{status.textContent=text;}});
   const run=btn('整理原文依据',start,'book-primary'),cancel=btn('停止',()=>reset('已停止。可继续查找原文。'));
   cancel.hidden=true;
-  const inspect=btn('检查本书页数',async()=>{
+  async function inspectPages(page=1){
     const current=scope();if(current.book==='all'){status.textContent='请先在上方选择一本材料，再检查页数。';return;}
     reset();const token=generation;status.textContent='正在检查页面保存与识别状态…';
-    try{const data=await api(`/api/books/${encodeURIComponent(current.book)}/readiness`);if(token!==generation)return;
-      renderReadiness(health,data,{el,btn,openPage:(book_id,page)=>openSource({book_id,page})});health.hidden=false;status.textContent='页数检查完成。';
+    try{const data=await api(`/api/books/${encodeURIComponent(current.book)}/readiness?page=${page}`);if(token!==generation)return;
+      renderReadiness(health,data,{el,btn,openPage:(book_id,page)=>openSource({book_id,page}),inspectPage:inspectPages});health.hidden=false;status.textContent='页数检查完成。';
     }catch(e){if(token===generation)status.textContent=e.message;}
-  });
+  }
+  const inspect=btn('检查本书页数',()=>inspectPages());
   controls.append(run,cancel,inspect,toggleLabel);root.append(lead,controls,note,status,health,results);anchor.after(root);
   function reset(text=''){
     aiPanel?.dispose();aiPanel=null;

@@ -61,3 +61,10 @@ test('Agent chooses search then answers only from public server-rebuilt evidence
 test('Agent refuses nonexistent tools, unsupported claims, duplicate queries and searches beyond budget',()=>{
  const d={step:0,queries:['花盆']};assert.throws(()=>parseAgentAction('{"action":"publish"}',d,[]));assert.throws(()=>parseAgentAction('{"action":"search","query":"花盆"}',d,[]));assert.throws(()=>parseAgentAction('{"action":"search","query":"花盆"}',{step:3,queries:[]},[]));assert.throws(()=>parseAgentAction('{"action":"answer","claims":[{"text":"无依据"}],"uncertainties":[]}',d,[]));assert.equal(parseAgentAction('{"action":"clarify","question":"你想查哪种花盆？"}',d,[]).action,'clarify');
 });
+test('Agent single-book scope is checked before paid generation and cannot carry cross-book sources',async()=>{
+ const f=fixture();try{let calls=0;const data={callId:crypto.randomUUID(),goal:'虚构园圃',bookId:'fiction',followups:[],queries:[],references:[],step:0,publicConfirmed:true,consent:true,connection:f.base.connection};
+ const call=()=>researchAgentRoute({path:'/api/ai/research/step',method:'POST',viewer:f.base.viewer,env:{},db:f.db,request:new Request('https://fixture.invalid/',{method:'POST',body:JSON.stringify(data)})},{generate:async()=>{calls++;return {raw:JSON.stringify({action:'search',query:'花盆'})};},search:async({url})=>{assert.equal(url.searchParams.get('book'),'fiction');return {citations:[f.ref]};}});
+ await call();assert.equal(calls,1);data.references=[{...f.ref,book_id:'other'}];await assert.rejects(call(),e=>e.status===400);assert.equal(calls,1);
+ data.references=[];f.sql.exec("UPDATE books SET level='special'");await assert.rejects(call(),e=>e.status===403);assert.equal(calls,1);
+ }finally{f.sql.close();}
+});
