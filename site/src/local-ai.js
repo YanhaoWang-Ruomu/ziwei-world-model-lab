@@ -1,13 +1,15 @@
 import {MODEL,messagesFor,validateOutput,verifySources} from './local-ai-contracts.mjs';
 import {createLocalGenerator} from './local-ai-runtime.mjs';
 import {createVault} from './vault-storage.mjs';
+import {callPersonalAi,personalAiStatus} from './personal-ai.js';
 
 const vault=createVault({namespace:'ziwei-local-ai',lockEvent:'ziwei:ai-locked'}),generator=createLocalGenerator();
 let viewer={},epoch=0,busy=false,api,refreshNotebook=()=>{},activeTask=null,cloudController=null;
 const changed=()=>document.dispatchEvent(new Event('ziwei:ai-journal'));
 const fold=x=>window.OpenCC?.Converter({from:'t',to:'cn'})(x)||x;
 const tick=()=>new Date().toISOString();
-const modelKey=(provider='local')=>provider==='qwen'?'qwen-plus-2025-12-01:prompt-1':JSON.stringify(MODEL);
+const modelKey=(provider='local')=>provider==='personal'?'personal-api:prompt-1':provider==='qwen'?'qwen-plus-2025-12-01:prompt-1':JSON.stringify(MODEL);
+export const aiJournal={get unlocked(){return vault.unlocked;},async put(task){if(task.kind!=='ai-agent')throw Error('研究记录格式不符。');await persist(task);},get:id=>vault.get(id),list:()=>vault.list({catalog:false,kind:'ai-agent'}),remove:id=>vault.remove(id)};
 async function access(input){
   const session=await api('/api/session');
   if((session.userId||'')!==(viewer.userId||'')||!!session.core!==!!viewer.core)throw Error('账户或权限已变化，请重新进入当前页面。');
@@ -31,7 +33,12 @@ export async function runLocalTask(task,{onProgress=()=>{},save=false}={}){
     if(!task.raw){
       onProgress('正在准备本机模型…');
       let raw;
-      if(task.provider==='qwen'){
+      if(task.provider==='personal'){
+        if(task.input.kind!=='answer'||!task.publicQuestionConfirmed)throw Error('个人云端 API 只处理公开书库问答。');
+        cloudController=new AbortController();onProgress('个人 AI 正在根据公开原文整理回答…');
+        const data=await callPersonalAi('/api/ai/personal/answer',{id:task.requestId||task.id,question:task.input.question,references:task.input.citations.map(({book_id,page,start,end,source_hash,revision,source})=>({book_id,page,start,end,source_hash,revision,source}))},{signal:cloudController.signal});
+        current();raw=data.raw;task={...task,input:data.input,usage:data.usage,usedModel:data.model};cloudController=null;
+      }else if(task.provider==='qwen'){
         if(task.input.kind!=='answer'||!task.publicQuestionConfirmed)throw Error('千问只处理经确认的公开书库问答。');
         cloudController=new AbortController();onProgress('千问正在依据公开原文整理回答…');
         const data=await api('/api/ai/qwen/answer',{method:'POST',signal:cloudController.signal,body:JSON.stringify({id:task.requestId||task.id,question:task.input.question,publicQuestionConfirmed:true,references:task.input.citations.map(({book_id,page,start,end,source_hash,revision,source})=>({book_id,page,start,end,source_hash,revision,source}))})});
@@ -57,17 +64,17 @@ function newTask(input,provider='local',publicQuestionConfirmed=false){const id=
 function stop(){epoch++;generator.stop();cloudController?.abort();cloudController=null;}
 export function createAiPanel({el,btn,getInput,onApply}){
   const root=el('details','local-ai-panel'),message=el('p'),output=el('div','local-ai-output'),save=el('input');save.type='checkbox';
-  root.append(el('summary','','AI 助手 · 依据原文整理草稿'),el('p','muted','本机模式首次需下载约 630 MB 模型及运行文件，建议 Wi-Fi 和 2 GB 以上可用内存，不调用收费服务。千问模式只支持公开书库问答，需核心账户；会把问题及公开选段发送至阿里云北京。所有结果均需核对。'));
-  const provider=el('select');provider.setAttribute('aria-label','AI 运行位置');provider.append(new Option('本机 AI · 无调用费用','local'));if(!onApply)provider.append(new Option('千问云端 · 仅公开书库','qwen'));
-  const publicCheck=el('input');publicCheck.type='checkbox';const publicLabel=el('label','review-check');publicLabel.hidden=true;publicLabel.append(publicCheck,document.createTextNode('确认问题不含个人资料或私密技法，同意将问题和公开选段发送给千问。'));
-  provider.onchange=async()=>{publicLabel.hidden=provider.value!=='qwen';publicCheck.checked=false;message.textContent='';if(provider.value!=='qwen'||!api)return;const token=epoch;try{const state=await api('/api/ai/qwen/status');if(token!==epoch||provider.value!=='qwen')return;message.textContent=state.enabled?`千问已就绪 · 今日已保守预留 ${state.reservedTodayCny.toFixed(2)} / 5 元。每次预留 0.25 元（不等于实际账单），以北京时间换日；停止请求仍可能计费。`:'千问尚未启用：需先在服务器配置密钥及预算。';}catch(e){if(token===epoch&&provider.value==='qwen')message.textContent=e.message;}};root.append(provider,publicLabel);
+  root.append(el('summary','','AI 助手 · 依据原文整理草稿'),el('p','muted','本机模式首次需下载约 630 MB 模型及运行文件。个人 API 在账户设置中配置，登录用户均可使用；云端只处理公开书库问答。本站千问仍限核心账户。所有结果均需核对。'));
+  const provider=el('select');provider.setAttribute('aria-label','AI 运行位置');provider.append(new Option('本机 AI · 无调用费用','local'));if(!onApply)provider.append(new Option('我的 API · 账户中配置','personal'),new Option('本站千问 · 仅公开书库','qwen'));
+  const publicCheck=el('input');publicCheck.type='checkbox';const publicLabel=el('label','review-check');publicLabel.hidden=true;publicLabel.append(publicCheck,document.createTextNode('确认问题不含个人资料或私密技法，同意将问题和公开选段发送给所选服务商，可能产生费用。'));
+  provider.onchange=async()=>{publicLabel.hidden=provider.value==='local';publicCheck.checked=false;message.textContent='';if(provider.value==='personal'){try{message.textContent=(await personalAiStatus()).message;}catch(e){message.textContent=e.message;}return;}if(provider.value!=='qwen'||!api)return;const token=epoch;try{const state=await api('/api/ai/qwen/status');if(token!==epoch||provider.value!=='qwen')return;message.textContent=state.enabled?`千问已就绪 · 今日已保守预留 ${state.reservedTodayCny.toFixed(2)} / 5 元。每次预留 0.25 元（不等于实际账单），以北京时间换日；停止请求仍可能计费。`:'千问尚未启用：需先在服务器配置密钥及预算。';}catch(e){if(token===epoch&&provider.value==='qwen')message.textContent=e.message;}};root.append(provider,publicLabel);
   const label=el('label','review-check');label.append(save,document.createTextNode('加密保存进度（需先在研究实验室解锁本机 AI 研究册）'));
   const run=btn('开始本机 AI 整理',async()=>{
     output.replaceChildren();message.textContent='';run.disabled=true;cancel.hidden=false;let ticket=epoch;
     try{
       if(!api)throw Error('页面尚未准备好，请稍后重试。');
       if(save.checked&&!vault.unlocked)throw Error('请先在研究实验室创建或解锁本机 AI 研究册。');
-      if(provider.value==='qwen'&&!publicCheck.checked)throw Error('请先确认问题不含私密内容，并同意发送公开选段。');
+      if(provider.value!=='local'&&!publicCheck.checked)throw Error('请先确认问题不含私密内容，并同意发送公开选段。');
       const input=getInput(),task=newTask(input,provider.value,publicCheck.checked),saved=save.checked;
       const done=await runLocalTask(task,{save:saved,onProgress:t=>{message.textContent=t;}});
       if(ticket!==epoch||!root.isConnected)return;
@@ -100,20 +107,20 @@ export function initLocalAi({api:request,el,btn}){
   auth.append(password,btn('创建 / 解锁研究册',safe(async()=>{
     if(!viewer.authenticated||!viewer.userId)throw Error('请先登录个人账户，再创建本机研究册。');
     const token=epoch,user=viewer.userId;await vault.open(user,password.value);password.value='';if(token!==epoch){vault.lock();return;}
-    message.textContent='研究册已解锁。可回书库或技法编辑器勾选加密保存进度。';await refreshNotebook();
+    message.textContent='研究册已解锁。可回书库或技法编辑器勾选加密保存进度。';await refreshNotebook();document.dispatchEvent(new Event('ziwei:ai-unlocked'));
   }), 'book-primary'));
   const actions=el('div','local-ai-actions');
   actions.append(btn('刷新研究记录',safe(()=>refreshNotebook())),btn('锁定研究册',()=>{stop();vault.lock();list.replaceChildren();detail.replaceChildren();compare.replaceChildren();document.dispatchEvent(new Event('ziwei:ai-cleared'));message.textContent='已锁定。';}),btn('停止当前任务',()=>{stop();message.textContent='已停止，可从最后保存的步骤继续。';}),btn('导出加密备份',safe(async()=>{
     const blob=new Blob([JSON.stringify(await vault.backup())],{type:'application/json'}),url=URL.createObjectURL(blob),a=el('a');a.href=url;a.download='观星台-AI研究册-加密备份.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);
   })));
   const restoreFile=el('input'),restorePassword=el('input');restoreFile.type='file';restoreFile.accept='.json';restoreFile.setAttribute('aria-label','AI 研究册加密备份文件');restorePassword.type='password';restorePassword.placeholder='备份原密码';restorePassword.setAttribute('aria-label','备份原密码');
-  const restore=el('details');restore.append(el('summary','','恢复加密备份'),restoreFile,restorePassword,btn('恢复到已解锁研究册',safe(async()=>{const file=restoreFile.files[0];if(!file||file.size>20*1024*1024)throw Error('请选择 20 MB 以内的研究册备份。');const value=JSON.parse(await file.text());if(value?.format!=='ziwei-encrypted-vault-v1'||value.records?.some(r=>r.data&&r.kind!=='ai-task'))throw Error('请选择 AI 研究册备份。');await vault.restore(value,restorePassword.value);restorePassword.value='';restoreFile.value='';await refreshNotebook();message.textContent='研究册已恢复。';})));
+  const restore=el('details');restore.append(el('summary','','恢复加密备份'),restoreFile,restorePassword,btn('恢复到已解锁研究册',safe(async()=>{const file=restoreFile.files[0];if(!file||file.size>20*1024*1024)throw Error('请选择 20 MB 以内的研究册备份。');const value=JSON.parse(await file.text());if(value?.format!=='ziwei-encrypted-vault-v1'||value.records?.some(r=>r.data&&!['ai-task','ai-agent'].includes(r.kind)))throw Error('请选择 AI 研究册备份。');await vault.restore(value,restorePassword.value);restorePassword.value='';restoreFile.value='';await refreshNotebook();message.textContent='研究册已恢复。';})));
   root.append(auth,actions,restore,message,list,compare,detail);document.querySelector('#world')?.append(root);message.setAttribute('role','status');
   let selected=[];
   async function open(task){
     detail.replaceChildren();const token=epoch;await access(task.input);if(token!==epoch)return;
     const current=await vault.get(task.id);if(!current||token!==epoch)return;
-    detail.append(el('h3','',current.input.kind==='answer'?current.input.question:'中文技法草稿'),el('p','muted',`创建于 ${current.created} · ${current.steps.map(s=>({sources:'原文检查',generated:'模型生成',validated:'结构检查'})[s.name]).join(' → ')||'待开始'} · ${current.provider==='qwen'?'千问 Plus 北京云端':'Qwen3 0.6B 本机'} / 整理方式 v1`));
+    detail.append(el('h3','',current.input.kind==='answer'?current.input.question:'中文技法草稿'),el('p','muted',`创建于 ${current.created} · ${current.steps.map(s=>({sources:'原文检查',generated:'模型生成',validated:'结构检查'})[s.name]).join(' → ')||'待开始'} · ${current.provider==='personal'?(current.usedModel||'个人 API'):current.provider==='qwen'?'千问 Plus 北京云端':'Qwen3 0.6B 本机'} / 整理方式 v1`));
     if(current.result){current.result=validateOutput(current.input,current.raw,fold);const output=el('div');renderTask(output,current,{el,btn});detail.append(output);}
     const resume=btn(current.result?'重新核对已保存草稿':'继续未完成步骤',safe(async()=>{const done=await runLocalTask(current,{save:true,onProgress:t=>{message.textContent=t;}});if(token!==epoch)return;await open(done);message.textContent='已完成至待人工核对步骤。';}));
     detail.append(resume,btn('创建对照分支，重新生成',safe(async()=>{const branch={...newTask(current.input,current.provider,current.publicQuestionConfirmed),parentId:current.id};await persist(branch);await open(branch);})),btn('删除这条研究记录',safe(async()=>{if(activeTask===current.id)throw Error('请先停止此任务。');await vault.remove(current.id);detail.replaceChildren();selected=selected.filter(x=>x!==current.id);compare.replaceChildren();await refreshNotebook();})));

@@ -185,6 +185,10 @@ export const aiUsage=sqliteTable('ai_usage',{
   requestId:text('request_id').primaryKey(),day:text('day').notNull(),reservedMicro:integer('reserved_micro').notNull(),
   status:text('status').notNull(),model:text('model').notNull(),inputTokens:integer('input_tokens'),outputTokens:integer('output_tokens'),
 },t=>[index('idx_ai_usage_day').on(t.day)]);
+export const personalAiUsage=sqliteTable('personal_ai_usage',{
+  ownerHash:text('owner_hash').notNull(),requestId:text('request_id').notNull(),day:text('day').notNull(),
+  status:text('status').notNull(),inputTokens:integer('input_tokens'),outputTokens:integer('output_tokens'),
+},t=>[primaryKey({columns:[t.ownerHash,t.requestId]}),index('personal_ai_usage_day').on(t.ownerHash,t.day)]);
 export const techniqueHistory=sqliteTable('technique_history',{
   id:integer('id').primaryKey({autoIncrement:true}),techniqueId:text('technique_id').notNull(),
   revision:integer('revision').notNull(),releaseVersion:integer('release_version').notNull(),

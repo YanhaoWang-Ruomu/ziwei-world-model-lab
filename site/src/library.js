@@ -2,6 +2,8 @@ import {initWorkspaceSections} from './workspace-sections.mjs';
 import {configurePlatformLogin} from './platform-login.mjs';
 import {initResearchCommunity} from './research-community.js';
 import {initLocalAi} from './local-ai.js';
+import {initPersonalAi} from './personal-ai.js';
+import {initResearchAgent} from './research-agent.js';
 import { importMaterial, pauseImport } from './upload.js';
 import { renderManagement } from './management.js';
 import { renderReview } from './review.js';
@@ -200,6 +202,8 @@ submissions=initSubmissions({api,el,btn,ruleWorkbench,openSource:openCardSource,
 members=initMembers({api,el,btn});
 initResearchCommunity({api,el,btn});
 initLocalAi({api,el,btn});
+initPersonalAi({api,el,btn});
+initResearchAgent({api,el,btn});
 workspace=initWorkspace({api,onSession:applySession});
 const personalAccount=initPersonalAccount({api,onSession:applySession});
 const privateVault=initPrivateLibrary({el,btn});

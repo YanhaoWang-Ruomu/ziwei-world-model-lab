@@ -297,7 +297,16 @@
     "src/local-ai.js",
     "src/local-ai.css",
     "tests/local-ai.test.mjs",
-    "tests/qwen-ai.test.mjs"
+    "tests/qwen-ai.test.mjs",
+    "src/ai-provider-catalog.mjs",
+    "src/personal-ai.js",
+    "src/research-agent.js",
+    "src/research-agent-contracts.mjs",
+    "server/personal-ai.mjs",
+    "server/research-agent.mjs",
+    "drizzle/0017_personal_ai_usage.sql",
+    "tests/personal-ai.test.mjs",
+    "docs/personal-ai-and-agent.md"
   ],
   "desktop": [
     "README.md",

@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "9407461e08c466ab435dc4369e34371659794bca",
+  "sourceCommit": "4781f78b0a1228eea7f3d89d4789062c056547b3",
   "files": [
     {
       "path": "site/db/schema.ts",
-      "sha256": "1a95769a1657c35b7ce88abf6903c704e9abfe6e9cca1cbfbb3d5fdace76f702"
+      "sha256": "2ada47e2087113da7dfc025eddbf938b9dc34d8f912a334a8996294e2f578f48"
     },
     {
       "path": "site/docs/community-local-acceptance.md",
@@ -84,7 +84,7 @@
     },
     {
       "path": "site/drizzle/meta/_journal.json",
-      "sha256": "580ba460cc2023120aba5794dabcd1fb7d456756ac05e1ef646e7dc2348ecb7a"
+      "sha256": "68ce77c83ce0b1a39ef98b0e2b4ba67ecc7ebf0dcd3e351deaeeef9ec0621af7"
     },
     {
       "path": "site/drizzle/meta/0000_snapshot.json",
@@ -284,7 +284,7 @@
     },
     {
       "path": "site/server/worker.js",
-      "sha256": "4ef4c5e5884784ef8819d4e59eadda70a377feeb80ef98ab7077b2af945cfcf1"
+      "sha256": "569fd091a1fc7f28e3fb6c472323bccf2bcc2d3298181afdce167640642ec2ed"
     },
     {
       "path": "site/server/world-community.js",
@@ -512,7 +512,7 @@
     },
     {
       "path": "site/src/library.js",
-      "sha256": "f51a2df8fa9aad77b520f0b2ce3232c35e60a725471a12db861f63022456281a"
+      "sha256": "9dab7e510cacfb7c2817f37f4b41845c7b37276b8d369cdc20ca7329109cb23f"
     },
     {
       "path": "site/src/living-landscape.mjs",
@@ -856,7 +856,7 @@
     },
     {
       "path": "site/src/vault-storage.mjs",
-      "sha256": "3f1921183097abc83b547d104920a396427e5c72bc3b46caa666d97cd150af10"
+      "sha256": "c889b946ec8d1043141098b55e17429792640e1a9e162c66e62af0a6e8f84831"
     },
     {
       "path": "site/src/wheel-chart.mjs",
@@ -1160,7 +1160,7 @@
     },
     {
       "path": "site/server/qwen-ai.mjs",
-      "sha256": "8578b62c0e8f1026fc6a0e6883d8e1490349b7070a0bb237d4f41b7684f2d500"
+      "sha256": "c9c908bf18b2d2a35b54d5ab2d0a75e00042bcea19cba2cca83b2a8d7eb80495"
     },
     {
       "path": "site/src/local-ai-contracts.mjs",
@@ -1176,11 +1176,11 @@
     },
     {
       "path": "site/src/local-ai.js",
-      "sha256": "c40556a2194354abd14bd1207f0eca23b0a1b06605529487d81d387f45d014ca"
+      "sha256": "6927a1eb5ab2c21ee03f585df28a8ed269ef9c00d6afc3e6d8f46cda8e04e863"
     },
     {
       "path": "site/src/local-ai.css",
-      "sha256": "4af000247d11be6fbff7cb9ca3e2e31c77a6f78f14d1791d9fa46fa056bd120a"
+      "sha256": "efb9fb6a14fa854cb72ae70c84abe49fd00e620ab49ce96e2c61516d5b3c5ea0"
     },
     {
       "path": "site/tests/local-ai.test.mjs",
@@ -1189,6 +1189,42 @@
     {
       "path": "site/tests/qwen-ai.test.mjs",
       "sha256": "c5f41689832ab0cf12ec96c1e6df8890e8fa7cddb0986ebe20a9917ba3aee9a5"
+    },
+    {
+      "path": "site/src/ai-provider-catalog.mjs",
+      "sha256": "fe0726a546a97f6a50f624889b5df291604f14db768067044ffaa792ddc10e01"
+    },
+    {
+      "path": "site/src/personal-ai.js",
+      "sha256": "0b8f347803084a19fad4479e790a21532011ca551f4426537bf97fe428b92590"
+    },
+    {
+      "path": "site/src/research-agent.js",
+      "sha256": "6b5aca0c7c7fd0d142ac08152615612ef5873205cef6157791a7c25713c9f3b5"
+    },
+    {
+      "path": "site/src/research-agent-contracts.mjs",
+      "sha256": "c8702b576c055055af140dcfbe5234fe8f1e3d26f6fe91abc2404dd5ae90b862"
+    },
+    {
+      "path": "site/server/personal-ai.mjs",
+      "sha256": "29376cf5631df7beea35becf2d98986e057bb833538ee8a4ca842df6483f054a"
+    },
+    {
+      "path": "site/server/research-agent.mjs",
+      "sha256": "bb99b3f39aa5eb64146ace9193b58c729e963877088e6bb58788068fb4aaa416"
+    },
+    {
+      "path": "site/drizzle/0017_personal_ai_usage.sql",
+      "sha256": "767b9e7205d2d2641d85243a1a116c513954f90bbd0129734d8142cd90317d49"
+    },
+    {
+      "path": "site/tests/personal-ai.test.mjs",
+      "sha256": "201640b953c8779f5877f418791942f0ccafaf55f7904c5039dc2d5d89952eda"
+    },
+    {
+      "path": "site/docs/personal-ai-and-agent.md",
+      "sha256": "71ccb4cf544b937c03104f9fa7190063e1e42a49533062d5457cf5f39d46bfba"
     },
     {
       "path": "desktop/README.md",

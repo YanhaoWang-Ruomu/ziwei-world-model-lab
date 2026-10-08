@@ -15,7 +15,7 @@ function indexedStore(name='ziwei-private-vault'){
   };
 }
 export function createVault({storage,namespace='ziwei-private-vault',lockEvent='ziwei:vault-locked'}={}){
-  if(!['ziwei-private-vault','ziwei-local-ai'].includes(namespace))throw Error('Unknown local store');
+  if(!['ziwei-private-vault','ziwei-local-ai','ziwei-personal-ai'].includes(namespace))throw Error('Unknown local store');
   storage??=indexedStore(namespace);
   let key=null,owner='',epoch=0;
   const lock=()=>{key=null;epoch++;globalThis.document?.dispatchEvent(new Event(lockEvent));};
