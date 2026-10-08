@@ -5,21 +5,24 @@ const root = path.resolve(__dirname, '..');
 const source = path.join(root, 'src');
 const destination = path.join(root, 'dist');
 async function build() {
+  const {approvedAsset}=await import(require('node:url').pathToFileURL(path.join(root,'server','downloads-core.mjs')).href);
+  const installers=JSON.parse(fs.readFileSync(path.join(source,'downloads-manifest.json'),'utf8'));
+  if(Object.values(installers).some(entry=>!approvedAsset(entry)))throw Error('Publish and verify the installer assets before building the website.');
   // Resolve and verify the sole disposable output before replacing the old static build.
   if (path.dirname(destination) !== root || path.basename(destination) !== 'dist' || (fs.existsSync(destination) && fs.lstatSync(destination).isSymbolicLink())) throw Error('Unsafe build destination');
   // Keep the output directory itself: Windows preview watchers hold a handle to it.
   fs.mkdirSync(destination, {recursive:true});
   const client = path.join(destination, 'client');
   fs.mkdirSync(client, { recursive: true });
-  // Review-only fixtures are never shipped with the full application.
-  for (const name of ['design-preview', 'style-preview']) {
+  // Preview fixtures and separately hosted installers are excluded from publication.
+  for (const name of ['design-preview', 'style-preview', 'release-assets']) {
     const preview = path.resolve(client, name);
     if (path.dirname(preview) !== client || (fs.existsSync(preview) && fs.lstatSync(preview).isSymbolicLink())) throw Error('Unsafe preview output');
     fs.rmSync(preview, {recursive:true,force:true});
   }
   // Book data and images are never public static assets: every read goes through authorization.
   for (const name of fs.readdirSync(source)) {
-    if (!['data','book-pages'].includes(name)) fs.cpSync(path.join(source,name),path.join(client,name),{recursive:true});
+    if (!['data','book-pages','release-assets'].includes(name)) fs.cpSync(path.join(source,name),path.join(client,name),{recursive:true});
   }
   const vendor=path.join(client,'vendor');fs.mkdirSync(vendor,{recursive:true});
   function copy(module,relative,target){const base=fs.realpathSync(path.join(root,'node_modules',module));fs.mkdirSync(path.dirname(target),{recursive:true});fs.cpSync(path.join(base,relative),target,{recursive:true});}

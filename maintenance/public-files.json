@@ -276,7 +276,10 @@
     "tests/library-evidence.test.mjs",
     "tests/library-evidence-ui.test.mjs",
     "tests/library-evidence.http.mjs",
-    "licenses/onnxruntime-LICENSE"
+    "licenses/onnxruntime-LICENSE",
+    "scripts/publish-installers.mjs",
+    "server/downloads-core.mjs",
+    "tests/downloads.test.mjs"
   ],
   "desktop": [
     "README.md",

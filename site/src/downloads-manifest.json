@@ -6,7 +6,8 @@
     "url": "/downloads/GuanXingTai-Setup-1.0.1-x64.exe",
     "type": "application/octet-stream",
     "size": 111543123,
-    "sha256": "b567c75d8d0048bfbb26e38524c704d656ce52b4d76054e9fd866d6736d76574"
+    "sha256": "b567c75d8d0048bfbb26e38524c704d656ce52b4d76054e9fd866d6736d76574",
+    "assetUrl": "https://github.com/YanhaoWang-Ruomu/ziwei-world-model-lab/releases/download/windows-v1.0.1/GuanXingTai-Setup-1.0.1-x64.exe"
   },
   "android": {
     "version": "1.0.2",
@@ -16,6 +17,7 @@
     "url": "/downloads/GuanXingTai-1.0.2.apk",
     "type": "application/vnd.android.package-archive",
     "size": 86486,
-    "sha256": "a9e2626b266f75ff556cc9a3f340d69baaf27ac63b2f613f3a35bcdfa5fedd4b"
+    "sha256": "a9e2626b266f75ff556cc9a3f340d69baaf27ac63b2f613f3a35bcdfa5fedd4b",
+    "assetUrl": "https://github.com/YanhaoWang-Ruomu/ziwei-world-model-lab/releases/download/android-v1.0.2/GuanXingTai-1.0.2.apk"
   }
 }

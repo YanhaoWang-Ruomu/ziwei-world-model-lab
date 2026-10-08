@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "e16c71cf39ad6972921236c201617cdbd03b4780",
+  "sourceCommit": "550a64d38a2873e07f792dcfd9a6d712943e4b2e",
   "files": [
     {
       "path": "site/db/schema.ts",
@@ -164,7 +164,7 @@
     },
     {
       "path": "site/scripts/build.js",
-      "sha256": "04f901d5608f12bc1e174bcb0ebc6b63a145cc13bece655351b64dcc5b2d9edf"
+      "sha256": "f52df1d9ef534438e62174d6f815318b70343b251c5ef1974eb6888d438e2cd7"
     },
     {
       "path": "site/scripts/preview.mjs",
@@ -460,7 +460,7 @@
     },
     {
       "path": "site/src/downloads-manifest.json",
-      "sha256": "320396801f181c7b88e947c44c4839dd8c504d4237c19d36ff103077aaf36434"
+      "sha256": "1ce5c99d868327795846c8a55b3ea769a40aae2cb5cd75193c111d7b250db14f"
     },
     {
       "path": "site/src/earth-globe.mjs",
@@ -1105,6 +1105,18 @@
     {
       "path": "site/licenses/onnxruntime-LICENSE",
       "sha256": "2f07c72751aed99790b8a4869cf2311df85a860b22ded05fa22803587a48922c"
+    },
+    {
+      "path": "site/scripts/publish-installers.mjs",
+      "sha256": "4d4d5e7551d2abb4db715032f2d1543ba5a90cd1f2937e79627e466c689124a9"
+    },
+    {
+      "path": "site/server/downloads-core.mjs",
+      "sha256": "6b1a536340dd115f99b42220eff279b0ca08380dd03acbdeb87b79943db1c2b4"
+    },
+    {
+      "path": "site/tests/downloads.test.mjs",
+      "sha256": "1a8e3e7d53d4b7e6aa2a9940d363cc3d68065ac57a8f6cfb05f882dd1c88fef4"
     },
     {
       "path": "desktop/README.md",
