@@ -189,6 +189,9 @@ export const personalAiUsage=sqliteTable('personal_ai_usage',{
   ownerHash:text('owner_hash').notNull(),requestId:text('request_id').notNull(),day:text('day').notNull(),
   status:text('status').notNull(),inputTokens:integer('input_tokens'),outputTokens:integer('output_tokens'),
 },t=>[primaryKey({columns:[t.ownerHash,t.requestId]}),index('personal_ai_usage_day').on(t.ownerHash,t.day)]);
+export const discoveryReceipts=sqliteTable('discovery_receipts',{
+  ownerHash:text('owner_hash').notNull(),requestId:text('request_id').notNull(),resultHash:text('result_hash').notNull(),createdAt:integer('created_at').notNull(),
+},t=>[primaryKey({columns:[t.ownerHash,t.requestId]})]);
 export const techniqueHistory=sqliteTable('technique_history',{
   id:integer('id').primaryKey({autoIncrement:true}),techniqueId:text('technique_id').notNull(),
   revision:integer('revision').notNull(),releaseVersion:integer('release_version').notNull(),

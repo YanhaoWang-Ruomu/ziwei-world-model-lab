@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "380b9df5707a6c3801f596be32ef572976f525e3",
+  "sourceCommit": "a4e32953f88191e9282b64792dddd47b64c44809",
   "files": [
     {
       "path": "site/db/schema.ts",
-      "sha256": "2ada47e2087113da7dfc025eddbf938b9dc34d8f912a334a8996294e2f578f48"
+      "sha256": "c56ea6e060c309420147b31090c353ecb1c34a0e6cefa8404c87a19fc19bd8ab"
     },
     {
       "path": "site/docs/AI_ACCEPTANCE.md",
@@ -21,6 +21,10 @@
     {
       "path": "site/docs/PASSWORD_RECOVERY.md",
       "sha256": "7a2d3dc7136dd7c89a5e1083f827b4f4d6996723d9233e4f764ee13631922090"
+    },
+    {
+      "path": "site/docs/PUBLIC_DISCOVERY.md",
+      "sha256": "90cbbce7fcd477f2caaaf3d83cfbeeab258278527ad0e4fbfdf901155c6a0105"
     },
     {
       "path": "site/docs/ai-assistants.md",
@@ -115,6 +119,10 @@
       "sha256": "767b9e7205d2d2641d85243a1a116c513954f90bbd0129734d8142cd90317d49"
     },
     {
+      "path": "site/drizzle/0018_discovery_receipts.sql",
+      "sha256": "02a1f6d8541a9b7462932f078707755c86183dcfd883bb2b267380169a03caf3"
+    },
+    {
       "path": "site/drizzle/meta/0000_snapshot.json",
       "sha256": "c19e8b2924661a0626aa4d9b8444d30efbe9487a9b88206fd95306aad5979379"
     },
@@ -184,7 +192,7 @@
     },
     {
       "path": "site/drizzle/meta/_journal.json",
-      "sha256": "68ce77c83ce0b1a39ef98b0e2b4ba67ecc7ebf0dcd3e351deaeeef9ec0621af7"
+      "sha256": "a3c11e90fa4f415245f52cb8aad37d793b35911f590f96011c044ffbcc65bda9"
     },
     {
       "path": "site/evaluations/baseline.json",
@@ -336,7 +344,11 @@
     },
     {
       "path": "site/server/personal-ai.mjs",
-      "sha256": "6c8101a000b63ef77c7b85693d11c29099fb8a5396c149a34944b992a0db57c5"
+      "sha256": "428743063e132ae361a47b6a14d62f91b55f0b91db2f0a4fdec232a4fb45abc9"
+    },
+    {
+      "path": "site/server/discovery.mjs",
+      "sha256": "6fda56c8608ffd482ad1ea56be1ced2de9cdd3f7a143757104f15a1b802cdb08"
     },
     {
       "path": "site/server/qwen-ai.mjs",
@@ -396,7 +408,7 @@
     },
     {
       "path": "site/server/worker.js",
-      "sha256": "98a3a5e9275a728bdac7ab4841958f92bbf3b7ae710ef0d80c105d1b24d538c5"
+      "sha256": "524cce8bcafb3c8d6f5f17a8b38c53e543e328df9784576647eba31aaf1a4af2"
     },
     {
       "path": "site/server/world-community.js",
@@ -640,7 +652,7 @@
     },
     {
       "path": "site/src/library.js",
-      "sha256": "da2fd0b2db7fb69c5cd5a40c5e048564772fbbc6b5211926b7149b7c3358fe62"
+      "sha256": "9dba479e538b5b7b00716da44dec7997509b5af44458950bc119e415d980e5ee"
     },
     {
       "path": "site/src/living-landscape.mjs",
@@ -664,11 +676,11 @@
     },
     {
       "path": "site/src/local-ai.css",
-      "sha256": "16ebe98db7354e3a4f1db1a021e102cb1416f25bd273f26f124082d274c0f293"
+      "sha256": "27ed7edc3d64b7e376149b1fb50e293ad24664146f801c3ed618563989e499e6"
     },
     {
       "path": "site/src/local-ai.js",
-      "sha256": "8f403e1f4c93fafa13265cbd10a724c0228bae0db22ad2ffba9a81725d015ada"
+      "sha256": "80b8d88597d500b3c3b01932429346ff0c82d919112aeee0877348e40cd4c9a3"
     },
     {
       "path": "site/src/local-semantic.mjs",
@@ -740,7 +752,15 @@
     },
     {
       "path": "site/src/personal-ai.js",
-      "sha256": "f6eefef7999e421d0db86769dce494a183f36cd7bcd6319997386594e2b2931d"
+      "sha256": "858c01458b70377897ba6e928d07719d5c57267e4604679d2624249c1a4e75d9"
+    },
+    {
+      "path": "site/src/discovery-contracts.mjs",
+      "sha256": "b1cbddc6631a8514f9856889d6f668dfec69f4f430816a325efb6766e08b9d90"
+    },
+    {
+      "path": "site/src/discovery.js",
+      "sha256": "61ffa5c91e27c837ef2021f84c207202a8726b290887c172cf8842edc0a557af"
     },
     {
       "path": "site/src/platform-login.mjs",
@@ -1209,6 +1229,18 @@
     {
       "path": "site/tests/personal-ai.test.mjs",
       "sha256": "850d0a217238435e66e94193f9d2fa2022efb1514f4ce9206ecbbd7d74fc6f30"
+    },
+    {
+      "path": "site/tests/discovery.test.mjs",
+      "sha256": "f5d34cbb94b28e806bbaf88a574f6572cd285d43962034e2affc465c3559a619"
+    },
+    {
+      "path": "site/tests/discovery.http.mjs",
+      "sha256": "ff80749d966576947e17572ea5681d1f07a7d5df467332d48931c56215fdc16e"
+    },
+    {
+      "path": "site/tests/discovery-ui.test.mjs",
+      "sha256": "ae7910d1dfc758384b75af073c3e4b14cb5b5acaaaf6d21d5db3f3dc448c39fc"
     },
     {
       "path": "site/tests/qwen-ai.test.mjs",

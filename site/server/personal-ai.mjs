@@ -7,16 +7,22 @@ export function allowedEndpoints(env){
   // Operator-controlled, exact base paths; user input can never extend this list.
   return String(env.AI_ALLOWED_BASE_URLS||'').split(',').filter(Boolean).map(x=>canonicalBase(x.trim()));
 }
-export async function requestPersonalAi({env={},db,viewer,connection,id,messages,fetcher=fetch}){
+export async function reservePersonalAi({db,viewer,id}){
   if(!viewer?.id)throw new HttpError(401,'请先登录自己的账户。');
-  let config;try{config=validateConnection(connection,allowedEndpoints(env));}catch(e){throw new HttpError(400,e.message);}
-  if(!/^[a-f0-9-]{36}$/.test(id)||new TextEncoder().encode(JSON.stringify(messages)).length>18000)throw new HttpError(400,'任务标识或输入长度不正确。');
+  if(typeof id!=='string'||!/^[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}$/.test(id))throw new HttpError(400,'任务标识不正确。');
   const owner=await digest(viewer.id),day=new Date().toISOString().slice(0,10);
   // Count only: no key, source text, model response or monetary estimate is persisted.
   const reservation=await db.prepare(`INSERT OR IGNORE INTO personal_ai_usage(owner_hash,request_id,day,status)
     SELECT ?,?,?,'reserved' WHERE (SELECT COUNT(*) FROM personal_ai_usage WHERE owner_hash=? AND day=?)<100`).bind(owner,id,day,owner,day).run();
   if(reservation.meta?.changes!==1)throw new HttpError(429,'此请求已发送，或已达到个人每日 100 次上限（UTC 换日）。不会自动重复扣费；请检查服务商用量。');
   const update=async(status,input=null,output=null)=>db.prepare('UPDATE personal_ai_usage SET status=?,input_tokens=?,output_tokens=? WHERE owner_hash=? AND request_id=?').bind(status,input,output,owner,id).run();
+  return {owner,update};
+}
+export async function requestPersonalAi({env={},db,viewer,connection,id,messages,fetcher=fetch}){
+  if(!viewer?.id)throw new HttpError(401,'请先登录自己的账户。');
+  let config;try{config=validateConnection(connection,allowedEndpoints(env));}catch(e){throw new HttpError(400,e.message);}
+  if(new TextEncoder().encode(JSON.stringify(messages)).length>18000)throw new HttpError(400,'输入长度不正确。');
+  const {update}=await reservePersonalAi({db,viewer,id});
   const payload={model:config.model,messages,max_tokens:1536,response_format:{type:'json_object'},stream:false};
   if(config.baseUrl.includes('dashscope'))payload.enable_thinking=false;
   if(config.baseUrl==='https://api.deepseek.com/v1')payload.thinking={type:'disabled'};

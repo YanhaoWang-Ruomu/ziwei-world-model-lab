@@ -12,6 +12,7 @@ const fold=x=>window.OpenCC?.Converter({from:'t',to:'cn'})(x)||x;
 const tick=()=>new Date().toISOString();
 const modelKey=(provider='local')=>provider==='native'?NATIVE_MODEL+':prompt-1':provider==='personal'?'personal-api:prompt-1':provider==='qwen'?'qwen-plus-2025-12-01:prompt-1':JSON.stringify(MODEL);
 export const aiJournal={get unlocked(){return vault.unlocked;},async put(task){if(task.kind!=='ai-agent')throw Error('研究记录格式不符。');await persist(task);},get:id=>vault.get(id),list:()=>vault.list({catalog:false,kind:'ai-agent'}),remove:id=>vault.remove(id)};
+export const discoveryJournal={get unlocked(){return vault.unlocked;},async put(task){if(task.kind!=='ai-discovery')throw Error('联合查询记录格式不符。');await persist(task);},get:id=>vault.get(id),list:()=>vault.list({catalog:false,kind:'ai-discovery'}),remove:id=>vault.remove(id)};
 async function access(input){
   const session=await api('/api/session');
   if((session.userId||'')!==(viewer.userId||'')||!!session.core!==!!viewer.core)throw Error('账户或权限已变化，请重新进入当前页面。');
@@ -119,7 +120,7 @@ export function initLocalAi({api:request,el,btn}){
     const blob=new Blob([JSON.stringify(await vault.backup())],{type:'application/json'}),url=URL.createObjectURL(blob),a=el('a');a.href=url;a.download='观星台-AI研究册-加密备份.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);
   })));
   const restoreFile=el('input'),restorePassword=el('input');restoreFile.type='file';restoreFile.accept='.json';restoreFile.setAttribute('aria-label','AI 研究册加密备份文件');restorePassword.type='password';restorePassword.placeholder='备份原密码';restorePassword.setAttribute('aria-label','备份原密码');
-  const restore=el('details');restore.append(el('summary','','恢复加密备份'),restoreFile,restorePassword,btn('恢复到已解锁研究册',safe(async()=>{const file=restoreFile.files[0];if(!file||file.size>20*1024*1024)throw Error('请选择 20 MB 以内的研究册备份。');const value=JSON.parse(await file.text());if(value?.format!=='ziwei-encrypted-vault-v1'||value.records?.some(r=>r.data&&!['ai-task','ai-agent'].includes(r.kind)))throw Error('请选择 AI 研究册备份。');await vault.restore(value,restorePassword.value);restorePassword.value='';restoreFile.value='';await refreshNotebook();message.textContent='研究册已恢复。';})));
+  const restore=el('details');restore.append(el('summary','','恢复加密备份'),restoreFile,restorePassword,btn('恢复到已解锁研究册',safe(async()=>{const file=restoreFile.files[0];if(!file||file.size>20*1024*1024)throw Error('请选择 20 MB 以内的研究册备份。');const value=JSON.parse(await file.text());if(value?.format!=='ziwei-encrypted-vault-v1'||value.records?.some(r=>r.data&&!['ai-task','ai-agent','ai-discovery'].includes(r.kind)))throw Error('请选择 AI 研究册备份。');await vault.restore(value,restorePassword.value);restorePassword.value='';restoreFile.value='';await refreshNotebook();message.textContent='研究册已恢复。';document.dispatchEvent(new Event('ziwei:ai-unlocked'));})));
   root.append(auth,actions,restore,message,list,compare,detail);document.querySelector('#world')?.append(root);message.setAttribute('role','status');
   let selected=[];
   async function open(task){

@@ -2,6 +2,7 @@ import {createVault} from './vault-storage.mjs';
 import {AI_PROVIDERS,validateConnection} from './ai-provider-catalog.mjs';
 import {READING_FIXTURES} from './ai-evaluation-fixtures.mjs';
 import {vaultPasswordReset} from './vault-password-reset.mjs';
+import {supportsWebDiscovery} from './discovery-contracts.mjs';
 const vault=createVault({namespace:'ziwei-personal-ai',lockEvent:'ziwei:personal-ai-locked'});
 let viewer={},epoch=0,api,activeId='',allowed=[],refresh=()=>{},controllers=new Set();
 const changed=()=>document.dispatchEvent(new Event('ziwei:personal-ai-changed'));
@@ -10,10 +11,10 @@ async function account(){const ticket=epoch,s=await api('/api/session');if(ticke
 export async function personalAiStatus(){
   if(!vault.unlocked)return {ready:false,message:'请到账户 → 我的 AI 接口，添加并解锁个人配置。'};
   const ticket=await account(),p=await vault.get(activeId);if(ticket!==epoch)throw Error('账户已变化。');
-  return {ready:!!p?.verifiedAt,id:p?.id,verifiedAt:p?.verifiedAt,name:p?.name,model:p?.model,message:p?.verifiedAt?`${p.name} · ${p.model} · 已验证`:'请先验证配置并设为当前使用。'};
+  return {ready:!!p?.verifiedAt,id:p?.id,verifiedAt:p?.verifiedAt,name:p?.name,model:p?.model,webSearch:supportsWebDiscovery(p?.baseUrl,p?.model),message:p?.verifiedAt?`${p.name} · ${p.model} · 已验证`:'请先验证配置并设为当前使用。'};
 }
 export async function callPersonalAi(path,data,{signal,profile}={}){
-  if(!['/api/ai/personal/answer','/api/ai/research/step','/api/ai/personal/evaluate'].includes(path))throw Error('不支持此 AI 操作。');
+  if(!['/api/ai/personal/answer','/api/ai/research/step','/api/ai/personal/evaluate','/api/ai/discovery/answer'].includes(path))throw Error('不支持此 AI 操作。');
   const ticket=await account(),p=await vault.get(activeId);if(ticket!==epoch||!p?.verifiedAt)throw Error('请先验证并选用个人 API 配置。');
   if(profile&&(profile.id!==p.id||profile.verifiedAt!==p.verifiedAt))throw Error('个人接口已切换或修改，请新建研究以使用新配置。');
   const controller=new AbortController();controllers.add(controller);const abort=()=>controller.abort();signal?.addEventListener('abort',abort,{once:true});if(signal?.aborted)controller.abort();
