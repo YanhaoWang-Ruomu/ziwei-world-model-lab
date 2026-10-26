@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "85688f0c9b97482135d55ceb28705498f15627d8",
+  "sourceCommit": "380b9df5707a6c3801f596be32ef572976f525e3",
   "files": [
     {
       "path": "site/db/schema.ts",
@@ -16,7 +16,7 @@
     },
     {
       "path": "site/docs/LOCAL_MULTIMODAL_AI.md",
-      "sha256": "3d0f83ec1b6a23fe197bd06b5836ac1db4c9ef6f347f6f9c8ffcd7244527d0c1"
+      "sha256": "174ae17aa6b9c33a9a44cedc193491475f11cde413a2fa90e5a2503fc84b8dc0"
     },
     {
       "path": "site/docs/PASSWORD_RECOVERY.md",
@@ -592,7 +592,7 @@
     },
     {
       "path": "site/src/downloads-manifest.json",
-      "sha256": "1ce5c99d868327795846c8a55b3ea769a40aae2cb5cd75193c111d7b250db14f"
+      "sha256": "fbe6a831e510ce122d687e5d4a424f74927a3932000da700caa1875d66ab1645"
     },
     {
       "path": "site/src/earth-globe.mjs",
@@ -692,7 +692,7 @@
     },
     {
       "path": "site/src/native-ai.mjs",
-      "sha256": "b2ec4109699ef0ea41acf92e538f0980531bd624e0a0b677a4bc5c5def747f86"
+      "sha256": "f0812dfb70d7fd9eef402484c5f444366e149887778dd0cac6e35ed603562d79"
     },
     {
       "path": "site/src/native-research.mjs",
@@ -1348,7 +1348,7 @@
     },
     {
       "path": "desktop/README.md",
-      "sha256": "303f0b662f5afe988932460a2d25929ad282c1134908a38f0753dee123fa955e"
+      "sha256": "ce00d0872daa3fc0acdbff1ea45781719b589f9b569755c7ef928b9d83130795"
     },
     {
       "path": "desktop/app/icon.png",
@@ -1372,7 +1372,7 @@
     },
     {
       "path": "desktop/app/policy.cjs",
-      "sha256": "15cee37b4d28b034d1794ce54098f1f99e694712743252ec0f62547d4ef71834"
+      "sha256": "ff5adb9ff80d73897263647182ae1068b5925f9d4b9bc0363c938eead34be7cb"
     },
     {
       "path": "desktop/app/update-policy.cjs",
@@ -1384,7 +1384,7 @@
     },
     {
       "path": "desktop/app/window.cjs",
-      "sha256": "2f6878a3f3154c05ce3fb56e8c843bb655f14f8507f65d579dab4f3bf30c4711"
+      "sha256": "cd0048d1574d684df9721d24540543a820abf8b472756843440e06c65ead861a"
     },
     {
       "path": "desktop/build/icon.ico",
@@ -1392,7 +1392,7 @@
     },
     {
       "path": "desktop/package.json",
-      "sha256": "1f5850088c0bf91a34171f76e95bbdeb06d19397f6bfde7e504040a3b6503b3b"
+      "sha256": "cb45f7e9b1cffb3393834358e5e1ebe82d828a9b4ee63c4a19d8d02d08eb354b"
     },
     {
       "path": "desktop/pnpm-lock.yaml",
@@ -1416,7 +1416,7 @@
     },
     {
       "path": "desktop/tests/policy.test.cjs",
-      "sha256": "4813f839df5f24412973d5457693e00dc01be20f4c9c65bf3b0073db98df998a"
+      "sha256": "4150c99225d5242b9aa1e029361b51a3d1548d93f3a512dff1a18c806cad7d03"
     },
     {
       "path": "desktop/tests/smoke.cjs",

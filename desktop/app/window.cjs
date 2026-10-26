@@ -10,7 +10,7 @@ const securePreferences = {
   webviewTag: false, autoplayPolicy: 'no-user-gesture-required', spellcheck: false
 };
 
-function createDesktop({ session, stateDir, site = SITE, hidden = false, version = '1.0.1', checkUpdates = () => {} }) {
+function createDesktop({ session, stateDir, site = SITE, hidden = false, version = '1.0.2', checkUpdates = () => {} }) {
   const stateFile = path.join(stateDir, 'window-state.json');
   let saved = {};
   try { saved = JSON.parse(fs.readFileSync(stateFile, 'utf8')); } catch { /* First launch. */ }

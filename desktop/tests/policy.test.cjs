@@ -26,3 +26,12 @@ test('download filename cannot select a path or Windows device', () => {
   assert.equal(p.cleanFilename('CON.txt'), '观星台导出文件');
   assert.equal(p.cleanFilename('a:b?.json'), 'a_b_.json');
 });
+test('local AI permits loopback only from the exact application origin', () => {
+  assert.ok(p.allowedPermission('loopback-network', p.SITE + '/#account'));
+  for (const origin of ['https://other.test', p.SITE + '.evil.test', 'http://' + new URL(p.SITE).host, 'file:///tmp/test', 'invalid']) {
+    assert.equal(p.allowedPermission('loopback-network', origin), false);
+  }
+  for (const permission of ['local-network', 'local-network-access']) {
+    assert.equal(p.allowedPermission(permission, p.SITE), false);
+  }
+});

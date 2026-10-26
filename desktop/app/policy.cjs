@@ -16,7 +16,9 @@ function authRoute(value, site = SITE) {
   return sameSite(value, site) && ['/signin-with-chatgpt', '/signout-with-chatgpt'].includes(new URL(value).pathname);
 }
 function allowedPermission(permission, origin, site = SITE) {
-  return permission === 'fullscreen' && sameSite(origin, site);
+  // The paired AI service listens on this computer, not the LAN. Keep the
+  // broader local-network permissions denied and trust only our exact origin.
+  return ['fullscreen', 'loopback-network'].includes(permission) && sameSite(origin, site);
 }
 function cleanFilename(value) {
   const name = String(value || '观星台导出文件').split(/[\\/]/).pop()

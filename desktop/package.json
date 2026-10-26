@@ -1,13 +1,13 @@
 {
   "name": "guanxingtai-desktop",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "观星台 Windows 桌面版",
   "author": "观星台",
   "private": true,
   "main": "app/main.cjs",
   "scripts": {
     "start": "electron .",
-    "test": "node --test tests/policy.test.cjs",
+    "test": "node --test tests/policy.test.cjs tests/updates.test.cjs",
     "test:desktop": "electron tests/smoke.cjs",
     "dist": "node scripts/build.cjs"
   },

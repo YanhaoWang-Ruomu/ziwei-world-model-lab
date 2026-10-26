@@ -26,6 +26,7 @@ export function initNativeAi({el,btn}){
   root.append(el('h3','','本机图文 AI'),el('p','muted','启动电脑上的本机 AI 服务，复制连接码后验证。连接只在当前页面会话中保留；退出账户即断开。连接后可在研究对话、书库问答和技法整理中选择本机图文模型。'),link,code,
     btn('连接并验证',async()=>{status.textContent='正在连接本机模型…';try{const candidate=code.value.trim();code.value='';await nativeAi.connect(candidate);status.textContent=`已连接 ${nativeAi.model} · 图文处理留在本机，无 API 调用费用。`;document.dispatchEvent(new Event('ziwei:native-ai-connected'));}catch(e){status.textContent=e.message;}}),
     btn('断开本机 AI',()=>{nativeAi.disconnect();status.textContent='本页面已断开。电脑服务仍在运行。';document.dispatchEvent(new Event('ziwei:native-ai-disconnected'));}),status);
+  root.append(el('p','muted','此功能连接当前电脑：Windows 客户端请使用 1.0.2 或更新版本。手机上的本机地址指向手机，无法连接电脑模型；手机请使用个人 AI 接口。'));
   const clear=()=>{nativeAi.disconnect();code.value='';status.textContent='';document.dispatchEvent(new Event('ziwei:native-ai-disconnected'));};
   document.addEventListener('ziwei:logout',clear);document.addEventListener('ziwei:session',clear);window.addEventListener('pagehide',clear);document.querySelector('#account')?.append(root);return {root};
 }

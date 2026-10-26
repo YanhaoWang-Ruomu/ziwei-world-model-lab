@@ -1,13 +1,13 @@
 {
   "windows": {
-    "version": "1.0.1",
-    "notes": "新增启动检查更新、下载校验与安装提醒；修复 Windows 图标引用。",
-    "filename": "GuanXingTai-Setup-1.0.1-x64.exe",
-    "url": "/downloads/GuanXingTai-Setup-1.0.1-x64.exe",
+    "version": "1.0.2",
+    "notes": "支持连接此电脑上的本机图文 AI；保留启动更新提醒、下载校验和现有账户资料。模型需单独安装启动。",
+    "filename": "GuanXingTai-Setup-1.0.2-x64.exe",
+    "url": "/downloads/GuanXingTai-Setup-1.0.2-x64.exe",
     "type": "application/octet-stream",
-    "size": 111543123,
-    "sha256": "b567c75d8d0048bfbb26e38524c704d656ce52b4d76054e9fd866d6736d76574",
-    "assetUrl": "https://github.com/YanhaoWang-Ruomu/ziwei-world-model-lab/releases/download/windows-v1.0.1/GuanXingTai-Setup-1.0.1-x64.exe"
+    "size": 111543231,
+    "sha256": "2f1c701e8fc9d862bf0714cb9ddebe64d7ee5968b28b483751c2d2b6fc58181a",
+    "assetUrl": "https://github.com/YanhaoWang-Ruomu/ziwei-world-model-lab/releases/download/windows-v1.0.2/GuanXingTai-Setup-1.0.2-x64.exe"
   },
   "android": {
     "version": "1.0.2",
