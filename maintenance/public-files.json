@@ -344,7 +344,20 @@
     "vendor-models/chi_tra.traineddata",
     "vendor-models/chi_tra_vert.traineddata",
     "wrangler.cloudflare.example.json",
-    "wrangler.jsonc"
+    "wrangler.jsonc",
+    "docs/RESEARCH_LAB_V1.md",
+    "evaluations/run-research.mjs",
+    "server/visual-research.mjs",
+    "src/fixtures/research-vision.png",
+    "src/research-evaluations-ui.js",
+    "src/research-evaluations.mjs",
+    "src/research-report.mjs",
+    "src/visual-research-ui.js",
+    "src/visual-research.mjs",
+    "tests/research-evaluations.test.mjs",
+    "tests/research-lab-ui.test.mjs",
+    "tests/visual-research.http.mjs",
+    "tests/visual-research.test.mjs"
   ],
   "desktop": [
     "README.md",

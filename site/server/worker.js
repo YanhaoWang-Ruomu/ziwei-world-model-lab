@@ -8,6 +8,7 @@ import {qwenRoute} from './qwen-ai.mjs';
 import {researchAgentRoute} from './research-agent.mjs';
 import {personalAiRoute} from './personal-ai.mjs';
 import {discoveryRoute} from './discovery.mjs';
+import {visualResearchRoute} from './visual-research.mjs';
 import {deleteBook,activeBookGuard} from './book-deletion.mjs';
 import * as OpenCC from 'opencc-js';
 import { now, digest, randomToken, identity, assertOrigin, HttpError, bodyBytes, jsonBody, safeText, positiveInt, onlineLevel } from './security.js';
@@ -101,6 +102,7 @@ async function route(request, env) {
   const personalAi=await personalAiRoute(context);if(personalAi!==null)return json(personalAi);
   const researchAi=await researchAgentRoute(context);if(researchAi!==null)return json(researchAi);
   const discovery=await discoveryRoute(context);if(discovery!==null)return json(discovery);
+  const visual=await visualResearchRoute(context);if(visual!==null)return visual instanceof Response?visual:json(visual);
   const activity=await activityHistoryRoute(context);if(activity!==null)return json(activity);
   const attachment=await attachmentRoute(context);if(attachment!==null)return attachment instanceof Response?attachment:json(attachment);
   const scenario=await scenarioRoute(context);if(scenario!==null)return json(scenario);

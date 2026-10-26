@@ -5,6 +5,7 @@ import {createLocalSemantic} from './local-semantic.mjs';
 import {finishPendingSearch,appendResearchFeedback,FEEDBACK_OUTCOMES} from './research-progress.mjs';
 import {nativeAi} from './native-ai.mjs';
 import {localResearchStep} from './native-research.mjs';
+import {researchQuality,researchReport} from './research-report.mjs';
 export function initResearchAgent({api,el,btn,journal=aiJournal,semanticFactory=createLocalSemantic,nativeConnection=nativeAi,nativeStep=localResearchStep}){
   const root=el('section','local-ai-panel research-agent'),goal=el('textarea'),provider=el('select'),confirm=el('input'),save=el('input'),status=el('p'),output=el('div'),history=el('div'),followup=el('input');root.id='research-agent';
   let viewer={},epoch=0,run=null,busy=false,starting=false,controller=null;
@@ -27,9 +28,17 @@ export function initResearchAgent({api,el,btn,journal=aiJournal,semanticFactory=
     output.replaceChildren();if(!run)return;
     if(run.provider==='native'&&!busy&&['inflight','uncertain'].includes(run.status))run.status='paused';
     output.append(el('h3','',run.goal),el('p','muted',`研究建立于 ${run.created} · ${run.bookTitle||'全部公开书库'} · ${run.pace==='auto'?'自动继续':'逐步确认'}`));
+    const quality=researchQuality(run);
+    output.append(el('p','research-progress-strip',`目标已记录 → ${quality.searched?'已检索':'待检索'} → ${quality.sources} 段出处 → ${quality.draftReady?'已生成草稿':'待完成'} → ${quality.feedbackCount?'已有复盘':'待人工复盘'}`));
     for(const event of run.events||[]){const row=el('article','agent-step');row.append(el('strong','',event.action==='search'?'检索公开书库':event.action==='clarify'?'AI 需要你补充':'研究草稿已生成'));if(event.query)row.append(el('p','',event.query+` · 找到 ${event.count} 段候选依据`));if(event.retrieval)row.append(el('small','',event.retrieval));if(event.question)row.append(el('p','',event.question));output.append(row);}
     if(run.result){for(const c of run.result.claims){const source=run.citations[c.source-1];const row=el('article','library-citation');row.append(el('p','',c.text),el('blockquote','',c.quote),el('small','',`${source.title} · 第 ${source.page} 页 / 段`),btn('打开原页',()=>document.dispatchEvent(new CustomEvent('ziwei:open-book-page',{detail:{id:source.book_id,page:source.page,bookLevel:'public'}}))));output.append(row);}for(const item of run.result.uncertainties)output.append(el('p','tech-unresolved',item));output.append(el('p','local-ai-warning','这是待核对的研究草稿。引用检查只能确认原文存在，不能保证解释正确。'));
       output.append(btn('带入个人研究，准备复盘',safely(()=>handoff('research'))));
+      output.append(btn('核对出处并导出研究报告',safely(async()=>{
+        if(busy)throw Error('请先等待当前研究完成。');const ticket=await access(),snapshot=structuredClone(run);
+        const checked=await api('/api/ai/research/sources',{method:'POST',body:JSON.stringify({references:snapshot.citations.map(referenceOnly)})});
+        if(ticket!==epoch||run?.id!==snapshot.id)return;snapshot.citations=checked.citations;parseAgentAction(JSON.stringify(snapshot.result),snapshot,checked.citations);
+        const url=URL.createObjectURL(new Blob([researchReport(snapshot)],{type:'text/plain;charset=utf-8'})),link=el('a');link.href=url;link.download='观星台-公开文献研究报告.txt';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);status.textContent='报告已生成，包含原文出处、运行过程与待确认项。';
+      })));
       if(viewer.core)output.append(btn('带入技法草稿，继续整理',safely(()=>handoff('technique'))));
       renderFeedback();
     }
@@ -109,6 +118,12 @@ export function initResearchAgent({api,el,btn,journal=aiJournal,semanticFactory=
   root.append(start,btn('停止研究',()=>{stop();if(run?.status==='inflight')run.status='uncertain';render();status.textContent=run?.provider==='native'?'已停止本机研究，可从已保存进度继续。':'已停止发送后续步骤。已发送的请求仍可能计费，可在历史中查看已保存进度。';}),status,output,history);
   async function refreshHistory(){const ticket=epoch;history.replaceChildren();if(!journal.unlocked)return;const rows=await journal.list();if(ticket!==epoch)return;history.append(el('h3','','已保存的 AI 研究'));for(let row of rows.sort((a,b)=>b.created.localeCompare(a.created))){const line=el('div','local-ai-record');line.append(el('span','',`${row.created} · ${row.step} 步 · ${row.status==='complete'?'已生成草稿':'可查看进度'}`),btn('核对来源并打开',safely(async()=>{if(busy)throw Error('请先停止当前研究。');stop();output.replaceChildren();run=null;const token=await access();const latest=await journal.get(row.id);if(token!==epoch)return;if(!latest)throw Error('这条研究已被删除，请刷新历史。');row=latest;const checked=await api('/api/ai/research/sources',{method:'POST',body:JSON.stringify({references:row.citations.map(referenceOnly)})});if(token!==epoch)return;row={...row,citations:checked.citations};if(row.result)parseAgentAction(JSON.stringify(row.result),row,row.citations);run=structuredClone(row);goal.value=row.goal;provider.value=row.provider;pace.value=row.pace||'manual';hybrid.checked=Boolean(row.hybrid);save.checked=true;confirm.checked=false;render();})),btn('删除记录',safely(async()=>{if(busy)throw Error('请先停止当前研究。');await journal.remove(row.id);if(run?.id===row.id){run=null;output.replaceChildren();}await refreshHistory();})));history.append(line);}}
   document.querySelector('#world')?.prepend(root);
+  document.addEventListener('ziwei:visual-research-question',e=>{
+    if(busy){status.textContent='请先停止当前研究，再带入书页问题。';return;}
+    const d=e.detail;if(typeof d?.query!=='string'||!Array.isArray(d.pages))return;
+    goal.value=(d.query+'（优先核对 PDF 第 '+d.pages.join('、')+' 页；图文识别尚未校对，请重新检索原文。）').slice(0,400);
+    if(![...book.options].some(o=>o.value===d.bookId))book.append(new Option('书页比较选定的公开材料',d.bookId));book.value=d.bookId;confirm.checked=false;status.textContent='已带入问题和候选页。开始前请确认公开范围；图片识别内容不会直接当作引文。';
+  });
   const clear=()=>{stop();run=null;goal.value='';followup.value='';hybrid.checked=false;book.replaceChildren(new Option('全部公开书库 · 关键词检索','all'));confirm.checked=false;status.textContent='';output.replaceChildren();history.replaceChildren();};
   document.addEventListener('ziwei:session',e=>{viewer=e.detail||{};clear();});document.addEventListener('ziwei:logout',()=>{viewer={};clear();});
   for(const event of ['ziwei:ai-cleared','ziwei:ai-locked','ziwei:personal-ai-locked','ziwei:material-deleting','ziwei:material-deleted'])document.addEventListener(event,clear);

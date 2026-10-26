@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "a4e32953f88191e9282b64792dddd47b64c44809",
+  "sourceCommit": "971aebf3f66b64ab3a3fb883b328dbb9cff8555e",
   "files": [
     {
       "path": "site/db/schema.ts",
@@ -408,7 +408,7 @@
     },
     {
       "path": "site/server/worker.js",
-      "sha256": "524cce8bcafb3c8d6f5f17a8b38c53e543e328df9784576647eba31aaf1a4af2"
+      "sha256": "103c17e893b3f24b5c31c6f5dde339f27b4db577dc008218cbd2be861752ec16"
     },
     {
       "path": "site/server/world-community.js",
@@ -424,7 +424,7 @@
     },
     {
       "path": "site/src/ai-evaluation-fixtures.mjs",
-      "sha256": "eea73e90f5750ad91cdc3228fc2e6c22b85877b275f2005418083b12a55e7310"
+      "sha256": "3b3ca8a67276624c0712e6696f323335413513ab5d6e181d01a2315eaf88329c"
     },
     {
       "path": "site/src/ai-provider-catalog.mjs",
@@ -652,7 +652,7 @@
     },
     {
       "path": "site/src/library.js",
-      "sha256": "9dba479e538b5b7b00716da44dec7997509b5af44458950bc119e415d980e5ee"
+      "sha256": "baff7b7cbeefbc1a3236ca175f9cd58c9a61143958f836a37a2b98df48522e84"
     },
     {
       "path": "site/src/living-landscape.mjs",
@@ -676,11 +676,11 @@
     },
     {
       "path": "site/src/local-ai.css",
-      "sha256": "27ed7edc3d64b7e376149b1fb50e293ad24664146f801c3ed618563989e499e6"
+      "sha256": "e8321abfca8dc763d186876cb2f39684624f3f04c5e5c1e70041fccb6b1331b1"
     },
     {
       "path": "site/src/local-ai.js",
-      "sha256": "80b8d88597d500b3c3b01932429346ff0c82d919112aeee0877348e40cd4c9a3"
+      "sha256": "06e1127ffd5b3bd78c6d2145756c724940347e49a464259e780201ca626a016f"
     },
     {
       "path": "site/src/local-semantic.mjs",
@@ -776,7 +776,7 @@
     },
     {
       "path": "site/src/research-agent.js",
-      "sha256": "3d9398a8df667907f600f8be2f25adadd0ebffb24017f76094ef67f6ce608af2"
+      "sha256": "3d565736c48047331b9f0ee64b51d81fd2bdf164d293c4492c3d8b7040f1b31d"
     },
     {
       "path": "site/src/research-community.css",
@@ -1377,6 +1377,58 @@
     {
       "path": "site/wrangler.jsonc",
       "sha256": "feba3f3df9dc1b5f7a9023df7cf17e4313c4f77cfc7aa509214e2daee178d26e"
+    },
+    {
+      "path": "site/docs/RESEARCH_LAB_V1.md",
+      "sha256": "844e19dc8ae635627e244b733d064ab8a2fc5bfa60f74a0885f684afebb6378e"
+    },
+    {
+      "path": "site/evaluations/run-research.mjs",
+      "sha256": "2220ed08a0d1804ca4cf7896c5882595b82b6433e81a217fbc09db6d91b07395"
+    },
+    {
+      "path": "site/server/visual-research.mjs",
+      "sha256": "ce2f6c3a4aa814c8613b9fe72d318fd5f19c36e13b20650e562e9507ad6be9d4"
+    },
+    {
+      "path": "site/src/fixtures/research-vision.png",
+      "sha256": "0fb86725b01d25c8f7c43de9f14d65a8e218b460f2f6ffce4c19144cfd135b7b"
+    },
+    {
+      "path": "site/src/research-evaluations-ui.js",
+      "sha256": "41557287bcf2a04ad2e70d1ed44f7d1b439d47b4e83fe951abef02200b28d3d6"
+    },
+    {
+      "path": "site/src/research-evaluations.mjs",
+      "sha256": "53ca88b7698d83b5497b7f2cf92d1228f316b1d5560fec7ca39a241fee428be1"
+    },
+    {
+      "path": "site/src/research-report.mjs",
+      "sha256": "4dd52127b5aedeab2456e95a3fd2a76ed2240ae954c2b418254490a8a5ca5f90"
+    },
+    {
+      "path": "site/src/visual-research-ui.js",
+      "sha256": "98816005961626387d2c9d06cda69b41a892bb624dfd112e130e06684531c012"
+    },
+    {
+      "path": "site/src/visual-research.mjs",
+      "sha256": "ec227fa678883524d60ab70cb87c69335ec7c35acc6967beaec57a9958ab2f65"
+    },
+    {
+      "path": "site/tests/research-evaluations.test.mjs",
+      "sha256": "7853a609d3ac557b18d4444b7b5835a5fc27872b2669689fb5d7a4e3e1690d24"
+    },
+    {
+      "path": "site/tests/research-lab-ui.test.mjs",
+      "sha256": "3ce10b5c558f4075ea70aa8e89daf3fa7f99de3f92e0b83a63c73246ad9ca4da"
+    },
+    {
+      "path": "site/tests/visual-research.http.mjs",
+      "sha256": "4ec143ae24a02b8b35671d42e1c28f0d4885ff34a2d2963335cce90a3efd5196"
+    },
+    {
+      "path": "site/tests/visual-research.test.mjs",
+      "sha256": "5dc0036e75ca0dc9cf1d0f9e7e87e196e18b2871ba2f0eedc211f10b8ba25d9d"
     },
     {
       "path": "desktop/README.md",

@@ -11,5 +11,5 @@ export function evaluationInput(id){
 }
 export function evaluationChecks(fixture,result){
  const answer=result.claims.map(x=>x.text).join('\n')+'\n'+result.uncertainties.join('\n');
- return {citationValid:true,expectedMarkersPresent:fixture.markers.every(x=>answer.includes(x)),refusalObserved:result.claims.length===0&&result.uncertainties.length>0,needsHumanReview:true};
+ return {citationValid:result.claims.every(c=>Number.isInteger(c.source)&&typeof c.quote==='string'&&c.quote.trim()&&fixture.sources[c.source-1]?.includes(c.quote)),expectedMarkersPresent:fixture.markers.every(x=>answer.includes(x)),refusalObserved:result.claims.length===0&&result.uncertainties.length>0,needsHumanReview:true};
 }
