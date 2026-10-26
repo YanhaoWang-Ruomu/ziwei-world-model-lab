@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "81bf3835026d4514569d97a711a88f291fd76dd9",
+  "sourceCommit": "1474669a0558dced90a01e0261d14d97403eec4f",
   "files": [
     {
       "path": "site/db/schema.ts",
@@ -13,6 +13,10 @@
     {
       "path": "site/docs/AI_RESEARCH_PROGRESS.md",
       "sha256": "b88e36f9b66013ec45045cab570d26d244e8794fd1546a665ab29294fa061cce"
+    },
+    {
+      "path": "site/docs/LOCAL_MULTIMODAL_AI.md",
+      "sha256": "0b19eef99720b81575eb6800ff79f63c2a552bbf01b9d4b01905d048ff2be96c"
     },
     {
       "path": "site/docs/PASSWORD_RECOVERY.md",
@@ -223,12 +227,44 @@
       "sha256": "27e01fabd242b5a05ad19b8fd33a17821a681efe5a10fad7f3d75e1dbffecff5"
     },
     {
+      "path": "site/scripts/evaluate-local-model.mjs",
+      "sha256": "7f122e167602fb21b9dc71207997036fc39a7154361398d0b170bcedf4eb4611"
+    },
+    {
+      "path": "site/scripts/install-local-model.mjs",
+      "sha256": "165327c0df36d23e1c7e9c1ae1c4c120ff3913681780b7af1110c48abefc9381"
+    },
+    {
+      "path": "site/scripts/local-model-manifest.json",
+      "sha256": "0a58d50be1dba56ccde6599c68f989f7a37bf9ba41b5ed9a9464964694d6c09e"
+    },
+    {
+      "path": "site/scripts/local-model-service.mjs",
+      "sha256": "13c23b6e56dcac87636387cee65cde0c7a62d7273982b1e5e3c023e9b2686840"
+    },
+    {
       "path": "site/scripts/preview.mjs",
       "sha256": "fbc5dc3cd698dd998ebb7fce4a864c34446eb58e379009e0b104261014ff63f2"
     },
     {
       "path": "site/scripts/publish-installers.mjs",
       "sha256": "4d4d5e7551d2abb4db715032f2d1543ba5a90cd1f2937e79627e466c689124a9"
+    },
+    {
+      "path": "site/scripts/setup-local-model.ps1",
+      "sha256": "669696b5e7618a033434f4d6f46ad8eac5beaf67620918ca89eb7cda5fad1e34"
+    },
+    {
+      "path": "site/scripts/start-local-ai-preview.ps1",
+      "sha256": "53f418b667411bf8fd57735ff036d24262d47ebf82b34d137b0fb2a0730ed7b4"
+    },
+    {
+      "path": "site/scripts/start-local-model.ps1",
+      "sha256": "4692760993b435f0372477fae25c5f95917306aeba239e83818b538f8ed550d1"
+    },
+    {
+      "path": "site/scripts/stop-local-model.ps1",
+      "sha256": "885be70e2da8cd80aaa6858dd5ddaaa235effd246f65b710250defe10b1bb6ad"
     },
     {
       "path": "site/scripts/test-preview.mjs",
@@ -604,7 +640,7 @@
     },
     {
       "path": "site/src/library.js",
-      "sha256": "9dab7e510cacfb7c2817f37f4b41845c7b37276b8d369cdc20ca7329109cb23f"
+      "sha256": "da2fd0b2db7fb69c5cd5a40c5e048564772fbbc6b5211926b7149b7c3358fe62"
     },
     {
       "path": "site/src/living-landscape.mjs",
@@ -632,7 +668,7 @@
     },
     {
       "path": "site/src/local-ai.js",
-      "sha256": "6bda6df07ed6b7cdeefb4c341fc04358740e3f823ffa64a0479b19b21ff6d023"
+      "sha256": "8f403e1f4c93fafa13265cbd10a724c0228bae0db22ad2ffba9a81725d015ada"
     },
     {
       "path": "site/src/local-semantic.mjs",
@@ -653,6 +689,18 @@
     {
       "path": "site/src/model.js",
       "sha256": "909e33d063b2bf60e4904440fdb2952d2b28b99b8fba96c843be47db206970a0"
+    },
+    {
+      "path": "site/src/native-ai.mjs",
+      "sha256": "b2ec4109699ef0ea41acf92e538f0980531bd624e0a0b677a4bc5c5def747f86"
+    },
+    {
+      "path": "site/src/native-research.mjs",
+      "sha256": "a2b0f64a11fbf9fb97516f0a69e843d009c4d53934984a2d37cacd3b84f500fe"
+    },
+    {
+      "path": "site/src/native-vision.js",
+      "sha256": "4d2e8ae6a73585ec3fe5e2532f64ea20b33c7677ca0bdc8f9f9618a591fd7a3b"
     },
     {
       "path": "site/src/orrery-data.mjs",
@@ -704,11 +752,11 @@
     },
     {
       "path": "site/src/research-agent-contracts.mjs",
-      "sha256": "32c3fd1a1af159a2e8c536ed9fa2f0ece588129f8af5c402a37fb75e46bb9ff5"
+      "sha256": "27917854eaa025fc0c7c80a724e67c85828f8e09cd5f91f649379b3b4b848885"
     },
     {
       "path": "site/src/research-agent.js",
-      "sha256": "f7cb1fc6e84fcb24683d308ee98709381762925b5f8dc7f6057cc4360b8aa978"
+      "sha256": "3d9398a8df667907f600f8be2f25adadd0ebffb24017f76094ef67f6ce608af2"
     },
     {
       "path": "site/src/research-community.css",
@@ -1137,6 +1185,18 @@
     {
       "path": "site/tests/local-ai.test.mjs",
       "sha256": "3d844b3f46228088886a904a57e3aff839486615d074f897849e7ea388a2b1da"
+    },
+    {
+      "path": "site/tests/native-agent-ui.test.mjs",
+      "sha256": "ea20f4273ceb726aea8087859f207036554229c6cd72efa0e00c17904472ca4b"
+    },
+    {
+      "path": "site/tests/native-ai.test.mjs",
+      "sha256": "ce21754af4c53923e46cac4c5c5ea4a697fcc9f6e8c28032e308bf2031f9a2af"
+    },
+    {
+      "path": "site/tests/native-research.http.mjs",
+      "sha256": "24016f951a653df3f39fcbac56468fcd761f7b19e1399cdf74bf7a83d376d3dc"
     },
     {
       "path": "site/tests/orrery.test.mjs",

@@ -14,6 +14,7 @@ export function agentMessages(data,citations){
 1. {"action":"search","query":"简短检索关键词","label":"给用户看的操作名称"}：调用公开书库检索。只用关键词，每次聚焦一个问题，必要时改用同义词，避免重复查询。
 2. {"action":"clarify","question":"需要用户补充的问题"}：目标含糊时询问。
 3. {"action":"answer","claims":[{"text":"有依据的一句话","source":1,"quote":"逐字引用对应原文"}],"uncertainties":["资料不足或有分歧之处"]}：给出研究草稿，每个结论都需资料编号及逐字原文。没有资料时 claims 可为空，但必须说明缺少依据，禁止捏造。
+对于清楚的查书问题，若原文与已检索列表都为空，先执行 search；当前没有原文不代表书库没有资料。若检索后的原文已足以回答问题，执行 answer；不要重复检索或无故询问用户。
 你最多有四步；当前是第 ${data.step+1} 步。最后一步必须 answer 或 clarify。不要输出思维过程。`},
     {role:'user',content:JSON.stringify({研究任务:data.goal,用户补充:data.followups,已检索:data.queries,原文:citations.map((c,i)=>({编号:i+1,书名:c.title,页码:c.page,内容:c.quote}))})}];
 }

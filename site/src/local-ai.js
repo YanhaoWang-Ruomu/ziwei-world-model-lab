@@ -3,13 +3,14 @@ import {createLocalGenerator} from './local-ai-runtime.mjs';
 import {createVault} from './vault-storage.mjs';
 import {vaultPasswordReset} from './vault-password-reset.mjs';
 import {callPersonalAi,personalAiStatus} from './personal-ai.js';
+import {nativeAi,NATIVE_MODEL} from './native-ai.mjs';
 
 const vault=createVault({namespace:'ziwei-local-ai',lockEvent:'ziwei:ai-locked'}),generator=createLocalGenerator();
 let viewer={},epoch=0,busy=false,api,refreshNotebook=()=>{},activeTask=null,cloudController=null;
 const changed=()=>document.dispatchEvent(new Event('ziwei:ai-journal'));
 const fold=x=>window.OpenCC?.Converter({from:'t',to:'cn'})(x)||x;
 const tick=()=>new Date().toISOString();
-const modelKey=(provider='local')=>provider==='personal'?'personal-api:prompt-1':provider==='qwen'?'qwen-plus-2025-12-01:prompt-1':JSON.stringify(MODEL);
+const modelKey=(provider='local')=>provider==='native'?NATIVE_MODEL+':prompt-1':provider==='personal'?'personal-api:prompt-1':provider==='qwen'?'qwen-plus-2025-12-01:prompt-1':JSON.stringify(MODEL);
 export const aiJournal={get unlocked(){return vault.unlocked;},async put(task){if(task.kind!=='ai-agent')throw Error('研究记录格式不符。');await persist(task);},get:id=>vault.get(id),list:()=>vault.list({catalog:false,kind:'ai-agent'}),remove:id=>vault.remove(id)};
 async function access(input){
   const session=await api('/api/session');
@@ -44,6 +45,9 @@ export async function runLocalTask(task,{onProgress=()=>{},save=false}={}){
         cloudController=new AbortController();onProgress('千问正在依据公开原文整理回答…');
         const data=await api('/api/ai/qwen/answer',{method:'POST',signal:cloudController.signal,body:JSON.stringify({id:task.requestId||task.id,question:task.input.question,publicQuestionConfirmed:true,references:task.input.citations.map(({book_id,page,start,end,source_hash,revision,source})=>({book_id,page,start,end,source_hash,revision,source}))})});
         current();raw=data.raw;task={...task,input:data.input,usage:data.usage};cloudController=null;
+      }else if(task.provider==='native'){
+        cloudController=new AbortController();onProgress('本机图文模型正在整理文字草稿…');
+        const data=await nativeAi.generate(messagesFor(task.input),{signal:cloudController.signal,json:true});raw=data.text;task={...task,usedModel:data.model,usage:data.usage};cloudController=null;
       }else raw=await generator.generate(messagesFor(task.input),message=>{if(ticket===epoch)onProgress(message);});current();
       task={...task,raw,steps:[...task.steps,{name:'generated',at:tick()}]};
       if(save)await persist(task);current();
@@ -65,17 +69,17 @@ function newTask(input,provider='local',publicQuestionConfirmed=false){const id=
 function stop(){epoch++;generator.stop();cloudController?.abort();cloudController=null;}
 export function createAiPanel({el,btn,getInput,onApply}){
   const root=el('details','local-ai-panel'),message=el('p'),output=el('div','local-ai-output'),save=el('input');save.type='checkbox';
-  root.append(el('summary','','AI 助手 · 依据原文整理草稿'),el('p','muted','本机模式首次需下载约 630 MB 模型及运行文件。个人 API 在账户设置中配置，登录用户均可使用；云端只处理公开书库问答。本站千问仍限核心账户。所有结果均需核对。'));
-  const provider=el('select');provider.setAttribute('aria-label','AI 运行位置');provider.append(new Option('本机 AI · 无调用费用','local'));if(!onApply)provider.append(new Option('我的 API · 账户中配置','personal'),new Option('本站千问 · 仅公开书库','qwen'));
+  root.append(el('summary','','AI 助手 · 依据原文整理草稿'),el('p','muted','轻量本机模式首次下载约 630 MB；本机图文模式需先在账户页连接电脑模型。个人 API 与本站千问只处理公开书库问答。所有结果均需核对。'));
+  const provider=el('select');provider.setAttribute('aria-label','AI 运行位置');provider.append(new Option('轻量本机 AI · 浏览器运行','local'),new Option('本机图文 AI · Qwen3.5-4B','native'));if(!onApply)provider.append(new Option('我的 API · 账户中配置','personal'),new Option('本站千问 · 仅公开书库','qwen'));
   const publicCheck=el('input');publicCheck.type='checkbox';const publicLabel=el('label','review-check');publicLabel.hidden=true;publicLabel.append(publicCheck,document.createTextNode('确认问题不含个人资料或私密技法，同意将问题和公开选段发送给所选服务商，可能产生费用。'));
-  provider.onchange=async()=>{publicLabel.hidden=provider.value==='local';publicCheck.checked=false;message.textContent='';if(provider.value==='personal'){try{message.textContent=(await personalAiStatus()).message;}catch(e){message.textContent=e.message;}return;}if(provider.value!=='qwen'||!api)return;const token=epoch;try{const state=await api('/api/ai/qwen/status');if(token!==epoch||provider.value!=='qwen')return;message.textContent=state.enabled?`千问已就绪 · 今日已保守预留 ${state.reservedTodayCny.toFixed(2)} / 5 元。每次预留 0.25 元（不等于实际账单），以北京时间换日；停止请求仍可能计费。`:'千问尚未启用：需先在服务器配置密钥及预算。';}catch(e){if(token===epoch&&provider.value==='qwen')message.textContent=e.message;}};root.append(provider,publicLabel);
+  provider.onchange=async()=>{publicLabel.hidden=['local','native'].includes(provider.value);publicCheck.checked=false;message.textContent='';if(provider.value==='native'){message.textContent=nativeAi.ready?'本机图文 AI 已连接。':'请先在账户页连接本机图文 AI。';return;}if(provider.value==='personal'){try{message.textContent=(await personalAiStatus()).message;}catch(e){message.textContent=e.message;}return;}if(provider.value!=='qwen'||!api)return;const token=epoch;try{const state=await api('/api/ai/qwen/status');if(token!==epoch||provider.value!=='qwen')return;message.textContent=state.enabled?`千问已就绪 · 今日已保守预留 ${state.reservedTodayCny.toFixed(2)} / 5 元。每次预留 0.25 元（不等于实际账单），以北京时间换日；停止请求仍可能计费。`:'千问尚未启用：需先在服务器配置密钥及预算。';}catch(e){if(token===epoch&&provider.value==='qwen')message.textContent=e.message;}};root.append(provider,publicLabel);
   const label=el('label','review-check');label.append(save,document.createTextNode('加密保存进度（需先在研究实验室解锁本机 AI 研究册）'));
   const run=btn('开始本机 AI 整理',async()=>{
     output.replaceChildren();message.textContent='';run.disabled=true;cancel.hidden=false;let ticket=epoch;
     try{
       if(!api)throw Error('页面尚未准备好，请稍后重试。');
       if(save.checked&&!vault.unlocked)throw Error('请先在研究实验室创建或解锁本机 AI 研究册。');
-      if(provider.value!=='local'&&!publicCheck.checked)throw Error('请先确认问题不含私密内容，并同意发送公开选段。');
+      if(!['local','native'].includes(provider.value)&&!publicCheck.checked)throw Error('请先确认问题不含私密内容，并同意发送公开选段。');
       const input=getInput(),task=newTask(input,provider.value,publicCheck.checked),saved=save.checked;
       const done=await runLocalTask(task,{save:saved,onProgress:t=>{message.textContent=t;}});
       if(ticket!==epoch||!root.isConnected)return;
