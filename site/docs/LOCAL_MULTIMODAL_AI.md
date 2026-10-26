@@ -38,7 +38,7 @@
 
 `node --test tests/native-ai.test.mjs tests/native-agent-ui.test.mjs tests/local-ai.test.mjs tests/research-agent-ui.test.mjs`
 
-`node scripts/evaluate-local-model.mjs <本机运行目录>` 使用固定虚构文本与 `fictional-vision.png`，生成本地报告并追加历史；不发送付费 API 请求。
+`node scripts/evaluate-local-model.mjs <本机运行目录>` 使用固定虚构文本与随源码附带的 `tests/fixtures/local-model-vision.png`，生成本地报告并追加历史；不发送付费 API 请求。
 
 隔离测试预览运行后执行 `node tests/native-research.http.mjs`，仅允许 127.0.0.1:8770。
 

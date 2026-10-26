@@ -1,4 +1,4 @@
-$ErrorActionPreference = 'Stop'
+﻿$ErrorActionPreference = 'Stop'
 $modelDirectory = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../../local-ai-runtime'))
 $pidFile = Join-Path $modelDirectory 'running.json'
 if (-not (Test-Path -LiteralPath $pidFile)) { Write-Output '本机 AI 没有运行记录。'; exit 0 }

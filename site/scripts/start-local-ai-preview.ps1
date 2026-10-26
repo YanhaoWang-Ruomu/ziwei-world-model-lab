@@ -1,4 +1,4 @@
-$ErrorActionPreference = 'Stop'
+﻿$ErrorActionPreference = 'Stop'
 $workspaceDirectory = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../..'))
 $previewDirectory = Join-Path $workspaceDirectory 'github-public/site'
 if (-not (Test-Path -LiteralPath (Join-Path $previewDirectory 'server/chart-public.mjs'))) {

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "1474669a0558dced90a01e0261d14d97403eec4f",
+  "sourceCommit": "85688f0c9b97482135d55ceb28705498f15627d8",
   "files": [
     {
       "path": "site/db/schema.ts",
@@ -16,7 +16,7 @@
     },
     {
       "path": "site/docs/LOCAL_MULTIMODAL_AI.md",
-      "sha256": "0b19eef99720b81575eb6800ff79f63c2a552bbf01b9d4b01905d048ff2be96c"
+      "sha256": "3d0f83ec1b6a23fe197bd06b5836ac1db4c9ef6f347f6f9c8ffcd7244527d0c1"
     },
     {
       "path": "site/docs/PASSWORD_RECOVERY.md",
@@ -228,7 +228,7 @@
     },
     {
       "path": "site/scripts/evaluate-local-model.mjs",
-      "sha256": "7f122e167602fb21b9dc71207997036fc39a7154361398d0b170bcedf4eb4611"
+      "sha256": "ad1e3b09da8fcead9d7ddf461a0b1daefed9568e4cad969477fdd791ba9b21d2"
     },
     {
       "path": "site/scripts/install-local-model.mjs",
@@ -252,19 +252,19 @@
     },
     {
       "path": "site/scripts/setup-local-model.ps1",
-      "sha256": "669696b5e7618a033434f4d6f46ad8eac5beaf67620918ca89eb7cda5fad1e34"
+      "sha256": "5f5ed3e443ac4f73c64e3fc65d88ef7ff7a736265ef27733791cb990ffd8ed5c"
     },
     {
       "path": "site/scripts/start-local-ai-preview.ps1",
-      "sha256": "53f418b667411bf8fd57735ff036d24262d47ebf82b34d137b0fb2a0730ed7b4"
+      "sha256": "65f0c831eb6bc27e43aa5565ec06a349152ef7e5ccda20d7039d4d8b618e386c"
     },
     {
       "path": "site/scripts/start-local-model.ps1",
-      "sha256": "4692760993b435f0372477fae25c5f95917306aeba239e83818b538f8ed550d1"
+      "sha256": "80cebc56010d3d43d7e4dac2e604e35bb9e9a38e7c1280486bbe6bd71a740bd1"
     },
     {
       "path": "site/scripts/stop-local-model.ps1",
-      "sha256": "885be70e2da8cd80aaa6858dd5ddaaa235effd246f65b710250defe10b1bb6ad"
+      "sha256": "930b69fe5ad38d14d212397c179637156b1875ccfb3d4c0a57b4fbcda6868c81"
     },
     {
       "path": "site/scripts/test-preview.mjs",
@@ -1161,6 +1161,10 @@
     {
       "path": "site/tests/fictional-store.mjs",
       "sha256": "e9863c8aaf2a498e2722ef0591708e8b50854375ca696d7d77b23699384edef7"
+    },
+    {
+      "path": "site/tests/fixtures/local-model-vision.png",
+      "sha256": "0fb86725b01d25c8f7c43de9f14d65a8e218b460f2f6ffce4c19144cfd135b7b"
     },
     {
       "path": "site/tests/landscape-journey.test.mjs",

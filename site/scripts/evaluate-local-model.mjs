@@ -23,7 +23,7 @@ await check('agent_search_then_answer',async()=>{
  const connection={ready:true,model:'Qwen3.5-4B-Q4_K_M',generate};const first=await localResearchStep(data,{api,connection});assert(first.decision.action==='search'&&toolCalls===1,'Did not search: '+JSON.stringify(first.decision));
  const second=await localResearchStep({...data,step:1,queries:[first.decision.query],references:[citation]},{api,connection});assert(second.decision.action==='answer'&&second.decision.claims.length>0,'Did not answer from evidence');return {first:first.decision,second:second.decision};
 });
-const imagePath=path.join(root,'fictional-vision.png');
+const imagePath=fileURLToPath(new URL('../tests/fixtures/local-model-vision.png',import.meta.url));
 if(fs.existsSync(imagePath))await check('fictional_chinese_image',async()=>{const image='data:image/png;base64,'+fs.readFileSync(imagePath).toString('base64');const r=JSON.parse((await generate([{role:'user',content:[{type:'text',text:'读取图中文字。输出 JSON：{"a_ml":甲盆每天毫升数,"b_ml":乙盆每天毫升数,"total_ml":合计毫升数}。不要猜测。'},{type:'image_url',image_url:{url:image}}]}])).text);assert(r.a_ml===20&&r.b_ml===30&&r.total_ml===50,'Image quantities incorrect');return r;});
 else results.push({name:'fictional_chinese_image',passed:false,error:'Synthetic image fixture missing'});
 const report={createdAt:new Date().toISOString(),model:'Qwen3.5-4B-Q4_K_M',thinking:false,scope:'Small fictional smoke suite; not general accuracy or causal validity evidence',results};

@@ -1,4 +1,4 @@
-$ErrorActionPreference = 'Stop'
+﻿$ErrorActionPreference = 'Stop'
 $modelDirectory = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../../local-ai-runtime'))
 & node (Join-Path $PSScriptRoot 'install-local-model.mjs') $modelDirectory
 if ($LASTEXITCODE -ne 0) { throw '下载或校验失败，请再次运行继续下载。' }

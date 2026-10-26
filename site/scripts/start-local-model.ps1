@@ -1,4 +1,4 @@
-$ErrorActionPreference = 'Stop'
+﻿$ErrorActionPreference = 'Stop'
 $modelDirectory = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../../local-ai-runtime'))
 $nodeExecutable = (Get-Command node -ErrorAction Stop).Source
 $serviceScript = Join-Path $PSScriptRoot 'local-model-service.mjs'
